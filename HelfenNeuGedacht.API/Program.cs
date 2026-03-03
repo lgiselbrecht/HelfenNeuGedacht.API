@@ -10,9 +10,20 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<MySqlDbContext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (!string.IsNullOrWhiteSpace(connectionString))
+{
+    builder.Services.AddDbContext<MySqlDbContext>(options =>
+        options.UseMySQL(connectionString));
+}
+else
+{
+    throw new InvalidOperationException("Missing required database connection string: 'DefaultConnection'.");
+}
+
+
+
 
 var app = builder.Build();
 
@@ -24,14 +35,14 @@ using (var scope = app.Services.CreateScope())
     {
         if (!db.Database.CanConnect())
         {
-            throw new Exception("Keine Verbindung zur Datenbank möglich.");
+            throw new Exception("Unable to connect to the database.");
         }
 
-        Console.WriteLine("Datenbankverbindung erfolgreich.");
+        Console.WriteLine("Database connection successful.");
     }
     catch (Exception ex)
     {
-        Console.WriteLine("Datenbankfehler beim Start:");
+        Console.WriteLine("Database error during application startup:");
         Console.WriteLine(ex.Message);
         throw; // bricht den Startup komplett ab
     }

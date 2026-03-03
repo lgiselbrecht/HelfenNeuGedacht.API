@@ -19,7 +19,7 @@ Bevor Sie beginnen, stellen Sie sicher, dass folgende Software auf Ihrem System 
 
 ```bash
 git clone https://github.com/lgiselbrecht/HelfenNeuGedacht.API.git
-cd HelfenNeuGedacht.API2
+cd HelfenNeuGedacht.API
 ```
 
 ### 2. NuGet Packages installieren
@@ -85,7 +85,7 @@ docker ps
 
 # Container-Logs anzeigen
 docker logs mysql_helfenneugedacht
-
+```
 
 
 ### 4. Datenbank-Migrationen (optional)

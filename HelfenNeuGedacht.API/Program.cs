@@ -16,6 +16,27 @@ builder.Services.AddDbContext<MySqlDbContext>(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<MySqlDbContext>();
+
+    try
+    {
+        if (!db.Database.CanConnect())
+        {
+            throw new Exception("Keine Verbindung zur Datenbank möglich.");
+        }
+
+        Console.WriteLine("Datenbankverbindung erfolgreich.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Datenbankfehler beim Start:");
+        Console.WriteLine(ex.Message);
+        throw; // bricht den Startup komplett ab
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

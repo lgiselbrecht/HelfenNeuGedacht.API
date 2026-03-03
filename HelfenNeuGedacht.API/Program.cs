@@ -1,3 +1,4 @@
+using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -10,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<MySqlDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();

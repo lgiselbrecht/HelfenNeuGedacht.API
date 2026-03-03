@@ -6,6 +6,13 @@ Für die **lokale Entwicklung** wird eine **MySQL-Datenbank über Docker** verwe
 
 Die Docker-Konfiguration befindet sich im Ordner:
 
+##
+Packages
+
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package MySql.EntityFrameworkCore
 
 /docker
 

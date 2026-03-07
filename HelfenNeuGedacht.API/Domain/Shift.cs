@@ -2,7 +2,7 @@
 
 namespace HelfenNeuGedacht.API.Domain
 {
-    public class Service : IEntity
+    public class Shift : IEntity
     {
         public int Id { get; set; }
 

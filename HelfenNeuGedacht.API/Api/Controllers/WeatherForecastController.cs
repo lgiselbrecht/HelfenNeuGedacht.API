@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace HelfenNeuGedacht.API.Controllers
+namespace HelfenNeuGedacht.API.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]

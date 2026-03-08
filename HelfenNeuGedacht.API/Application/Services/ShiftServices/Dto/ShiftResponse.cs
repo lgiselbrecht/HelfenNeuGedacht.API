@@ -1,8 +1,6 @@
-﻿using HelfenNeuGedacht.API.Domain.Entities;
-
-namespace HelfenNeuGedacht.API.Domain
+﻿namespace HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto
 {
-    public class Shift : IEntity
+    public class ShiftResponse
     {
         public int Id { get; set; }
 
@@ -10,9 +8,10 @@ namespace HelfenNeuGedacht.API.Domain
 
         public string Description { get; set; } = string.Empty;
 
+        public string Requirements { get; set; } = string.Empty;
+
         public int AgeRestriction { get; set; } = 0;
 
         public int Points { get; set; }
-
     }
 }

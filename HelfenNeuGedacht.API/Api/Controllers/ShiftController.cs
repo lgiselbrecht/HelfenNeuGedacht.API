@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HelfenNeuGedacht.API.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Mysqlx.Crud;
 
 namespace HelfenNeuGedacht.API.Api.Controllers
@@ -9,35 +10,35 @@ namespace HelfenNeuGedacht.API.Api.Controllers
     {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult GetAllShifts()
+        public async Task<ActionResult<List<Shift>>> GetAllShifts()
         {
             return Ok();
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult GetShift(int Id)
+        public async Task<ActionResult<Shift>> GetShift(int Id)
         {
             return Ok();
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public ActionResult AddShift()
+        public async Task<ActionResult> AddShift()
         {
             return Created();
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public ActionResult UpdateShift(int Id)
+        public async Task<ActionResult> UpdateShift(int Id)
         {
             return Ok();
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public ActionResult DeleteShift(int Id)
+        public async Task<ActionResult> DeleteShift(int Id)
         {
             return NoContent();
         }

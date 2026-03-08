@@ -1,4 +1,5 @@
-﻿using HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto;
+﻿using System.Security.Cryptography.X509Certificates;
+using HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto;
 using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 
 namespace HelfenNeuGedacht.API.Application.Mapper
@@ -28,6 +29,27 @@ namespace HelfenNeuGedacht.API.Application.Mapper
 
 
     };
+
+
+
         }
+
+        public OrganizationApprovedResponse ToOrganizationApprovedResponse(Organization organization)
+        {
+            return new OrganizationApprovedResponse()
+            {
+                Id = organization.Id,
+                Name = organization.Name,
+                RegistrationNumber = organization.RegistrationNumber,
+                Type = organization.Type,
+                ApprovalStatus = organization.ApprovalStatus,
+                IsApproved = organization.IsApproved,
+                IsActive = organization.IsActive,
+                ApprovedAt = organization.ApprovedAt,
+                ApprovedBy = organization.ApprovedBy,
+                RejectionReason = organization.RejectionReason
+            };
+        }
+
     }
 }

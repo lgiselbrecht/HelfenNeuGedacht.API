@@ -50,6 +50,14 @@ namespace HelfenNeuGedacht.API.API.Controllers
             return Ok(result);
         }
 
+        [HttpPut("{id}/approve")]
+        public async Task<ActionResult<OrganizationResponse>> ApproveOrganizationById(OrganizationApprovedRequest approveRequest, string adminuser)
+        {
+            var result = await _organizationService.ApproveOrganization(approveRequest, adminuser);
+            return Ok(result);
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<Organization>> DeleteOrganizationById(int id)
         {

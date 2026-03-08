@@ -18,10 +18,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
             _mapper = mapper;
         }
 
-        public Task<OrganizationResponse> CreateOrganizationAdminAsync(int organizationId, string adminUserId)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public async Task<OrganizationResponse> CreateOrganizationAsync(OrganizationRequest eventEntity)
         {
@@ -54,13 +51,8 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 
         }
 
-        public async Task<OrganizationResponse> DeleteOrganizationAdminAsync(int organizationId, string adminUserId)
-        {
 
-            throw new NotImplementedException();
-
-
-        }
+       
 
         public async Task<OrganizationResponse> DeleteOrganizationByIdAsync(int id)
         {
@@ -70,11 +62,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
             return _mapper.ToOrganizationResponse(organization);
         }
 
-        public Task<IEnumerable<OrganizationResponse>> GetOrganizationAdminsAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
+       
         public async Task<OrganizationResponse> GetOrganizationByIdAsync(int id)
         {
             var x = await _organizationRepositories.FindByIdAsync(id);
@@ -84,10 +72,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
             return _mapper.ToOrganizationResponse(x);
         }
 
-        public Task<OrganizationResponse> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public async Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, OrganizationRequest updatedOrganization)
         {
@@ -116,6 +101,48 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 
 
         }
+
+        public async Task<OrganizationApprovedResponse> ApproveOrganization(OrganizationApprovedRequest organizationApprovedRequest, string adminUser)
+        {
+            var organization = await _organizationRepositories.FindByIdAsync(organizationApprovedRequest.OrganisationId);
+
+            organization.ApprovedBy = adminUser;
+            organization.ApprovalStatus = organizationApprovedRequest.ApprovalStatus;
+            organization.IsApproved = organizationApprovedRequest.IsApproved;
+            organization.RejectionReason = organizationApprovedRequest.RejectionReason;
+            organization.ApprovedAt = DateTime.UtcNow;
+
+            var result = await _organizationRepositories.UpdateAsync(organization);
+            return _mapper.ToOrganizationApprovedResponse(result);
+
+
+        }
+
+
+        public Task<IEnumerable<OrganizationResponse>> GetOrganizationAdminsAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<OrganizationResponse> DeleteOrganizationAdminAsync(int organizationId, string adminUserId)
+        {
+
+            throw new NotImplementedException();
+
+
+        }
+
+        public Task<OrganizationResponse> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OrganizationResponse> CreateOrganizationAdminAsync(int organizationId, string adminUserId)
+        {
+            throw new NotImplementedException();
+        }
+
+     
     }
 }
 

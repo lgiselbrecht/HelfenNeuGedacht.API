@@ -11,6 +11,8 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
         public Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, OrganizationRequest updatedOrganization);
         public Task<OrganizationResponse> DeleteOrganizationByIdAsync(int id);
 
+        public Task<OrganizationApprovedResponse> ApproveOrganization(OrganizationApprovedRequest organizationApprovedRequest, string adminUser);
+
 
 
         //Admins, denke das muss dann hier raus und in User rein buw user endität und dann hier nur die relation zwischen user und organization, frog mi it

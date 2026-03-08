@@ -39,15 +39,11 @@ namespace HelfenNeuGedacht.API.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Organization>> UpdateOrganizationById(int id, [FromBody] Organization updatedOrganization)
+        public async Task<ActionResult<OrganizationResponse>> UpdateOrganizationById(int id, CreateOrganizationRequest updatedOrganization)
         {
             if (updatedOrganization == null)
                 return BadRequest("UpdatedOrganization darf nicht null sein.");
 
-            var existingOrganization = await _organizationService.GetOrganizationByIdAsync(id);
-
-            if (existingOrganization == null)
-                return NotFound($"Keine Organization mit der ID {id} gefunden.");
 
             var result = await _organizationService.UpdateOrganizationByIdAsync(id, updatedOrganization);
 

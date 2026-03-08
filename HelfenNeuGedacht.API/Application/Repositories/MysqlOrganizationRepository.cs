@@ -38,9 +38,11 @@ namespace HelfenNeuGedacht.API.Application.Repositories
 
         }
 
-        public Task<Organization> UpdateAsync(Organization entity)
+        public async Task<Organization> UpdateAsync(Organization entity)
         {
-            throw new NotImplementedException();
+            _context.Organization.Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
     }
 }

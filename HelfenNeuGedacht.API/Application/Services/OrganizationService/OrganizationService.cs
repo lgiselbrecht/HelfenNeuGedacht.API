@@ -89,15 +89,33 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
             throw new NotImplementedException();
         }
 
-        public Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, Organization updatedOrganization)
+        public async Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, CreateOrganizationRequest updatedOrganization)
         {
-            throw new NotImplementedException();
+            var organization = _organizationRepositories.FindByIdAsync(id).Result;
+
+
+            organization.Name = updatedOrganization.Name;
+            organization.Description = updatedOrganization.Description;
+            organization.Type = updatedOrganization.Type;
+            organization.RegistrationNumber = updatedOrganization.RegistrationNumber;
+            organization.Website = updatedOrganization.Website;
+            organization.Street = updatedOrganization.Street;
+            organization.PostalCode = updatedOrganization.PostalCode;
+            organization.City = updatedOrganization.City;
+            organization.State = updatedOrganization.State;
+            organization.Country = updatedOrganization.Country;
+            organization.ContactEmail = updatedOrganization.ContactEmail;
+            organization.ContactPhone = updatedOrganization.ContactPhone;
+            organization.ContactPersonName = updatedOrganization.ContactPersonName;
+            organization.ContactPersonRole = updatedOrganization.ContactPersonRole;
+            organization.UpdatedAt = DateTime.UtcNow;
+
+            var result = await _organizationRepositories.UpdateAsync(organization);
+
+            return _mapper.ToOrganizationResponse(result);
+
+
         }
     }
 }
 
-
-//public Task<IEnumerable<OrganizationResponse>> GetOrganizationAdminsAsync(int id);
-//public Task<OrganizationResponse> CreateOrganizationAdminAsync(int organizationId, string adminUserId);
-//public Task<OrganizationResponse> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization);
-//public Task<OrganizationResponse> DeleteOrganizationAdminAsync(int organizationId, string adminUserId);

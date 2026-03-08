@@ -3,6 +3,8 @@ using HelfenNeuGedacht.API.Application.Repositories;
 using HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto;
 using HelfenNeuGedacht.API.Domain.Entities;
 using HelfenNeuGedacht.API.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Http.HttpResults;
+using ZstdSharp.Unsafe;
 using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 
 namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
@@ -106,7 +108,11 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
         {
             var organization = await _organizationRepositories.FindByIdAsync(organizationApprovedRequest.OrganisationId);
 
-            organization.ApprovedBy = adminUser;
+            if (organization == null) {
+                return null;
+            }
+
+                organization.ApprovedBy = adminUser;
             organization.ApprovalStatus = organizationApprovedRequest.ApprovalStatus;
             organization.IsApproved = organizationApprovedRequest.IsApproved;
             organization.RejectionReason = organizationApprovedRequest.RejectionReason;

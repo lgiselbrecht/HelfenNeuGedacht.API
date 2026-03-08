@@ -54,6 +54,8 @@ namespace HelfenNeuGedacht.API.API.Controllers
         public async Task<ActionResult<OrganizationResponse>> ApproveOrganizationById(OrganizationApprovedRequest approveRequest, string adminuser)
         {
             var result = await _organizationService.ApproveOrganization(approveRequest, adminuser);
+            if (result == null)
+                return NotFound($"Keine Organization mit der ID {approveRequest.OrganisationId} gefunden.");
             return Ok(result);
         }
 

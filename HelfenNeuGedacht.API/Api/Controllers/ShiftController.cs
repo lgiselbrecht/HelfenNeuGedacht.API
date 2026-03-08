@@ -1,4 +1,6 @@
-﻿using HelfenNeuGedacht.API.Domain.Entities;
+﻿using HelfenNeuGedacht.API.Application.Services.ShiftServices;
+using HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto;
+using HelfenNeuGedacht.API.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Mysqlx.Crud;
 
@@ -8,38 +10,64 @@ namespace HelfenNeuGedacht.API.Api.Controllers
     [Route("api/shifts")]
     public class ShiftController : ControllerBase
     {
+        private readonly IShiftService _shiftService;
+
+        public ShiftController(IShiftService shiftService) {
+            _shiftService = shiftService;
+        }
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Shift>>> GetAllShifts()
         {
-            return Ok();
+            var shifts = await _shiftService.GetAllShiftsAsync();
+            return Ok(shifts);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Shift>> GetShift(int Id)
         {
+            var shift = await _shiftService.GetShiftByIdAsync(Id);
             return Ok();
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult> AddShift()
+        public async Task<ActionResult<ShiftResponse>> AddShift(CreateShiftRequest shift)
         {
+            if (shift == null)
+            {
+                return BadRequest("no data recieved");
+            }
+
+            var createdShift = await _shiftService.AddShiftAsync(shift);
+
             return Created();
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult> UpdateShift(int Id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<ShiftResponse>> UpdateShift(int Id, UpdateShiftRequest shift)
         {
+            if(shift == null)
+            {
+                return BadRequest();
+            }
+
+            var updatedShift = await _shiftService.UpdateShiftAsync(Id, shift);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult> DeleteShift(int Id)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<Shift>> DeleteShift(int Id)
         {
+            var shift = await _shiftService.GetShiftByIdAsync(Id);
+            if (shift == null)
+                return NotFound($"Kein Dienst gefunden");
+
+            var deletedShift= await _shiftService.DeleteShiftAsync(Id)
             return NoContent();
         }
     }

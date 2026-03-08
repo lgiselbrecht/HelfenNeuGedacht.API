@@ -1,4 +1,4 @@
-using HelfenNeuGedacht.API.Application.Services;
+using HelfenNeuGedacht.API.Application.Services.ShiftServices;
 using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;

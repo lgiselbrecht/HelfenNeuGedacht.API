@@ -1,40 +1,86 @@
-﻿using HelfenNeuGedacht.API.Domain.Entities;
+﻿using HelfenNeuGedacht.API.Application.Mapper;
+using HelfenNeuGedacht.API.Application.Repositories;
+using HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto;
+using HelfenNeuGedacht.API.Domain.Entities;
 
 namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
 {
     public class ShiftService : IShiftService
     {
-        //Remove after Testing 
-        static List<Shift> shifts = new List<Shift>
-        {
-            new Shift {Id = 1, Name = "Bardienst", Description = "Helfen in der Bar", AgeRestriction = 18, Points = 10},
-            new Shift {Id = 2, Name = "Garderobe", Description = "Jacken aufhängen", AgeRestriction = 0, Points = 10},
-            new Shift {Id = 3, Name = "Aufräumen", Description = "Nach Veranstaltungsende aufräumen", AgeRestriction = 0, Points = 20}
-        };
-        public ShiftService() { }
-        public Task<Shift> AddShiftAsync(Shift shift)
-        {
-            throw new NotImplementedException();
+        private IShiftRepository _shiftRepositories;
+        private DtoMapper _mapper;
+
+        public ShiftService(IShiftRepository shiftRepository, DtoMapper mapper) {
+            _shiftRepositories = shiftRepository;            
+            _mapper = mapper;
         }
 
-        public Task<bool> DeleteShiftAsync(int id)
+        public async Task<ShiftResponse> AddShiftAsync(CreateShiftRequest shiftRequest)
         {
-            throw new NotImplementedException();
+            var shift = new Shift()
+            {
+                Name = shiftRequest.Name,
+                Description = shiftRequest.Description,
+                Requirements = shiftRequest.Requirements,
+                AgeRestriction = shiftRequest.AgeRestriction,
+                Points = shiftRequest.Points,
+            };
+
+            var newShift = await _shiftRepositories.AddAsync(shift);
+
+            return _mapper.ToShiftResponse(newShift);
         }
 
-        public async Task<List<Shift>> GetAllShiftsAsync()
+
+        public async Task<ShiftResponse> DeleteShiftAsync(int id)
         {
-            return await Task.FromResult(shifts);
+            var shiftToDelete = await _shiftRepositories.FindByIdAsync(id);
+            await _shiftRepositories.DeleteAsync(shiftToDelete);
+
+            return _mapper.ToShiftResponse(shiftToDelete);
         }
 
-        public Task<Shift> GetShiftByIdAsync(int id)
+        public async Task<List<ShiftResponse?>> GetAllShiftsAsync()
         {
-            throw new NotImplementedException();
+            var allShifts = await _shiftRepositories.FindAllAsync();
+            List<ShiftResponse> allShiftsResponse = new List<ShiftResponse>();
+
+            foreach (var shift in allShifts) {
+                allShiftsResponse.Add(_mapper.ToShiftResponse(shift));
+            }
+
+            return allShiftsResponse;
         }
 
-        public Task<Shift> UpdateShiftAsync(int id, Shift shift)
+        public async Task<ShiftResponse?> GetShiftByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var shift = await _shiftRepositories.FindByIdAsync(id);
+
+            if(shift == null)
+            {
+                return null;
+            }
+
+            return _mapper.ToShiftResponse(shift);
+        }
+
+        public async Task<ShiftResponse?> UpdateShiftAsync(int id, UpdateShiftRequest shift)
+        {
+            var existingShift = await _shiftRepositories.FindByIdAsync(id);
+
+            if (existingShift == null) {
+                return null;
+            }
+
+            existingShift.Name = shift.Name;
+            existingShift.Description = shift.Description;
+            existingShift.Requirements = shift.Requirements;
+            existingShift.AgeRestriction = shift.AgeRestriction;
+            existingShift.Points = shift.Points;
+
+            await _shiftRepositories.UpdateAsync(existingShift);
+
+            return _mapper.ToShiftResponse(existingShift);
         }
     }
 }

@@ -1,15 +1,16 @@
 ﻿using System.Diagnostics.Eventing.Reader;
-using HelfenNeuGedacht.API.Domain;
+using HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto;
+using HelfenNeuGedacht.API.Domain.Entities;
 
-namespace HelfenNeuGedacht.API.Application.Services
+namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
 {
     public interface IShiftService
     {
-        Task<List<Shift>> GetAllShiftsAsync();
-        Task<Shift> GetShiftByIdAsync(int id);
-        Task<Shift> AddShiftAsync(Shift shift);
-        Task<Shift> UpdateShiftAsync(int id, Shift shift);
-        Task<bool> DeleteShiftAsync(int id);
+        Task<List<ShiftResponse>> GetAllShiftsAsync();
+        Task<ShiftResponse> GetShiftByIdAsync(int id);
+        Task<ShiftResponse> AddShiftAsync(CreateShiftRequest shift);
+        Task<ShiftResponse> UpdateShiftAsync(int id, UpdateShiftRequest shift);
+        Task<ShiftResponse> DeleteShiftAsync(int id);
 
     }
 }

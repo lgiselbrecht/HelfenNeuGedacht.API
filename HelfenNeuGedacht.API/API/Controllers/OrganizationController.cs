@@ -23,8 +23,8 @@ namespace HelfenNeuGedacht.API.API.Controllers
 
             var createdOrganization = await _organizationService.CreateOrganizationAsync(organization);
 
-            return Ok(createdOrganization);
-           // return CreatedAtAction(nameof(GetById), new { id = newOrganization.Id }, newLecture);
+           return Ok(createdOrganization);
+           //return CreatedAtAction(nameof(GetById), new { id = newOrganization.Id }, newLecture);
         }
 
         [HttpGet("{id}")]
@@ -81,7 +81,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
         }
 
         [HttpGet("{id}/admins")]
-        public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizationAdmins(int id)
+        public async Task<ActionResult<IEnumerable<OrganizationResponse>>> GetOrganizationAdmins(int id)
         {
             var organization = await _organizationService.GetOrganizationByIdAsync(id);
 
@@ -94,23 +94,13 @@ namespace HelfenNeuGedacht.API.API.Controllers
         }
 
         [HttpPut("{organizationId}/admins")]
-        public async Task<ActionResult<Organization>> UpdateOrganizationAdmin(int organizationId, [FromBody] Organization updatedOrganization)
+        public async Task<ActionResult<OrganizationResponse>> UpdateOrganizationAdmin(int organizationId, Organization updatedOrganization)
         {
-            if (updatedOrganization == null)
-                return BadRequest("UpdatedOrganization darf nicht null sein.");
-
-            var existingOrganization = await _organizationService.GetOrganizationByIdAsync(organizationId);
-
-            if (existingOrganization == null)
-                return NotFound($"Keine Organization mit der ID {organizationId} gefunden.");
-
-            var result = await _organizationService.UpdateOrganizationAdminAsync(existingOrganization, updatedOrganization);
-
-            return Ok(result);
+          throw new NotImplementedException();
         }
 
         [HttpDelete("{organizationId}/admins/{adminUserId}")]
-        public async Task<ActionResult<Organization>> DeleteOrganizationAdmin(int organizationId, string adminUserId)
+        public async Task<ActionResult<OrganizationResponse>> DeleteOrganizationAdmin(int organizationId, string adminUserId)
         {
             var organization = await _organizationService.GetOrganizationByIdAsync(organizationId);
 

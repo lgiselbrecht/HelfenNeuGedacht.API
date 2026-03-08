@@ -18,7 +18,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
             _mapper = mapper;
         }
 
-        public Task<Organization> CreateOrganizationAdminAsync(int organizationId, string adminUserId)
+        public Task<OrganizationResponse> CreateOrganizationAdminAsync(int organizationId, string adminUserId)
         {
             throw new NotImplementedException();
         }
@@ -54,38 +54,50 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 
         }
 
-        public Task<Organization> DeleteOrganizationAdminAsync(int organizationId, string adminUserId)
+        public async Task<OrganizationResponse> DeleteOrganizationAdminAsync(int organizationId, string adminUserId)
+        {
+
+            throw new NotImplementedException();
+
+
+        }
+
+        public async Task<OrganizationResponse> DeleteOrganizationByIdAsync(int id)
+        {
+            var organization = await _organizationRepositories.FindByIdAsync(id);
+            await _organizationRepositories.DeleteAsync(organization);
+
+            return _mapper.ToOrganizationResponse(organization);
+        }
+
+        public Task<IEnumerable<OrganizationResponse>> GetOrganizationAdminsAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Organization> DeleteOrganizationByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Organization>> GetOrganizationAdminsAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Organization> GetOrganizationByIdAsync(int id)
+        public async Task<OrganizationResponse> GetOrganizationByIdAsync(int id)
         {
             var x = await _organizationRepositories.FindByIdAsync(id);
             if (x == null)
                 return null;
 
-            return x;
+            return _mapper.ToOrganizationResponse(x);
         }
 
-        public Task<Organization> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization)
+        public Task<OrganizationResponse> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Organization> UpdateOrganizationByIdAsync(int id, Organization updatedOrganization)
+        public Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, Organization updatedOrganization)
         {
             throw new NotImplementedException();
         }
     }
 }
+
+
+//public Task<IEnumerable<OrganizationResponse>> GetOrganizationAdminsAsync(int id);
+//public Task<OrganizationResponse> CreateOrganizationAdminAsync(int organizationId, string adminUserId);
+//public Task<OrganizationResponse> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization);
+//public Task<OrganizationResponse> DeleteOrganizationAdminAsync(int organizationId, string adminUserId);

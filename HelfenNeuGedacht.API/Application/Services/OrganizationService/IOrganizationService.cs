@@ -7,17 +7,17 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
     {
         //Organizations
         public Task<OrganizationResponse> CreateOrganizationAsync(CreateOrganizationRequest eventEntity);
-        public Task<Organization> GetOrganizationByIdAsync(int id);
-        public Task<Organization> UpdateOrganizationByIdAsync(int id, Organization updatedOrganization);
-        public Task<Organization> DeleteOrganizationByIdAsync(int id);
+        public Task<OrganizationResponse> GetOrganizationByIdAsync(int id);
+        public Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, Organization updatedOrganization);
+        public Task<OrganizationResponse> DeleteOrganizationByIdAsync(int id);
 
 
 
         //Admins, denke das muss dann hier raus und in User rein buw user endität und dann hier nur die relation zwischen user und organization, frog mi it
-        public Task<IEnumerable<Organization>> GetOrganizationAdminsAsync(int id);
-        public Task<Organization> CreateOrganizationAdminAsync(int organizationId, string adminUserId);
-        public Task<Organization> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization);
-        public Task<Organization> DeleteOrganizationAdminAsync(int organizationId, string adminUserId);
+        public Task<IEnumerable<OrganizationResponse>> GetOrganizationAdminsAsync(int id);
+        public Task<OrganizationResponse> CreateOrganizationAdminAsync(int organizationId, string adminUserId);
+        public Task<OrganizationResponse> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization);
+        public Task<OrganizationResponse> DeleteOrganizationAdminAsync(int organizationId, string adminUserId);
 
 
 

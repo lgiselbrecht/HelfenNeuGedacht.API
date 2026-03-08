@@ -1,0 +1,33 @@
+﻿using HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto;
+using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
+
+namespace HelfenNeuGedacht.API.Application.Mapper
+{
+    public class DtoMapper
+    {
+        public OrganizationResponse ToOrganizationResponse(Organization organization)
+        {
+            return new OrganizationResponse()
+            {
+                Id = organization.Id,
+                Name = organization.Name,
+                Description = organization.Description,
+                RegistrationNumber = organization.RegistrationNumber,
+                Type = organization.Type,
+                Website = organization.Website,
+                Street = organization.Street,
+                PostalCode = organization.PostalCode,
+                City = organization.City,
+                State = organization.State,
+                Country = organization.Country,
+                ContactEmail = organization.ContactEmail,
+                ContactPersonName  = organization.ContactPersonName,
+                ContactPhone = organization.ContactPhone,
+                ContactPersonRole = organization.ContactPersonRole
+                                            
+
+
+    };
+        }
+    }
+}

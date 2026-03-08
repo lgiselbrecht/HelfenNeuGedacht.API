@@ -1,0 +1,46 @@
+﻿using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
+using Microsoft.EntityFrameworkCore;
+
+namespace HelfenNeuGedacht.API.Application.Repositories
+{
+    public class MysqlOrganizationRepository : IOrganizationRepositories
+    {
+        private readonly MySqlDbContext _context;
+
+        public MysqlOrganizationRepository(MySqlDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<Organization> AddAsync(Organization entity)
+        {
+           _context.Organization.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<Organization> DeleteAsync(Organization entity)
+        {
+            _context.Organization.Remove(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<List<Organization>> FindAllAsync()
+        {
+            throw new NotImplementedException();
+            // return await _context.Organization.ToListAsync();
+        }
+
+        public async Task<Organization?> FindByIdAsync(int id)
+        {
+          return await _context.Organization.FindAsync(id);
+
+        }
+
+        public Task<Organization> UpdateAsync(Organization entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

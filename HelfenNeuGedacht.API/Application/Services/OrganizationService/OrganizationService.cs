@@ -1,0 +1,91 @@
+﻿using HelfenNeuGedacht.API.Application.Mapper;
+using HelfenNeuGedacht.API.Application.Repositories;
+using HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto;
+using HelfenNeuGedacht.API.Domain.Entities;
+using HelfenNeuGedacht.API.Infrastructure.Repositories;
+using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
+
+namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
+{
+    public class OrganizationService : IOrganizationService
+    {
+        private IOrganizationRepositories _organizationRepositories;
+        private DtoMapper _mapper;
+
+        public OrganizationService(IOrganizationRepositories organizationRepositorie, DtoMapper mapper)
+        {
+            _organizationRepositories = organizationRepositorie;
+            _mapper = mapper;
+        }
+
+        public Task<Organization> CreateOrganizationAdminAsync(int organizationId, string adminUserId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<OrganizationResponse> CreateOrganizationAsync(CreateOrganizationRequest eventEntity)
+        {
+            var organisatzion = new Organization()
+            {
+                Name = eventEntity.Name,
+                Description = eventEntity.Description,
+                Type = eventEntity.Type,
+                RegistrationNumber = eventEntity.RegistrationNumber,
+                Website = eventEntity.Website,
+                Street = eventEntity.Street,
+                PostalCode = eventEntity.PostalCode,
+                City = eventEntity.City,
+                State = eventEntity.State,
+                Country = eventEntity.Country,
+                ContactEmail = eventEntity.ContactEmail,
+                ContactPhone = eventEntity.ContactPhone,
+                ContactPersonName = eventEntity.ContactPersonName,
+                ContactPersonRole = eventEntity.ContactPersonRole
+
+
+            };
+
+
+
+            var newOrganization = await _organizationRepositories.AddAsync(organisatzion);
+
+
+            return _mapper.ToOrganizationResponse(newOrganization);
+
+        }
+
+        public Task<Organization> DeleteOrganizationAdminAsync(int organizationId, string adminUserId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Organization> DeleteOrganizationByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Organization>> GetOrganizationAdminsAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Organization> GetOrganizationByIdAsync(int id)
+        {
+            var x = await _organizationRepositories.FindByIdAsync(id);
+            if (x == null)
+                return null;
+
+            return x;
+        }
+
+        public Task<Organization> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Organization> UpdateOrganizationByIdAsync(int id, Organization updatedOrganization)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

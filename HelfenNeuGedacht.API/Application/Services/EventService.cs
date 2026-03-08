@@ -4,8 +4,8 @@ namespace HelfenNeuGedacht.API.Application.Services
 {
     public class EventService : IEventService
     {
-        private readonly ApplicationDbContext _context;
-        public EventService(ApplicationDbContext context)
+        private readonly MySqlDbContext _context;
+        public EventService(MySqlDbContext context)
         {
             _context = context;
         }

@@ -16,7 +16,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrganizationResponse>> CreateOrganization(CreateOrganizationRequest organization)
+        public async Task<ActionResult<OrganizationResponse>> CreateOrganization(OrganizationRequest organization)
         {
             if (organization == null)
                 return BadRequest("no data recieved");
@@ -39,7 +39,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<OrganizationResponse>> UpdateOrganizationById(int id, CreateOrganizationRequest updatedOrganization)
+        public async Task<ActionResult<OrganizationResponse>> UpdateOrganizationById(int id, OrganizationRequest updatedOrganization)
         {
             if (updatedOrganization == null)
                 return BadRequest("UpdatedOrganization darf nicht null sein.");

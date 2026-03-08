@@ -6,9 +6,9 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
     public interface IOrganizationService
     {
         //Organizations
-        public Task<OrganizationResponse> CreateOrganizationAsync(CreateOrganizationRequest eventEntity);
+        public Task<OrganizationResponse> CreateOrganizationAsync(OrganizationRequest eventEntity);
         public Task<OrganizationResponse> GetOrganizationByIdAsync(int id);
-        public Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, CreateOrganizationRequest updatedOrganization);
+        public Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, OrganizationRequest updatedOrganization);
         public Task<OrganizationResponse> DeleteOrganizationByIdAsync(int id);
 
 

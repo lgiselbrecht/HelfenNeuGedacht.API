@@ -1,6 +1,6 @@
 ﻿namespace HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto
 {
-    public class CreateOrganizationRequest
+    public class OrganizationRequest
     {
         public string Name { get; set; } = string.Empty;
 

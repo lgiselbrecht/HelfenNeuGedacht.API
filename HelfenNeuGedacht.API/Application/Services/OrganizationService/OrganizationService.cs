@@ -23,7 +23,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
             throw new NotImplementedException();
         }
 
-        public async Task<OrganizationResponse> CreateOrganizationAsync(CreateOrganizationRequest eventEntity)
+        public async Task<OrganizationResponse> CreateOrganizationAsync(OrganizationRequest eventEntity)
         {
             var organisatzion = new Organization()
             {
@@ -89,7 +89,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
             throw new NotImplementedException();
         }
 
-        public async Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, CreateOrganizationRequest updatedOrganization)
+        public async Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, OrganizationRequest updatedOrganization)
         {
             var organization = _organizationRepositories.FindByIdAsync(id).Result;
 

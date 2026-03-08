@@ -1,6 +1,6 @@
 ﻿namespace HelfenNeuGedacht.API.Application.Repositories
 {
-    public interface IOrganizationRepositories : IRepository<Organization>
+    public interface IOrganizationRepository : IRepository<Organization>
     {
     }
 }

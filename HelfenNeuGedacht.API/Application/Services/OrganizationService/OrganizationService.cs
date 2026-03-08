@@ -9,10 +9,10 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 {
     public class OrganizationService : IOrganizationService
     {
-        private IOrganizationRepositories _organizationRepositories;
+        private IOrganizationRepository _organizationRepositories;
         private DtoMapper _mapper;
 
-        public OrganizationService(IOrganizationRepositories organizationRepositorie, DtoMapper mapper)
+        public OrganizationService(IOrganizationRepository organizationRepositorie, DtoMapper mapper)
         {
             _organizationRepositories = organizationRepositorie;
             _mapper = mapper;

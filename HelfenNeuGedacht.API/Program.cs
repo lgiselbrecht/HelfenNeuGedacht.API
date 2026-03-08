@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 
-builder.Services.AddScoped<IOrganizationRepositories, MysqlOrganizationRepository>();
+builder.Services.AddScoped<IOrganizationRepository, MysqlOrganizationRepository>();
 
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 

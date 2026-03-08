@@ -1,9 +1,9 @@
-﻿using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
+﻿using HelfenNeuGedacht.API.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelfenNeuGedacht.API.Application.Repositories
+namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
 {
-    public class MysqlOrganizationRepository : IOrganizationRepositories
+    public class MysqlOrganizationRepository : IOrganizationRepository
     {
         private readonly MySqlDbContext _context;
 

@@ -1,6 +1,10 @@
+
+using HelfenNeuGedacht.API.Application.Services.ShiftServices;
+
 using HelfenNeuGedacht.API.Application.Mapper;
 using HelfenNeuGedacht.API.Application.Repositories;
 using HelfenNeuGedacht.API.Application.Services.OrganizationService;
+
 using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -15,11 +19,15 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 
+builder.Services.AddScoped<IShiftService, ShiftService>();
+
+
 builder.Services.AddScoped<IOrganizationRepository, MysqlOrganizationRepository>();
 
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 
 builder.Services.AddTransient<DtoMapper>();
+
 
 
 
@@ -74,8 +82,9 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+app.MapScalarApiReference();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 

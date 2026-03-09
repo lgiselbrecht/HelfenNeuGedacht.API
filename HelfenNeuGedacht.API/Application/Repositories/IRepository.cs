@@ -1,4 +1,4 @@
-﻿using HelfenNeuGedacht.API.Domain.Entities;
+using HelfenNeuGedacht.API.Domain.Entities;
 
 namespace HelfenNeuGedacht.API.Application.Repositories
 {

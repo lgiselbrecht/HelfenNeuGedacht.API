@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace HelfenNeuGedacht.API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreatev2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,7 +38,6 @@ namespace HelfenNeuGedacht.API.Migrations
                     ApprovalStatus = table.Column<int>(type: "int", nullable: false),
                     IsApproved = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsVerified = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ApprovedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
@@ -82,6 +81,11 @@ namespace HelfenNeuGedacht.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false),
+                    Description = table.Column<string>(type: "longtext", nullable: false),
+                    Requirements = table.Column<string>(type: "longtext", nullable: false),
+                    AgeRestriction = table.Column<int>(type: "int", nullable: false),
+                    Points = table.Column<int>(type: "int", nullable: false),
                     EventsId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

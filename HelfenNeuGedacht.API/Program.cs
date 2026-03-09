@@ -20,7 +20,7 @@ builder.Services.AddOpenApi();
 
 
 builder.Services.AddScoped<IShiftService, ShiftService>();
-
+builder.Services.AddScoped<IShiftRepository, MysqlShiftRepository>();
 
 builder.Services.AddScoped<IOrganizationRepository, MysqlOrganizationRepository>();
 
@@ -82,7 +82,6 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
-app.MapScalarApiReference();
 
 //app.UseAuthorization();
 

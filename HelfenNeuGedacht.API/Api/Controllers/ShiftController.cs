@@ -67,7 +67,7 @@ namespace HelfenNeuGedacht.API.Api.Controllers
             if (shift == null)
                 return NotFound($"Kein Dienst gefunden");
 
-            var deletedShift= await _shiftService.DeleteShiftAsync(Id)
+            var deletedShift = await _shiftService.DeleteShiftAsync(Id);
             return NoContent();
         }
     }

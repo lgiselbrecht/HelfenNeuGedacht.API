@@ -10,5 +10,5 @@ public class Events : IEntity
     public DateTime EndDate { get; set; }
     public int OrganizationId { get; set; }
     public required Organization Organization { get; set; }
-    public required ICollection<Shifts> Shift { get; set; }
+    public required ICollection<Shift> Shift { get; set; }
 }

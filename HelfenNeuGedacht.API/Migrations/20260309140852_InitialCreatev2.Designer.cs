@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelfenNeuGedacht.API.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20260308160036_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260309140852_InitialCreatev2")]
+    partial class InitialCreatev2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,40 @@ namespace HelfenNeuGedacht.API.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Event");
+                });
+
+            modelBuilder.Entity("HelfenNeuGedacht.API.Domain.Entities.Shift", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AgeRestriction")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("EventsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Requirements")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventsId");
+
+                    b.ToTable("Shift");
                 });
 
             modelBuilder.Entity("Organization", b =>
@@ -102,9 +136,6 @@ namespace HelfenNeuGedacht.API.Migrations
                     b.Property<bool>("IsApproved")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -139,22 +170,6 @@ namespace HelfenNeuGedacht.API.Migrations
                     b.ToTable("Organization");
                 });
 
-            modelBuilder.Entity("Shifts", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EventsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventsId");
-
-                    b.ToTable("Shift");
-                });
-
             modelBuilder.Entity("Events", b =>
                 {
                     b.HasOne("Organization", "Organization")
@@ -166,7 +181,7 @@ namespace HelfenNeuGedacht.API.Migrations
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("Shifts", b =>
+            modelBuilder.Entity("HelfenNeuGedacht.API.Domain.Entities.Shift", b =>
                 {
                     b.HasOne("Events", null)
                         .WithMany("Shift")

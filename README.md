@@ -124,23 +124,3 @@ Die Datenbank-Verbindungseinstellungen befinden sich in:
 }
 ```
 
-## 📁 Projektstruktur
-
-```
-HelfenNeuGedacht.API2/
-├── Docker/
-│   ├── docker-compose.yml        # Docker Compose Konfiguration
-│   └── mysql_data/                # MySQL Daten-Volume
-├── HelfenNeuGedacht.API/
-│   ├── Controllers/               # API Controller
-│   ├── Infrastructure/
-│   │   └── Repositories/
-│   │       └── MySqlRepository/   # Datenbank-Repositories
-│   ├── Properties/
-│   │   └── launchSettings.json    # Launch-Profile
-│   ├── appsettings.json           # App-Konfiguration (Production)
-│   ├── appsettings.Development.json # App-Konfiguration (Development)
-│   ├── Program.cs                 # Entry Point
-│   └── HelfenNeuGedacht.API.csproj
-└── README.md
-```

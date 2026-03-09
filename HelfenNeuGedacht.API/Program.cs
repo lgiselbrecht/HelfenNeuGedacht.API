@@ -1,4 +1,10 @@
+
 using HelfenNeuGedacht.API.Application.Services.ShiftServices;
+
+using HelfenNeuGedacht.API.Application.Mapper;
+using HelfenNeuGedacht.API.Application.Repositories;
+using HelfenNeuGedacht.API.Application.Services.OrganizationService;
+
 using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -12,7 +18,18 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+
 builder.Services.AddScoped<IShiftService, ShiftService>();
+
+
+builder.Services.AddScoped<IOrganizationRepository, MysqlOrganizationRepository>();
+
+builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+
+builder.Services.AddTransient<DtoMapper>();
+
+
+
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -28,8 +45,9 @@ else
 
 
 
-
 var app = builder.Build();
+
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -56,7 +74,12 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(options =>
+    {
+        options.Title = "HelfenNeuGedacht API";
+    });
 }
+
 
 app.UseHttpsRedirection();
 app.MapScalarApiReference();

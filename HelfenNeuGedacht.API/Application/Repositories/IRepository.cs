@@ -1,4 +1,4 @@
-﻿using HelfenNeuGedacht.API.Domain.Entities;
+using HelfenNeuGedacht.API.Domain.Entities;
 
 namespace HelfenNeuGedacht.API.Application.Repositories
 {
@@ -15,3 +15,4 @@ namespace HelfenNeuGedacht.API.Application.Repositories
         Task<TEntity> DeleteAsync(TEntity entity);
     }
 }
+

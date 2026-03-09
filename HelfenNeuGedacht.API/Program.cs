@@ -8,6 +8,7 @@ using HelfenNeuGedacht.API.Application.Services.OrganizationService;
 using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using HelfenNeuGedacht.API.Application.Services.EventsService;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,8 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IEventRepository, MySqlEventsRepository>();
 
 builder.Services.AddScoped<IShiftService, ShiftService>();
 builder.Services.AddScoped<IShiftRepository, MysqlShiftRepository>();

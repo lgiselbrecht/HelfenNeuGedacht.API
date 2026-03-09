@@ -5,6 +5,7 @@ using HelfenNeuGedacht.API.Domain.Entities;
 ﻿using System.Security.Cryptography.X509Certificates;
 using HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto;
 using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
+using HelfenNeuGedacht.API.Application.Services.EventsService.Dto;
 
 namespace HelfenNeuGedacht.API.Application.Mapper
 {
@@ -69,6 +70,18 @@ namespace HelfenNeuGedacht.API.Application.Mapper
             };
         }
 
-
+        public EventResponse ToEventResponse(HelpingEvents events)
+        {
+            return new EventResponse()
+            {
+                Id = events.Id,
+                Title = events.Title,
+                Description = events.Description,
+                Location = events.Location,
+                StartDate = events.StartDate,
+                EndDate = events.EndDate,
+                OrganizationId = events.OrganizationId
+            };
+        }
     }
 }

@@ -16,21 +16,49 @@ namespace HelfenNeuGedacht.API.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EventResponse>>> GetAllEvents()
+        public async Task<ActionResult<List<HelpingEvents>>> GetAllEvents()
         {
             var events = await _eventService.GetAllEventsAsync();
             return Ok(events);
         }
 
-        // Einzelnes Event abrufen
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<EventResponse>> GetEventById(int id)
+        {
+            var events = await _eventService.GetEventByIdAsync(id);
+            return Ok(events);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<EventResponse>> CreateEvent(EventRequest eventRequest)
+        {
+            if (eventRequest == null)
+                return BadRequest("no data recieved");
+            var createdEvent = await _eventService.CreateEventAsync(eventRequest);
+            return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.Id }, createdEvent);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<EventResponse>> UpdateEvent(int id, EventRequest eventRequest)
+        {
+            if (eventRequest == null)
+                return BadRequest("no data recieved");
+            var updatedEvent = await _eventService.UpdateEventAsync(eventRequest);
+            return Ok(updatedEvent);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteEvent(int id)
         {
             var events = await _eventService.GetEventByIdAsync(id);
             if (events == null)
                 return NotFound($"Event mit der ID {id} wurde nicht gefunden.");
-
-            return Ok(events);
+            await _eventService.DeleteEventAsync(id);
+            return NoContent();
         }
     }
 }

@@ -4,9 +4,10 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
 {
     public interface IEventService
     {
-        Task<IEnumerable<EventResponse>> GetAllEventsAsync();
+        Task<List<EventResponse>> GetAllEventsAsync();
         Task<EventResponse> GetEventByIdAsync(int id);
+        Task<EventResponse> UpdateEventAsync(EventRequest eventEntity);
         Task<EventResponse> CreateEventAsync(EventRequest eventEntity);
-        Task DeleteEventAsync(int id);
+        Task<EventResponse> DeleteEventAsync(int id);
     }
 }

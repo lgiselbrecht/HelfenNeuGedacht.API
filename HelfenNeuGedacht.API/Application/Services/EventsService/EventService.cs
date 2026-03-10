@@ -19,6 +19,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             _eventRepository = eventRepository;
             _mapper = mapper;
         }
+
         public async Task<EventResponse> CreateEventAsync(EventRequest eventEntity)
         {
             var events = new HelpingEvents()
@@ -29,45 +30,59 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
                 StartDate = eventEntity.StartDate,
                 EndDate = eventEntity.EndDate,
             };
-            
+
             var newEvent = await _eventRepository.AddAsync(events);
             return _mapper.ToEventResponse(newEvent);
-            //throw new NotImplementedException();
         }
 
-        public Task DeleteEventAsync(Guid id)
+        public async Task<EventResponse> DeleteEventAsync(int id)
         {
-            throw new NotImplementedException();
+            var eventToDelete = await _eventRepository.FindByIdAsync(id);
+            await _eventRepository.DeleteAsync(eventToDelete);
+
+            return _mapper.ToEventResponse(eventToDelete);
         }
 
-        public Task DeleteEventAsync(int id)
+        public async Task<List<EventResponse>> GetAllEventsAsync()
         {
-            throw new NotImplementedException();
+            var allEvents = await _eventRepository.FindAllAsync();
+            List<EventResponse> eventResponses = new List<EventResponse>();
+
+            foreach (var events in allEvents)
+            {
+                eventResponses.Add(_mapper.ToEventResponse(events));
+            }
+            return eventResponses;
         }
 
-        public Task<IEnumerable<HelpingEvents>> GetAllEventsAsync()
+        public async Task<EventResponse?> GetEventByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var events = await _eventRepository.FindByIdAsync(id);
+            if (events == null)
+            {
+                return null;
+            }
+
+            return _mapper.ToEventResponse(events);
         }
 
-        public Task<HelpingEvents> GetEventByIdAsync(Guid id)
+        public async Task<EventResponse> UpdateEventAsync(EventRequest eventEntity)
         {
-            throw new NotImplementedException();
-        }
+            var existingEvent = await _eventRepository.FindByIdAsync(eventEntity.Id);
 
-        public Task<HelpingEvents> GetEventByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+            if (existingEvent == null)
+            {
+                throw new Exception("Event not found");
+            }
 
-        Task<IEnumerable<EventResponse>> IEventService.GetAllEventsAsync()
-        {
-            throw new NotImplementedException();
-        }
+            existingEvent.Title = eventEntity.Title;
+            existingEvent.Description = eventEntity.Description;
+            existingEvent.Location = eventEntity.Location;
+            existingEvent.StartDate = eventEntity.StartDate;
+            existingEvent.EndDate = eventEntity.EndDate;
 
-        Task<EventResponse> IEventService.GetEventByIdAsync(int id)
-        {
-            throw new NotImplementedException();
+            await _eventRepository.UpdateAsync(existingEvent);
+            return _mapper.ToEventResponse(existingEvent);
         }
     }
 }

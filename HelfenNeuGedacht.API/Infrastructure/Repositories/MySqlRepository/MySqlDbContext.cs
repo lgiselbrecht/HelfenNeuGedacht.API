@@ -1,10 +1,11 @@
 ﻿using HelfenNeuGedacht.API.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 
 namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
 {
-    public class MySqlDbContext : DbContext
+    public class MySqlDbContext : IdentityDbContext<ApplicationUser>
     {
 
         public DbSet<HelpingEvents> Event { get; set; }

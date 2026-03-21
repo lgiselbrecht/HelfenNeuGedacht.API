@@ -1,14 +1,18 @@
 
-using HelfenNeuGedacht.API.Application.Services.ShiftServices;
-
 using HelfenNeuGedacht.API.Application.Mapper;
 using HelfenNeuGedacht.API.Application.Repositories;
+using HelfenNeuGedacht.API.Application.Services;
+using HelfenNeuGedacht.API.Application.Services.Auth.AuthService;
+using HelfenNeuGedacht.API.Application.Services.AuthService;
+using HelfenNeuGedacht.API.Application.Services.EventsService;
 using HelfenNeuGedacht.API.Application.Services.OrganizationService;
-
+using HelfenNeuGedacht.API.Application.Services.ShiftServices;
+using HelfenNeuGedacht.API.Domain.Entities;
 using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using HelfenNeuGedacht.API.Application.Services.EventsService;
+using HelfenNeuGedacht.API.Infrastructure.Seed;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,7 +50,19 @@ else
     throw new InvalidOperationException("Missing required database connection string: 'DefaultConnection'.");
 }
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+}).AddEntityFrameworkStores<MySqlDbContext>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, JWTService>();
 
 var app = builder.Build();
 
@@ -54,7 +70,9 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    var services = scope.ServiceProvider;
     var db = scope.ServiceProvider.GetRequiredService<MySqlDbContext>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
     try
     {
@@ -64,6 +82,7 @@ using (var scope = app.Services.CreateScope())
         }
 
         Console.WriteLine("Database connection successful.");
+        await IdentitySeeder.SeedRolesAsync(roleManager);
     }
     catch (Exception ex)
     {
@@ -86,7 +105,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -98,7 +98,7 @@ using (var scope = app.Services.CreateScope())
         }
 
         Console.WriteLine("Database connection successful.");
-        //Migrations ausführen und Rollen anlegen
+      
         await db.Database.MigrateAsync();
         await IdentitySeeder.SeedRolesAsync(roleManager);
     }
@@ -106,7 +106,7 @@ using (var scope = app.Services.CreateScope())
     {
         Console.WriteLine("Database error during application startup:");
         Console.WriteLine(ex.Message);
-        throw; // bricht den Startup komplett ab
+        throw; 
     }
 }
 

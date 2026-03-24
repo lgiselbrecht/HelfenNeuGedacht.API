@@ -9,10 +9,11 @@ using HelfenNeuGedacht.API.Application.Services.OrganizationService;
 using HelfenNeuGedacht.API.Application.Services.ShiftServices;
 using HelfenNeuGedacht.API.Domain.Entities;
 using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
+using HelfenNeuGedacht.API.Infrastructure.Seed;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using HelfenNeuGedacht.API.Infrastructure.Seed;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +66,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, JWTService>();
 
 var app = builder.Build();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 
 
@@ -95,15 +100,19 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
+//{
+//    app.MapOpenApi();
+//    app.MapScalarApiReference(options =>
+//    {
+//        options.Title = "HelfenNeuGedacht API";
+//    });
+//}
+app.MapOpenApi();
+app.MapScalarApiReference(options =>
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference(options =>
-    {
-        options.Title = "HelfenNeuGedacht API";
-    });
-}
-
+    options.Title = "HelfenNeuGedacht API";
+});
 
 app.UseHttpsRedirection();
 

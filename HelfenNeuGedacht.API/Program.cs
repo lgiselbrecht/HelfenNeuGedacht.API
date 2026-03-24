@@ -82,6 +82,8 @@ using (var scope = app.Services.CreateScope())
         }
 
         Console.WriteLine("Database connection successful.");
+        //Migrations ausführen und Rollen anlegen
+        await db.Database.MigrateAsync();
         await IdentitySeeder.SeedRolesAsync(roleManager);
     }
     catch (Exception ex)

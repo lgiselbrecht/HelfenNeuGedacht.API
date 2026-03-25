@@ -1,6 +1,8 @@
 ﻿using HelfenNeuGedacht.API.Application.Services.ShiftServices;
 using HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto;
+using HelfenNeuGedacht.API.Domain.Constants;
 using HelfenNeuGedacht.API.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mysqlx.Crud;
 
@@ -8,6 +10,8 @@ namespace HelfenNeuGedacht.API.Api.Controllers
 {
     [ApiController]
     [Route("api/shifts")]
+    //[Authorize(Roles = $"{Roles.OrganizationAdmin},{Roles.OrganizationUser}")]
+    //TODO: Rollen festlegen
     public class ShiftController : ControllerBase
     {
         private readonly IShiftService _shiftService;

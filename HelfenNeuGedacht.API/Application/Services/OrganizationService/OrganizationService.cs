@@ -1,9 +1,12 @@
 ﻿using HelfenNeuGedacht.API.Application.Mapper;
 using HelfenNeuGedacht.API.Application.Repositories;
+using HelfenNeuGedacht.API.Application.Services.Auth.AuthService;
 using HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto;
+using HelfenNeuGedacht.API.Domain.Constants;
 using HelfenNeuGedacht.API.Domain.Entities;
 using HelfenNeuGedacht.API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using ZstdSharp.Unsafe;
 using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 
@@ -13,14 +16,109 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
     {
         private IOrganizationRepository _organizationRepositories;
         private DtoMapper _mapper;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ITokenService _tokenService;
 
-        public OrganizationService(IOrganizationRepository organizationRepositorie, DtoMapper mapper)
+        public OrganizationService(
+            IOrganizationRepository organizationRepositorie, 
+            DtoMapper mapper,
+            UserManager<ApplicationUser> userManager,
+            ITokenService tokenService)
         {
             _organizationRepositories = organizationRepositorie;
             _mapper = mapper;
+            _userManager = userManager;
+            _tokenService = tokenService;
         }
 
       
+
+        public async Task<OrganizationRegistrationResponse> RegisterOrganizationWithAdminAsync(OrganizationRequest organizationRequest, string password)
+        {
+            try
+            {
+                // 1. Check if email already exists
+                var existingUser = await _userManager.FindByEmailAsync(organizationRequest.ContactEmail);
+                if (existingUser != null)
+                {
+                    return new OrganizationRegistrationResponse
+                    {
+                        Success = false,
+                        Message = "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits."
+                    };
+                }
+
+                // 2. Create Organization
+                var organization = new Organization
+                {
+                    Name = organizationRequest.Name,
+                    Description = organizationRequest.Description,
+                    Type = organizationRequest.Type,
+                    RegistrationNumber = organizationRequest.RegistrationNumber,
+                    Website = organizationRequest.Website,
+                    Street = organizationRequest.Street,
+                    PostalCode = organizationRequest.PostalCode,
+                    City = organizationRequest.City,
+                    State = organizationRequest.State,
+                    Country = organizationRequest.Country,
+                    ContactEmail = organizationRequest.ContactEmail,
+                    ContactPhone = organizationRequest.ContactPhone,
+                    ContactPersonName = organizationRequest.ContactPersonName,
+                    ContactPersonRole = organizationRequest.ContactPersonRole
+                };
+
+                var createdOrganization = await _organizationRepositories.AddAsync(organization);
+
+                // 3. Create Admin User
+                var adminUser = new ApplicationUser
+                {
+                    UserName = organizationRequest.ContactEmail,
+                    Email = organizationRequest.ContactEmail,
+                    OrganizationId = createdOrganization.Id,
+                    SecurityStamp = Guid.NewGuid().ToString()
+                };
+
+                var createUserResult = await _userManager.CreateAsync(adminUser, password);
+
+                if (!createUserResult.Succeeded)
+                {
+                    // Rollback: Delete organization if user creation fails
+                    await _organizationRepositories.DeleteAsync(createdOrganization);
+                    
+                    var errors = string.Join(", ", createUserResult.Errors.Select(e => e.Description));
+                    return new OrganizationRegistrationResponse
+                    {
+                        Success = false,
+                        Message = $"Fehler beim Erstellen des Benutzers: {errors}"
+                    };
+                }
+
+                // 4. Assign OrganizationAdmin role
+                await _userManager.AddToRoleAsync(adminUser, Roles.OrganizationAdmin);
+
+                // 5. Generate JWT Token
+                var tokenDto = await _tokenService.CreateTokenAsync(adminUser);
+
+                // 6. Return success response with token
+                return new OrganizationRegistrationResponse
+                {
+                    Success = true,
+                    Message = "Organisation und Administrator erfolgreich registriert!",
+                    OrganizationId = createdOrganization.Id,
+                    UserId = adminUser.Id,
+                    Token = tokenDto.token,
+                    TokenExpiration = tokenDto.expiration
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OrganizationRegistrationResponse
+                {
+                    Success = false,
+                    Message = $"Ein Fehler ist aufgetreten: {ex.Message}"
+                };
+            }
+        }
 
         public async Task<OrganizationResponse> CreateOrganizationAsync(OrganizationRequest eventEntity)
         {

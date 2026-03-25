@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Helfen neu gedacht</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">H</div>
+            <div>Helfen neu<br>gedacht</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="Dashboard.html" class="nav-item active">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                    </path>
+                </svg>
+                Dashboard
+            </a>
+            <a href="Events.html" class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
+                </svg>
+                Veranstaltungen
+            </a>
+            <a href="#" class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                    </path>
+                </svg>
+                Dienste
+            </a>
+            <a href="Organization.html" class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                    </path>
+                </svg>
+                Organisation
+            </a>
+        </nav>
+        <div style="padding: 12px; margin-top: auto;">
+            <button onclick="logout()" class="btn btn-outline" style="width: 100%;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                    </path>
+                </svg>
+                Abmelden
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div class="page-title">
+                <h1 id="welcomeMessage">Willkommen!</h1>
+                <p>Hier ist Ihre aktuelle Übersicht über den Helfer-Bedarf</p>
+            </div>
+        </header>
+
+        <!-- Statistics Grid -->
+        <div class="stats-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="card-title">Aktive Veranstaltungen</div>
+                <div class="card-value" id="eventsCount">-</div>
+           
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                        </path>
+                    </svg>
+                </div>
+                <div class="card-title">Offene Dienste</div>
+                <div class="card-value" id="shiftsCount">-</div>
+                
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Meine Nächsten Veranstaltungen</h3>
+                <ul class="event-list" id="upcomingEventsList">
+                    <li class="event-item">
+                        <div>
+                            <div class="event-name">Lade Veranstaltungen...</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Auth-Guard: Prüfe ob Benutzer eingeloggt ist
+        requireAuth();
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            
+            try {
+                // Events zählen
+                await loadEventsCount();
+                
+                // Shifts zählen
+                await loadShiftsCount();
+                
+                // Veranstaltungen laden
+                await loadUpcomingEvents();
+            } catch (error) {
+                console.error('Fehler beim Laden der Dashboard-Daten:', error);
+            }
+        });
+
+        // Events Count laden
+        async function loadEventsCount() {
+            try {
+                const response = await authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`);
+                if (response && response.ok) {
+                    const events = await response.json();
+                    document.getElementById('eventsCount').textContent = events.length;
+                } else {
+                    document.getElementById('eventsCount').textContent = '0';
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Events:', error);
+                document.getElementById('eventsCount').textContent = '0';
+            }
+        }
+
+        // Shifts Count laden
+        async function loadShiftsCount() {
+            try {
+                const response = await authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}`);
+                if (response && response.ok) {
+                    const shifts = await response.json();
+                    document.getElementById('shiftsCount').textContent = shifts.length;
+                } else {
+                    document.getElementById('shiftsCount').textContent = '0';
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Shifts:', error);
+                document.getElementById('shiftsCount').textContent = '0';
+            }
+        }
+
+        // Nächste Veranstaltungen laden
+        async function loadUpcomingEvents() {
+            try {
+                const response = await authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`);
+                if (response.ok) {
+                    const events = await response.json();
+                    const listElement = document.getElementById('upcomingEventsList');
+                    
+                    if (events.length === 0) {
+                        listElement.innerHTML = `
+                            <li class="event-item">
+                                <div>
+                                    <div class="event-name">Keine Veranstaltungen gefunden</div>
+                                </div>
+                            </li>
+                        `;
+                        return;
+                    }
+
+                    // Nur die nächsten 3 Events anzeigen
+                    const upcomingEvents = events
+                        .filter(e => e.startDate) // optional: nur Events mit Datum
+                        .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+                        .slice(0, 3);
+                    listElement.innerHTML = '';
+
+                    upcomingEvents.forEach(event => {
+                        const li = document.createElement('li');
+                        li.className = 'event-item';
+                        
+                        const eventDate = event.startDate ? new Date(event.startDate).toLocaleDateString('de-DE', { 
+                            day: '2-digit', 
+                            month: 'short', 
+                            year: 'numeric' 
+                        }) : 'Datum TBD';
+
+                        li.innerHTML = `
+                            <div>
+                                <div class="event-name">${event.title || 'Unbenannt'}</div>
+                                <div class="event-date">${eventDate}</div>
+                            </div>
+                        `;
+                        
+                        listElement.appendChild(li);
+                    });
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Veranstaltungen:', error);
+            }
+        }
+    </script>
+</body>
+</html>

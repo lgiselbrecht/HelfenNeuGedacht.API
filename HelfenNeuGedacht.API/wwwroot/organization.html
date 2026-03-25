@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organisation - Helfen neu gedacht</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">H</div>
+            <div>Helfen neu<br>gedacht</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="Dashboard.html" class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                    </path>
+                </svg>
+                Dashboard
+            </a>
+            <a href="Events.html" class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
+                </svg>
+                Veranstaltungen
+            </a>
+            <a href="#" class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                    </path>
+                </svg>
+                Dienste
+            </a>
+            <a href="Organization.html" class="nav-item active">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                    </path>
+                </svg>
+                Organisation
+            </a>
+        </nav>
+        <div style="padding: 12px; margin-top: auto;">
+            <button onclick="logout()" class="btn btn-outline" style="width: 100%;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                    </path>
+                </svg>
+                Abmelden
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div class="page-title">
+                <h1>Organisation verwalten</h1>
+                <p>Hier können Sie die Daten Ihrer Organisation einsehen und bearbeiten</p>
+            </div>
+        </header>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="card text-center" style="padding: 40px;">
+            <p>Lade Organisationsdaten...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="card hidden" style="padding: 24px; border-color: #ef4444;">
+            <h3 style="color: #ef4444; margin-bottom: 12px;">Fehler</h3>
+            <p id="errorMessage"></p>
+        </div>
+
+        <!-- Organization Form -->
+        <div id="organizationForm" class="hidden">
+            <form id="orgForm">
+                <!-- Grundlegende Informationen -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <h3 style="margin-bottom: 24px;">Grundlegende Informationen</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="name">Name der Organisation *</label>
+                        <input type="text" id="name" name="name" class="form-input" required placeholder="z.B. Freiwillige Feuerwehr Musterstadt">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="description">Beschreibung</label>
+                        <textarea id="description" name="description" class="form-input" rows="4" placeholder="Kurze Beschreibung Ihrer Organisation"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="type">Typ</label>
+                            <select id="type" name="type" class="form-select">
+                                <option value="">Bitte auswählen...</option>
+                                <option value="Verein">Verein</option>
+                                <option value="Gemeinde">Gemeinde</option>
+                                <option value="Feuerwehr">Feuerwehr</option>
+                                <option value="THW">THW (Technisches Hilfswerk)</option>
+                                <option value="Kirche">Kirche / Religiöse Organisation</option>
+                                <option value="NGO">NGO / Non-Profit Organisation</option>
+                                <option value="Sonstige">Sonstige</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="registrationNumber">Registrierungsnummer *</label>
+                            <input type="text" id="registrationNumber" name="registrationNumber" class="form-input" required placeholder="z.B. VR 12345">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="website">Webseite</label>
+                        <input type="url" id="website" name="website" class="form-input" placeholder="https://www.example.com">
+                    </div>
+                </div>
+
+                <!-- Adresse -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <h3 style="margin-bottom: 24px;">Adresse</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="street">Straße und Hausnummer</label>
+                        <input type="text" id="street" name="street" class="form-input" placeholder="z.B. Musterstraße 123">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="postalCode">Postleitzahl</label>
+                            <input type="text" id="postalCode" name="postalCode" class="form-input" placeholder="z.B. 12345">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="city">Stadt</label>
+                            <input type="text" id="city" name="city" class="form-input" placeholder="z.B. Musterstadt">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="state">Bundesland</label>
+                            <input type="text" id="state" name="state" class="form-input" placeholder="z.B. Vorarlberg">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="country">Land</label>
+                            <input type="text" id="country" name="country" class="form-input" placeholder="z.B. Österreich">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kontaktinformationen -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <h3 style="margin-bottom: 24px;">Kontaktinformationen</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="contactEmail">Kontakt-E-Mail *</label>
+                            <input type="email" id="contactEmail" name="contactEmail" class="form-input" required placeholder="kontakt@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="contactPhone">Kontakt-Telefon</label>
+                            <input type="tel" id="contactPhone" name="contactPhone" class="form-input" placeholder="+49 123 456789">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="contactPersonName">Name der Kontaktperson</label>
+                            <input type="text" id="contactPersonName" name="contactPersonName" class="form-input" placeholder="z.B. Max Mustermann">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="contactPersonRole">Rolle der Kontaktperson</label>
+                            <input type="text" id="contactPersonRole" name="contactPersonRole" class="form-input" placeholder="z.B. Vorsitzende/r">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary btn-lg">
+                        Änderungen speichern
+                    </button>
+                    <button type="button" onclick="loadOrganizationData()" class="btn btn-outline btn-lg">
+                        Zurücksetzen
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Auth-Guard: Prüfe ob Benutzer eingeloggt ist
+        requireAuth();
+
+        let organizationId = null;
+
+        // Extract OrganizationId from JWT Token
+        function getOrganizationIdFromToken() {
+            const userInfo = getUserInfo();
+            if (userInfo && userInfo.OrganizationId) {
+                return parseInt(userInfo.OrganizationId);
+            }
+            return null;
+        }
+
+        // Load organization data on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            organizationId = getOrganizationIdFromToken();
+            
+            if (!organizationId) {
+                showError('Keine Organisation gefunden. Sie sind möglicherweise keiner Organisation zugeordnet.');
+                return;
+            }
+
+            await loadOrganizationData();
+        });
+
+        // Load organization data from API
+        async function loadOrganizationData() {
+            try {
+                showLoading();
+                
+                const response = await authenticatedFetch(
+                    `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ORGANIZATION}/${organizationId}`
+                );
+
+                if (!response.ok) {
+                    throw new Error(`Fehler beim Laden der Organisation: ${response.status}`);
+                }
+
+                const organization = await response.json();
+                populateForm(organization);
+                showForm();
+                
+            } catch (error) {
+                console.error('Fehler beim Laden der Organisation:', error);
+                showError(`Fehler beim Laden der Organisationsdaten: ${error.message}`);
+            }
+        }
+
+        // Populate form with organization data
+        function populateForm(org) {
+            document.getElementById('name').value = org.name || '';
+            document.getElementById('description').value = org.description || '';
+            document.getElementById('type').value = org.type || '';
+            document.getElementById('registrationNumber').value = org.registrationNumber || '';
+            document.getElementById('website').value = org.website || '';
+            document.getElementById('street').value = org.street || '';
+            document.getElementById('postalCode').value = org.postalCode || '';
+            document.getElementById('city').value = org.city || '';
+            document.getElementById('state').value = org.state || '';
+            document.getElementById('country').value = org.country || '';
+            document.getElementById('contactEmail').value = org.contactEmail || '';
+            document.getElementById('contactPhone').value = org.contactPhone || '';
+            document.getElementById('contactPersonName').value = org.contactPersonName || '';
+            document.getElementById('contactPersonRole').value = org.contactPersonRole || '';
+        }
+
+        // Handle form submission
+        document.getElementById('orgForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const organizationData = {
+                name: formData.get('name'),
+                description: formData.get('description') || null,
+                registrationNumber: formData.get('registrationNumber'),
+                type: formData.get('type') || null,
+                website: formData.get('website') || null,
+                street: formData.get('street') || null,
+                postalCode: formData.get('postalCode') || null,
+                city: formData.get('city') || null,
+                state: formData.get('state') || null,
+                country: formData.get('country') || null,
+                contactEmail: formData.get('contactEmail'),
+                contactPhone: formData.get('contactPhone') || null,
+                contactPersonName: formData.get('contactPersonName') || null,
+                contactPersonRole: formData.get('contactPersonRole') || null
+            };
+
+            try {
+                const response = await authenticatedFetch(
+                    `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ORGANIZATION}/${organizationId}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(organizationData)
+                    }
+                );
+
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    throw new Error(`Fehler beim Speichern: ${response.status} - ${errorData}`);
+                }
+
+                const result = await response.json();
+                
+                // Success message
+                alert('Organisationsdaten erfolgreich gespeichert!');
+                
+                // Reload data to show updated values
+                await loadOrganizationData();
+                
+            } catch (error) {
+                console.error('Fehler beim Speichern:', error);
+                alert(`Fehler beim Speichern: ${error.message}`);
+            }
+        });
+
+        // UI State Management
+        function showLoading() {
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('organizationForm').classList.add('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            document.getElementById('organizationForm').classList.add('hidden');
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        function showForm() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('organizationForm').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

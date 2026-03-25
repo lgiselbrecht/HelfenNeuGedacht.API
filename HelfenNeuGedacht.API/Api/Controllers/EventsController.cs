@@ -1,11 +1,14 @@
 ﻿using HelfenNeuGedacht.API.Application.Services.EventsService;
 using HelfenNeuGedacht.API.Application.Services.EventsService.Dto;
+using HelfenNeuGedacht.API.Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HelfenNeuGedacht.API.Api.Controllers
+namespace HelfenNeuGedacht.API.API.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("api/events")]
+    [Authorize(Roles = $"{Roles.OrganizationAdmin},{Roles.OrganizationUser}")]
     public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;

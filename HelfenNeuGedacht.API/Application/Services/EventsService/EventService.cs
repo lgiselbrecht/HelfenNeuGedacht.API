@@ -6,6 +6,9 @@ using HelfenNeuGedacht.API.Domain.Entities;
 using HelfenNeuGedacht.API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
 using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace HelfenNeuGedacht.API.Application.Services.EventsService
 {
@@ -13,11 +16,29 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
     {
         private IEventRepository _eventRepository;
         private DtoMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EventService(IEventRepository eventRepository, DtoMapper mapper)
+        public EventService(
+            IEventRepository eventRepository, 
+            DtoMapper mapper,
+            IHttpContextAccessor httpContextAccessor,
+            UserManager<ApplicationUser> userManager)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
+        }
+
+        private async Task<int?> GetUserOrganizationIdAsync()
+        {
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return null;
+
+            var user = await _userManager.FindByIdAsync(userId);
+            return user?.OrganizationId;
         }
 
         public async Task<EventResponse> CreateEventAsync(EventRequest eventEntity)
@@ -46,7 +67,14 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
 
         public async Task<List<EventResponse>> GetAllEventsAsync()
         {
-            var allEvents = await _eventRepository.FindAllAsync();
+            var organizationId = await GetUserOrganizationIdAsync();
+            
+              if (!organizationId.HasValue)
+            {
+                return new List<EventResponse>();
+            }
+
+            var allEvents = await _eventRepository.FindByOrganizationIdAsync(organizationId.Value);
             List<EventResponse> eventResponses = new List<EventResponse>();
 
             foreach (var events in allEvents)

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Veranstaltungen - Helfen neu gedacht</title>
-    <link rel="stylesheet" href="../style/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -16,7 +16,7 @@
             <div>Helfen neu<br>gedacht</div>
         </div>
         <nav class="nav-menu">
-            <a href="#" class="nav-item">
+            <a href="Dashboard.html" class="nav-item">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
@@ -40,29 +40,26 @@
                 </svg>
                 Dienste
             </a>
-            <a href="#" class="nav-item">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+         
+           <a href="Organization.html" class="nav-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                </path>
+            </svg>
+            Organisation
+        </a>
+        </nav>
+          <div style="padding: 12px; margin-top: auto;">
+            <button onclick="logout()" class="btn btn-outline" style="width: 100%;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Stammhelfer
-            </a>
-            <a href="#" class="nav-item">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
                     </path>
                 </svg>
-                Benutzerverwaltung
-            </a>
-            <a href="#" class="nav-item">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                </svg>
-                Registrierung
-            </a>
-        </nav>
+                Abmelden
+            </button>
+        </div>
     </aside>
 
     <main class="main-content">
@@ -85,7 +82,6 @@
             <input type="text" id="eventLocation" placeholder="Ort" required>
             <label>Start: <input type="datetime-local" id="eventStartDate" required></label>
             <label>Ende: <input type="datetime-local" id="eventEndDate" required></label>
-            <label>Organisations-ID: <input type="number" id="eventOrganizationId" value="1" required></label>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
                 <button type="submit" class="btn-primary">In Datenbank Speichern</button>
                 <button type="button" id="cancelFormBtn"
@@ -155,7 +151,13 @@
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
     <script>
+        // Auth-Guard: Prüfe ob Benutzer eingeloggt ist
+        requireAuth();
+
         function loadEventDetails(eventId) {
             // Verhindert, dass der # Link die Seite nach oben springen lässt
             if (event) event.preventDefault();
@@ -171,9 +173,9 @@
             document.getElementById('modalEventHelpers').textContent = '--/-- Helfer';
             shiftList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">Lade Dienste...</div>';
 
-            const detailUrl = `http://localhost:5062/api/events/${eventId}?includeShifts=true`;
+            const detailUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}/${eventId}?includeShifts=true`;
 
-            fetch(detailUrl)
+            authenticatedFetch(detailUrl)
                 .then(response => {
                     if (!response.ok) throw new Error('Details konnten nicht geladen werden');
                     return response.json();
@@ -312,7 +314,7 @@
                 }
             });
 
-            const apiUrl = 'http://localhost:5062/api/events';
+            const apiUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`;
             const tableBody = document.querySelector('tbody');
 
             // --- Logik für das Erstellen einer neuen Veranstaltung (POST) ---
@@ -337,6 +339,13 @@
             createEventForm.addEventListener('submit', (e) => {
                 e.preventDefault(); // Verhindert das Neuladen der Seite durch HTML
 
+                // OrganizationId aus JWT-Token holen
+                const userInfo = getUserInfo();
+                if (!userInfo || !userInfo.OrganizationId) {
+                    alert('Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.');
+                    return;
+                }
+
                 // Wir sammeln die Daten aus den Input-Feldern zusammen, angepasst an das Swagger/API-Format
                 const newEvent = {
                     id: 0, // 0 als Erkennungszeichen für 'Neuanlage'
@@ -345,11 +354,11 @@
                     location: document.getElementById('eventLocation').value,
                     startDate: new Date(document.getElementById('eventStartDate').value).toISOString(),
                     endDate: new Date(document.getElementById('eventEndDate').value).toISOString(),
-                    organizationId: parseInt(document.getElementById('eventOrganizationId').value, 10)
+                    organizationId: parseInt(userInfo.OrganizationId, 10)
                 };
 
-                // POST Request an dein C#-Backend, um es in der Docker-Datenbank zu speichern
-                fetch(apiUrl, {
+                // POST Request an dein C#-Backend mit Authentifizierung
+                authenticatedFetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newEvent)
@@ -375,15 +384,27 @@
                     });
             });
 
-            // Logik für das Abrufen der Liste (GET) ---
+            // Logik für das Abrufen der Liste (GET) - gefiltert nach Organisation
+            const userInfo = getUserInfo();
+            if (!userInfo || !userInfo.OrganizationId) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.</td></tr>';
+                return;
+            }
 
-            fetch(apiUrl)
+            const apiUrlWithOrg = `${apiUrl}?organizationId=${userInfo.OrganizationId}`;
+
+            authenticatedFetch(apiUrlWithOrg)
                 .then(response => {
                     if (!response.ok) throw new Error('Netzwerk-Antwort war nicht ok');
                     return response.json();
                 })
                 .then(events => {
                     tableBody.innerHTML = '';
+
+                    if (events.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">Keine Veranstaltungen für Ihre Organisation gefunden.</td></tr>';
+                        return;
+                    }
 
                     events.forEach(event => {
                         const tr = document.createElement('tr');
@@ -395,13 +416,13 @@
                                     <span>${event.title}</span>
                                 </div>
                             </td>
-                            <td>${new Date(event.startDate).toLocaleDateString('de-DE')}</td>
                             <td>
                                 <div class="location-cell">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                     ${event.location}
                                 </div>
                             </td>
+                            <td>${new Date(event.startDate).toLocaleDateString('de-DE')}</td>
                             <td>${new Date(event.endDate).toLocaleDateString('de-DE')}</td>
                             <td><span style="color: var(--text-muted); font-size: 0.8rem;">#${event.id}</span></td>
                             <td><a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details ansehen &rarr;</a></td>
@@ -410,7 +431,10 @@
                         tableBody.appendChild(tr);
                     });
                 })
-                .catch(error => console.error('Fehler beim Laden der Veranstaltungen:', error));
+                .catch(error => {
+                    console.error('Fehler beim Laden der Veranstaltungen:', error);
+                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden der Veranstaltungen. Bitte versuchen Sie es später erneut.</td></tr>';
+                });
         });
     </script>
 </body>

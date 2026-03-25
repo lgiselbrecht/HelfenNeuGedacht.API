@@ -22,6 +22,12 @@ namespace HelfenNeuGedacht.API.Application.Services.Auth.AuthService
             new(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
         };
 
+            // OrganizationId hinzufügen, wenn vorhanden für Dashboard
+            if (user.OrganizationId.HasValue)
+            {
+                authClaims.Add(new Claim("OrganizationId", user.OrganizationId.Value.ToString()));
+            }
+
             foreach (var userRole in userRoles)
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));

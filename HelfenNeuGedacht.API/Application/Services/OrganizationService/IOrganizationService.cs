@@ -7,6 +7,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
     {
         //Organizations
         public Task<OrganizationResponse> CreateOrganizationAsync(OrganizationRequest eventEntity);
+        public Task<OrganizationRegistrationResponse> RegisterOrganizationWithAdminAsync(OrganizationRequest organizationRequest, string password);
         public Task<OrganizationResponse> GetOrganizationByIdAsync(int id);
         public Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, OrganizationRequest updatedOrganization);
         public Task<OrganizationResponse> DeleteOrganizationByIdAsync(int id);

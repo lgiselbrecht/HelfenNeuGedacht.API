@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Helfen neu gedacht</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="wizard-container">
+        <div class="card-header" style="text-align: center; margin-bottom: 30px;">
+         
+            <h2>Login</h2>
+       
+        </div>
+
+        <div class="form-section" id="loginForm">
+            <div id="errorMessage" class="alert-box" style="display: none; background-color: #fee; border-left: 4px solid #c33;">
+                <div class="alert-header">
+                      <span id="errorText">Fehler</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">E-Mail-Adresse</label>
+                <input type="email" id="email" class="form-input" placeholder="ihre.email@beispiel.at" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Passwort</label>
+                <input type="password" id="password" class="form-input" placeholder="Ihr Passwort" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-primary btn-lg btn-block" onclick="login()">
+                    Anmelden
+                </button>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                <p style="color: var(--muted-foreground); margin-bottom: 10px;">
+                    Noch keine Organisation registriert?
+                </p>
+                <a href="organization_registration.html" class="btn btn-outline">
+                    Jetzt Organisation registrieren →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Enter-Taste zum Einloggen
+        document.getElementById('password').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                login();
+            }
+        });
+
+        async function login() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Validierung
+            if (!email || !password) {
+                showError('Bitte füllen Sie alle Felder aus.');
+                return;
+            }
+            //Dieser Regex ist garantiert nicht KI generiert
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_CONFIG.BASE_URL}/authenticate/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+               
+                    saveToken(data.token);
+                                       window.location.href = 'dashboard.html';
+                } else {
+                    showError(data.message || 'Login fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.');
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Nach 5 Sekunden ausblenden
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

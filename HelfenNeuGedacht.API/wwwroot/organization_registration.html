@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organisation Registrierung - Helfen neu gedacht</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="wizard-container">
+        <!-- Wizard Steps Progress -->
+        <div class="wizard-steps">
+            <div class="wizard-step active" id="step1-indicator">
+                <div class="wizard-step-circle">1</div>
+                <div class="wizard-step-label">Kontakt-Informationen</div>
+            </div>
+            <div class="wizard-step" id="step2-indicator">
+                <div class="wizard-step-circle">2</div>
+                <div class="wizard-step-label">Organisation-Details</div>
+            </div>
+            <div class="wizard-step" id="step3-indicator">
+                <div class="wizard-step-circle">3</div>
+                <div class="wizard-step-label">Bestätigung</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Kontakt-Informationen -->
+        <div class="form-section" id="step1" style="display: block;">
+            <div class="card-header">
+                <div>
+                    <h2>Kontakt-Informationen</h2>
+                    <p style="color: var(--text-muted); font-size: 14px;">Erstellen Sie Ihr Administrator-Konto</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="contactPersonName">Vor- und Nachname</label>
+                <input type="text" id="contactPersonName" class="form-input" placeholder="Max Musterman" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="contactEmail">E-Mail-Adresse</label>
+                <input type="email" id="contactEmail" class="form-input" placeholder="ihre.email@beispiel.at" required>
+                <div class="form-hint">Diese E-Mail wird für Login und Benachrichtigungen verwendet</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Passwort</label>
+                <input type="password" id="password" class="form-input" placeholder="Mindestens 8 Zeichen" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="passwordConfirm">Passwort bestätigen</label>
+                <input type="password" id="passwordConfirm" class="form-input" placeholder="Passwort wiederholen" required>
+            </div>
+
+            <div class="form-actions">
+                <a href="login.html" class="btn btn-outline">
+                    Bereits registriert? Zum Login
+                </a>
+                <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+                    Weiter →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Organisation-Details -->
+        <div class="form-section" id="step2" style="display: none;">
+            <div class="card-header">
+      
+                <div>
+                    <h2>Organisation-Details</h2>
+                    <p style="color: var(--text-muted); font-size: 14px;">Informationen über Ihre Organisation</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="organizationName">Name der Organisation</label>
+                <input type="text" id="organizationName" class="form-input" placeholder="z.B. Sportverein Musterstadt e.V." required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="registrationNumber">Vereinsregisternummer</label>
+                <input type="text" id="registrationNumber" class="form-input" placeholder="z.B. VR 12345">
+                <div class="form-hint">Optional, aber empfohlen für die Verifizierung</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="organizationType">Art der Organisation</label>
+                <select id="organizationType" class="form-select" required>
+                    <option value="">Bitte auswählen...</option>
+                    <option value="Verein">Verein</option>
+                    <option value="Gemeinde">Gemeinde</option>
+                    <option value="Feuerwehr">Feuerwehr</option>
+                    <option value="THW">THW (Technisches Hilfswerk)</option>
+                    <option value="Kirche">Kirche / Religiöse Organisation</option>
+                    <option value="NGO">NGO / Non-Profit Organisation</option>
+                    <option value="Sonstige">Sonstige</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="street">Straße und Hausnummer</label>
+                <input type="text" id="street" class="form-input" placeholder="z.B. Hauptstraße 123" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="postalCode">Postleitzahl</label>
+                    <input type="text" id="postalCode" class="form-input" placeholder="z.B. 12345" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="city">Stadt</label>
+                    <input type="text" id="city" class="form-input" placeholder="z.B. Musterstadt" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="contactPhone">Telefonnummer (optional)</label>
+                <input type="tel" id="contactPhone" class="form-input" placeholder="z.B. +49 123 456789">
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-outline" onclick="prevStep(1)">
+                    ← Zurück
+                </button>
+                <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+                    Weiter →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Bestätigung & Datenschutz -->
+        <div class="form-section" id="step3" style="display: none;">
+            <div class="card-header">
+                <div>
+                    <h2>Bestätigung & Datenschutz</h2>
+                    <p style="color: var(--text-muted); font-size: 14px;">Bestätigen Sie Ihre Angaben</p>
+                </div>
+            </div>
+
+            <!-- Zusammenfassung -->
+            <h3 style="margin-bottom: 16px; font-size: 16px;">Ihre E-Mail</h3>
+            <div class="summary-section">
+                <div class="summary-value" id="summaryEmail">-</div>
+            </div>
+
+            <h3 style="margin-bottom: 16px; font-size: 16px;">Organisation</h3>
+            <div class="summary-section">
+                <div class="summary-value" id="summaryOrgName">-</div>
+            </div>
+
+            <h3 style="margin-bottom: 16px; font-size: 16px;">Adresse</h3>
+            <div class="summary-section">
+                <div class="summary-value" id="summaryAddress">-</div>
+            </div>
+
+            <!-- Checkboxen -->
+            <div style="margin-top: 24px;">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="acceptTerms" class="checkbox-input" required>
+                    <label for="acceptTerms" class="checkbox-label">
+                        Ich akzeptiere die <a href="#" onclick="alert('Nutzungsbedingungen (noch nicht verfügbar)'); return false;">Nutzungsbedingungen</a>
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="acceptPrivacy" class="checkbox-input" required>
+                    <label for="acceptPrivacy" class="checkbox-label">
+                        Ich habe die <a href="#" onclick="alert('Datenschutzerklärung (noch nicht verfügbar)'); return false;">Datenschutzerklärung</a> gelesen und stimme zu
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="acceptNewsletter" class="checkbox-input">
+                    <label for="acceptNewsletter" class="checkbox-label">
+                        Ich möchte Updates und Neuigkeiten per E-Mail erhalten (optional)
+                    </label>
+                </div>
+            </div>
+
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-outline" onclick="prevStep(2)">
+                    Zurück
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" onclick="submitRegistration()">
+                    Registrierung abschließen
+                </button>
+            </div>
+        </div>
+
+        <!-- Erfolgsmeldung (versteckt) -->
+        <div class="form-section" id="successMessage" style="display: none;">
+            <div class="text-center">
+                <div style="font-size: 64px; margin-bottom: 16px;">✅</div>
+                <h2>Registrierung erfolgreich!</h2>
+                <p style="color: var(--text-muted); margin: 16px 0;">
+                    Ihre Organisation wurde erfolgreich registriert. Sie erhalten in Kürze eine Bestätigungs-E-Mail.
+                </p>
+                <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='Dashboard.html'">
+                    Zum Dashboard →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        let currentStep = 1;
+        const formData = {};
+
+        // Wechsle zum nächsten Schritt
+        function nextStep(step) {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+
+            // Speichere aktuelle Daten
+            saveStepData(currentStep);
+
+            // Verstecke aktuellen Schritt
+            document.getElementById(`step${currentStep}`).style.display = 'none';
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('active');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('completed');
+
+            // Zeige nächsten Schritt
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).style.display = 'block';
+            document.getElementById(`step${currentStep}-indicator`).classList.add('active');
+
+            // Bei Schritt 3: Zusammenfassung anzeigen
+            if (currentStep === 3) {
+                showSummary();
+            }
+
+            // Scroll nach oben
+            window.scrollTo(0, 0);
+        }
+
+        // Wechsle zum vorherigen Schritt
+        function prevStep(step) {
+            // Verstecke aktuellen Schritt
+            document.getElementById(`step${currentStep}`).style.display = 'none';
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('active');
+
+            // Zeige vorherigen Schritt
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).style.display = 'block';
+            document.getElementById(`step${currentStep}-indicator`).classList.add('active');
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('completed');
+
+            // Scroll nach oben
+            window.scrollTo(0, 0);
+        }
+
+        // Validiere aktuellen Schritt
+        function validateStep(step) {
+            if (step === 1) {
+                const name = document.getElementById('contactPersonName').value.trim();
+                const email = document.getElementById('contactEmail').value.trim();
+                const password = document.getElementById('password').value;
+                const passwordConfirm = document.getElementById('passwordConfirm').value;
+
+                if (!name || !email || !password || !passwordConfirm) {
+                    alert('Bitte füllen Sie alle Pflichtfelder aus.');
+                    return false;
+                }
+
+                if (password !== passwordConfirm) {
+                    alert('Die Passwörter stimmen nicht überein.');
+                    return false;
+                }
+
+                if (password.length < 8) {
+                    alert('Das Passwort muss mindestens 8 Zeichen lang sein.');
+                    return false;
+                }
+
+                // Einfache E-Mail-Validierung
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+                    return false;
+                }
+            }
+
+            if (step === 2) {
+                const orgName = document.getElementById('organizationName').value.trim();
+                const orgType = document.getElementById('organizationType').value;
+                const street = document.getElementById('street').value.trim();
+                const postalCode = document.getElementById('postalCode').value.trim();
+                const city = document.getElementById('city').value.trim();
+
+                if (!orgName || !orgType || !street || !postalCode || !city) {
+                    alert('Bitte füllen Sie alle Pflichtfelder aus.');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Speichere Daten des aktuellen Schritts
+        function saveStepData(step) {
+            if (step === 1) {
+                formData.contactPersonName = document.getElementById('contactPersonName').value.trim();
+                formData.contactEmail = document.getElementById('contactEmail').value.trim();
+                formData.password = document.getElementById('password').value;
+            }
+
+            if (step === 2) {
+                formData.name = document.getElementById('organizationName').value.trim();
+                formData.registrationNumber = document.getElementById('registrationNumber').value.trim() || '';
+                formData.type = document.getElementById('organizationType').value;
+                formData.street = document.getElementById('street').value.trim();
+                formData.postalCode = document.getElementById('postalCode').value.trim();
+                formData.city = document.getElementById('city').value.trim();
+                formData.contactPhone = document.getElementById('contactPhone').value.trim() || null;
+                formData.country = 'Österreich';
+            }
+        }
+
+        // Zeige Zusammenfassung an
+        function showSummary() {
+            document.getElementById('summaryEmail').textContent = formData.contactEmail;
+            document.getElementById('summaryOrgName').textContent = formData.name;
+            document.getElementById('summaryAddress').textContent = 
+                `${formData.street}, ${formData.postalCode} ${formData.city}`;
+        }
+
+        // Registrierung absenden
+        async function submitRegistration() {
+            // Validiere Checkboxen
+            const acceptTerms = document.getElementById('acceptTerms').checked;
+            const acceptPrivacy = document.getElementById('acceptPrivacy').checked;
+
+            if (!acceptTerms || !acceptPrivacy) {
+                alert('Bitte akzeptieren Sie die Nutzungsbedingungen und Datenschutzerklärung.');
+                return;
+            }
+
+            // Erstelle Request-Objekt mit Passwort
+            const registrationRequest = {
+                name: formData.name,
+                registrationNumber: formData.registrationNumber || '',
+                type: formData.type,
+                street: formData.street,
+                postalCode: formData.postalCode,
+                city: formData.city,
+                country: formData.country,
+                contactEmail: formData.contactEmail,
+                contactPhone: formData.contactPhone,
+                contactPersonName: formData.contactPersonName,
+                password: formData.password
+            };
+
+            try {
+                // Sende Request an neuen /register Endpoint
+                const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ORGANIZATION}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(registrationRequest)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    console.log('Registrierung erfolgreich:', result);
+
+                    // Token speichern (automatischer Login)
+                    saveToken(result.token);
+
+                    // Speichere Benutzername für Dashboard
+                    localStorage.setItem('userName', formData.contactPersonName);
+
+                    // Verstecke Formular, zeige Erfolgsmeldung
+                    document.getElementById('step3').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+
+                    // // Automatische Weiterleitung zum Dashboard nach 2 Sekunden
+                    // setTimeout(() => {
+                    //     window.location.href = 'Dashboard.html';
+                    // }, 2000);
+                } else {
+                    console.error('Registrierung fehlgeschlagen:', result);
+                    alert(`Registrierung fehlgeschlagen: ${result.message || 'Unbekannter Fehler'}`);
+                }
+            } catch (error) {
+                console.error('Fehler bei der Registrierung:', error);
+                alert('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.');
+            }
+        }
+    </script>
+</body>
+</html>

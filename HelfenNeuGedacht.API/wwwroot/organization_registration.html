@@ -193,12 +193,11 @@
         <!-- Erfolgsmeldung (versteckt) -->
         <div class="form-section" id="successMessage" style="display: none;">
             <div class="text-center">
-                <div style="font-size: 64px; margin-bottom: 16px;">✅</div>
                 <h2>Registrierung erfolgreich!</h2>
                 <p style="color: var(--text-muted); margin: 16px 0;">
                     Ihre Organisation wurde erfolgreich registriert. Sie erhalten in Kürze eine Bestätigungs-E-Mail.
                 </p>
-                <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='Dashboard.html'">
+                <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='dashboard.html'">
                     Zum Dashboard →
                 </button>
             </div>
@@ -384,7 +383,7 @@
 
                     // // Automatische Weiterleitung zum Dashboard nach 2 Sekunden
                     // setTimeout(() => {
-                    //     window.location.href = 'Dashboard.html';
+                    //     window.location.href = 'dashboard.html';
                     // }, 2000);
                 } else {
                     console.error('Registrierung fehlgeschlagen:', result);

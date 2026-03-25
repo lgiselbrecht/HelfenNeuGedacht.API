@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div class="events">
+        <ul class="events_list">
+
+        </ul>
+    </div>
+
+    <div class="shifts">
+        <ul class="shifts_list" id="shifts_list">
+
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const apiUrl = 'http://localhost:5062/api/shifts';
+    const listElement = document.getElementById('shifts_list');
+
+    fetch(apiUrl)
+        .then(response => {
+            return response.json(); 
+        })
+        .then(shifts => {
+            listElement.innerHTML = '';
+
+            shifts.forEach(shift => {
+                const li = document.createElement('li');
+                
+                li.innerHTML = `
+                    <strong>${shift.name}</strong>: ${shift.description} 
+                    <em>(Anforderung: ${shift.requirements}, Punkte: ${shift.points})</em>
+                `;
+                
+                listElement.appendChild(li);
+            });
+        })
+});
+    </script>
+</body>
+</html>

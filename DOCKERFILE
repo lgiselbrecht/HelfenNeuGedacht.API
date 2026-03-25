@@ -2,6 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
+
 # Solution + Projekt kopieren (für Cache)
 COPY *.sln ./
 COPY HelfenNeuGedacht.API/*.csproj HelfenNeuGedacht.API/
@@ -10,6 +11,9 @@ RUN dotnet restore HelfenNeuGedacht.API/HelfenNeuGedacht.API.csproj
 # Restlichen Code kopieren
 COPY . .
 WORKDIR /src/HelfenNeuGedacht.API
+
+# config.js mit dem Build-ARG anpassen (ersetzt localhost durch konfigurierte URL)
+RUN sed -i "s|http://localhost:5062/api|${API_BASE_URL}|g" wwwroot/config.js
 
 # Build + Publish
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false

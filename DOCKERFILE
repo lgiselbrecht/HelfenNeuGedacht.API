@@ -12,6 +12,9 @@ RUN dotnet restore HelfenNeuGedacht.API/HelfenNeuGedacht.API.csproj
 COPY . .
 WORKDIR /src/HelfenNeuGedacht.API
 
+# ARG deklarieren (mit Default für lokale Entwicklung)
+ARG API_BASE_URL=http://localhost:5062/api
+
 # config.js mit dem Build-ARG anpassen (ersetzt localhost durch konfigurierte URL)
 RUN sed -i "s|http://localhost:5062/api|${API_BASE_URL}|g" wwwroot/config.js
 

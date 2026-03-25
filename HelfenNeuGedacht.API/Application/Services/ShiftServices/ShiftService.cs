@@ -24,11 +24,18 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
                 Requirements = shiftRequest.Requirements,
                 AgeRestriction = shiftRequest.AgeRestriction,
                 Points = shiftRequest.Points,
+                EventId = shiftRequest.EventId
             };
 
             var newShift = await _shiftRepositories.AddAsync(shift);
 
             return _mapper.ToShiftResponse(newShift);
+        }
+
+        public async Task<List<ShiftResponse>> GetShiftsByEventIdAsync(int eventId)
+        {
+            var shifts = await _shiftRepositories.FindByEventIdAsync(eventId);
+            return shifts.Select(s => _mapper.ToShiftResponse(s)).ToList();
         }
 
 
@@ -77,6 +84,7 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
             existingShift.Requirements = shift.Requirements;
             existingShift.AgeRestriction = shift.AgeRestriction;
             existingShift.Points = shift.Points;
+            existingShift.EventId = shift.EventId;
 
             await _shiftRepositories.UpdateAsync(existingShift);
 

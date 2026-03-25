@@ -22,6 +22,7 @@ namespace HelfenNeuGedacht.API.Application.Mapper
                 Requirements = shift.Requirements,
                 AgeRestriction = shift.AgeRestriction,
                 Points = shift.Points,
+                EventId = shift.EventId
             };
         }
 
@@ -70,9 +71,9 @@ namespace HelfenNeuGedacht.API.Application.Mapper
             };
         }
 
-        public EventResponse ToEventResponse(HelpingEvents events)
+        public EventResponse ToEventResponse(HelpingEvents events, bool includeShifts = false)
         {
-            return new EventResponse()
+            var response = new EventResponse()
             {
                 Id = events.Id,
                 Title = events.Title,
@@ -82,6 +83,13 @@ namespace HelfenNeuGedacht.API.Application.Mapper
                 EndDate = events.EndDate,
                 OrganizationId = events.OrganizationId
             };
+
+            if (includeShifts && events.Shift != null)
+            {
+                response.Shifts = events.Shift.Select(s => ToShiftResponse(s)).ToList();
+            }
+
+            return response;
         }
     }
 }

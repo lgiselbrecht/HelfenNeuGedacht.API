@@ -1,4 +1,5 @@
 ﻿using HelfenNeuGedacht.API.Application.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
 {
@@ -27,14 +28,12 @@ namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
 
         public async Task<List<HelpingEvents>> FindAllAsync()
         {
-            //return await _context.Event.ToListAsync();
-            throw new NotImplementedException();
+            return await _context.Event.ToListAsync();
         }
 
         public async Task<HelpingEvents?> FindByIdAsync(int id)
         {
-            //return await _context.Event.FirstOrDefaultAsync(e => e.Id == id);
-            throw new NotImplementedException();
+            return await _context.Event.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<HelpingEvents> UpdateAsync(HelpingEvents entity)
@@ -42,6 +41,20 @@ namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
             _context.Event.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
+        }
+
+        public async Task<HelpingEvents?> FindByIdWithShiftsAsync(int id)
+        {
+            return await _context.Event
+                .Include(e => e.Shift)
+                .FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async Task<List<HelpingEvents>> FindByOrganizationIdAsync(int organizationId)
+        {
+            return await _context.Event
+                .Where(e => e.OrganizationId == organizationId)
+                .ToListAsync();
         }
     }
 }

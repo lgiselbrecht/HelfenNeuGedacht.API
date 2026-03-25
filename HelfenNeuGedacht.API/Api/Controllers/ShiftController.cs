@@ -18,10 +18,18 @@ namespace HelfenNeuGedacht.API.Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<Shift>>> GetAllShifts()
+        public async Task<ActionResult<List<ShiftResponse>>> GetAllShifts([FromQuery] int? eventId)
         {
-            var shifts = await _shiftService.GetAllShiftsAsync();
-            return Ok(shifts);
+            if (eventId.HasValue)
+            {
+                var shifts = await _shiftService.GetShiftsByEventIdAsync(eventId.Value);
+                return Ok(shifts);
+            }
+            else
+            {
+                var shifts = await _shiftService.GetAllShiftsAsync();
+                return Ok(shifts);
+            }
         }
 
         [HttpGet("{id}")]

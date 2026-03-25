@@ -4,6 +4,6 @@ namespace HelfenNeuGedacht.API.Application.Repositories
 {
     public interface IShiftRepository : IRepository<Shift>
     {
-
+        Task<List<Shift>> FindByEventIdAsync(int eventId);
     }
 }

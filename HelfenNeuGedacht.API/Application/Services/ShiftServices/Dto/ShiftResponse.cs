@@ -13,5 +13,7 @@
         public int AgeRestriction { get; set; } = 0;
 
         public int Points { get; set; }
+
+        public int EventId { get; set; }
     }
 }

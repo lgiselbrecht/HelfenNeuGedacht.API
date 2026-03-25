@@ -5,7 +5,8 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
     public interface IEventService
     {
         Task<List<EventResponse>> GetAllEventsAsync();
-        Task<EventResponse> GetEventByIdAsync(int id);
+        Task<List<EventResponse>> GetEventsByOrganizationIdAsync(int organizationId);
+        Task<EventResponse> GetEventByIdAsync(int id, bool includeShifts = false);
         Task<EventResponse> UpdateEventAsync(EventRequest eventEntity);
         Task<EventResponse> CreateEventAsync(EventRequest eventEntity);
         Task<EventResponse> DeleteEventAsync(int id);

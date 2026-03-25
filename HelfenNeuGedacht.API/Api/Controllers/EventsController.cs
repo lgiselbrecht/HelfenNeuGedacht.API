@@ -16,17 +16,27 @@ namespace HelfenNeuGedacht.API.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<HelpingEvents>>> GetAllEvents()
+        public async Task<ActionResult<List<EventResponse>>> GetAllEvents([FromQuery] int? organizationId)
         {
-            var events = await _eventService.GetAllEventsAsync();
-            return Ok(events);
+            if (organizationId.HasValue)
+            {
+                var events = await _eventService.GetEventsByOrganizationIdAsync(organizationId.Value);
+                return Ok(events);
+            }
+            else
+            {
+                var events = await _eventService.GetAllEventsAsync();
+                return Ok(events);
+            }
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<EventResponse>> GetEventById(int id)
+        public async Task<ActionResult<EventResponse>> GetEventById(int id, [FromQuery] bool includeShifts = false)
         {
-            var events = await _eventService.GetEventByIdAsync(id);
+            var events = await _eventService.GetEventByIdAsync(id, includeShifts);
+            if (events == null)
+                return NotFound($"Event mit der ID {id} wurde nicht gefunden.");
             return Ok(events);
         }
 

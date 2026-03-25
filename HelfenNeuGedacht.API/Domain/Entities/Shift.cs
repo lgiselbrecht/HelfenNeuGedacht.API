@@ -14,5 +14,8 @@
 
         public int Points { get; set; }
 
+        // Beziehung zu HelpingEvents
+        public int EventId { get; set; }
+        public HelpingEvents? Event { get; set; }
     }
 }

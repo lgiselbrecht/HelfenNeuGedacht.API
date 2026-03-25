@@ -29,6 +29,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
                 Location = eventEntity.Location,
                 StartDate = eventEntity.StartDate,
                 EndDate = eventEntity.EndDate,
+                OrganizationId = eventEntity.OrganizationId
             };
 
             var newEvent = await _eventRepository.AddAsync(events);
@@ -55,15 +56,31 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             return eventResponses;
         }
 
-        public async Task<EventResponse?> GetEventByIdAsync(int id)
+        public async Task<EventResponse?> GetEventByIdAsync(int id, bool includeShifts = false)
         {
-            var events = await _eventRepository.FindByIdAsync(id);
+            HelpingEvents? events;
+            
+            if (includeShifts)
+            {
+                events = await _eventRepository.FindByIdWithShiftsAsync(id);
+            }
+            else
+            {
+                events = await _eventRepository.FindByIdAsync(id);
+            }
+            
             if (events == null)
             {
                 return null;
             }
 
-            return _mapper.ToEventResponse(events);
+            return _mapper.ToEventResponse(events, includeShifts);
+        }
+
+        public async Task<List<EventResponse>> GetEventsByOrganizationIdAsync(int organizationId)
+        {
+            var events = await _eventRepository.FindByOrganizationIdAsync(organizationId);
+            return events.Select(e => _mapper.ToEventResponse(e)).ToList();
         }
 
         public async Task<EventResponse> UpdateEventAsync(EventRequest eventEntity)
@@ -80,6 +97,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             existingEvent.Location = eventEntity.Location;
             existingEvent.StartDate = eventEntity.StartDate;
             existingEvent.EndDate = eventEntity.EndDate;
+            existingEvent.OrganizationId = eventEntity.OrganizationId;
 
             await _eventRepository.UpdateAsync(existingEvent);
             return _mapper.ToEventResponse(existingEvent);

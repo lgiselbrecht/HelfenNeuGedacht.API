@@ -45,5 +45,12 @@ namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
             await _context.SaveChangesAsync();
             return entity;
         }
+
+        public async Task<List<Shift>> FindByEventIdAsync(int eventId)
+        {
+            return await _context.Shift
+                .Where(s => s.EventId == eventId)
+                .ToListAsync();
+        }
     }
 }

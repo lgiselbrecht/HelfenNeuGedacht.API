@@ -27,9 +27,9 @@ namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
             return entity;
         }
 
-        public async Task<List<Shift>> FindAllAsync()
+            public async Task<List<Shift>> FindAllAsync()
         {
-            //throw new NotImplementedException();
+          
             return await _context.Shift.ToListAsync();
         }
 

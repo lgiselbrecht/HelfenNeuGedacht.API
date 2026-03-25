@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelfenNeuGedacht.API.API.Controllers
+//TODO: Add/check Authorization
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -44,7 +45,6 @@ namespace HelfenNeuGedacht.API.API.Controllers
             var createdOrganization = await _organizationService.CreateOrganizationAsync(organization);
 
            return Ok(createdOrganization);
-           //return CreatedAtAction(nameof(GetById), new { id = newOrganization.Id }, newLecture);
         }
 
         [HttpGet("{id}")]

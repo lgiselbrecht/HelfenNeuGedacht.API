@@ -156,10 +156,13 @@ app.MapOpenApi();
 app.MapScalarApiReference(options =>
 {
     options.Title = "HelfenNeuGedacht API";
+
 });
 
 app.UseHttpsRedirection();
 
+
+//TODO: besser einschränken 
 app.UseCors("AllowAll");
 
 app.UseDefaultFiles();

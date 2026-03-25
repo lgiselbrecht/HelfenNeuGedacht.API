@@ -68,8 +68,9 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
         public async Task<List<EventResponse>> GetAllEventsAsync()
         {
             var organizationId = await GetUserOrganizationIdAsync();
-            
-              if (!organizationId.HasValue)
+
+            // empty list if user has no organization            
+            if (!organizationId.HasValue)
             {
                 return new List<EventResponse>();
             }
@@ -105,6 +106,8 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             return _mapper.ToEventResponse(events, includeShifts);
         }
 
+        // This method is currently not used, but it can be useful for future features like an Superadmin dashboard
+     
         public async Task<List<EventResponse>> GetEventsByOrganizationIdAsync(int organizationId)
         {
             var events = await _eventRepository.FindByOrganizationIdAsync(organizationId);

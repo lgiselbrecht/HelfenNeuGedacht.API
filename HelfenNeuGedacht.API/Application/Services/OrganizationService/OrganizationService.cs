@@ -202,6 +202,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 
         }
 
+        //TODO: Frontend anbindung erst im Innovationsprojekt (v2)
         public async Task<OrganizationApprovedResponse> ApproveOrganization(OrganizationApprovedRequest organizationApprovedRequest, string adminUser)
         {
             var organization = await _organizationRepositories.FindByIdAsync(organizationApprovedRequest.OrganisationId);
@@ -222,7 +223,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 
         }
 
-
+        //TODO: Implement or Delete kann aber raus denke da wir das via userroles regeln können
         public Task<IEnumerable<OrganizationResponse>> GetOrganizationAdminsAsync(int id)
         {
             throw new NotImplementedException();

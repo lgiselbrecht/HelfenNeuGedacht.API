@@ -25,11 +25,11 @@ namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
             await _context.SaveChangesAsync();
             return entity;
         }
-
+        //TODO: usecase? 
         public async Task<List<Organization>> FindAllAsync()
         {
             throw new NotImplementedException();
-            // return await _context.Organization.ToListAsync();
+            
         }
 
         public async Task<Organization?> FindByIdAsync(int id)

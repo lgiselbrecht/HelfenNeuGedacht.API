@@ -862,3 +862,19 @@ tbody tr:hover {
 .text-warning { color: #f59e0b; }
 .text-success { color: #10b981; }
 
+.action-link-danger {
+    color: #ef4444;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.action-link-danger:hover {
+    text-decoration: underline;
+}
+
+

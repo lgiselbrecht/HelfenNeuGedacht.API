@@ -83,7 +83,7 @@
             <label>Start: <input type="datetime-local" id="eventStartDate" required></label>
             <label>Ende: <input type="datetime-local" id="eventEndDate" required></label>
             <div class="form-actions-row">
-                <button type="submit" class="btn-primary">In Datenbank Speichern</button>
+                <button type="submit" class="btn-primary">Speichern</button>
                 <button type="button" id="cancelFormBtn" class="btn-secondary">Abbrechen</button>
             </div>
         </form>
@@ -218,8 +218,6 @@
                         let totalHelpersCurrent = 0;
 
                         eventDetails.shifts.forEach(shift => {
-                            // Dummy calculations for UI demonstration matching the design
-                            // Ideally these come directly from the backend shift object
                             const helpersNeeded = 15; // Placeholder
                             const helpersCurrent = Math.floor(Math.random() * helpersNeeded);
                             const percentage = helpersCurrent / helpersNeeded;
@@ -268,7 +266,7 @@
 
                         document.getElementById('modalEventHelpers').textContent = `${totalHelpersCurrent}/${totalHelpersNeeded} Helfer`;
                     } else {
-                        // Dummy-Daten anzeigen, wenn noch keine Schichten im Backend existieren (passend zum Screenshot)
+                        // Dummy-Daten anzeigen, wenn noch keine Schichten im Backend existieren
                         shiftList.innerHTML = `
                             <div class="shift-card">
                                 <div class="shift-details">
@@ -318,6 +316,30 @@
                     console.error('Fehler beim Abrufen der Details:', error);
                     shiftList.innerHTML = `<div style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden: ${error.message}</div>`;
                 });
+        }
+
+        async function deleteEvent(eventId, eventTitle) {
+            if (!confirm(`Möchten Sie die Veranstaltung "${eventTitle}" wirklich unwiderruflich löschen?`)) {
+                return;
+            }
+
+            try {
+                const deleteUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}/${eventId}`;
+                const response = await authenticatedFetch(deleteUrl, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('Veranstaltung wurde erfolgreich gelöscht.');
+                    location.reload();
+                } else {
+                    const error = await response.json();
+                    alert(`Fehler beim Löschen: ${error.message || 'Unbekannter Fehler'}`);
+                }
+            } catch (error) {
+                console.error('Fehler beim Löschen der Veranstaltung:', error);
+                alert('Netzwerkfehler beim Löschen der Veranstaltung.');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -441,10 +463,15 @@
                                     ${event.location}
                                 </div>
                             </td>
-                            <td>${new Date(event.startDate).toLocaleDateString('de-DE')}</td>
+                             <td>${new Date(event.startDate).toLocaleDateString('de-DE')}</td>
                             <td>${new Date(event.endDate).toLocaleDateString('de-DE')}</td>
                             <td><span style="color: var(--text-muted); font-size: 0.8rem;">#${event.id}</span></td>
-                            <td><a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details ansehen &rarr;</a></td>
+                            <td>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details &rarr;</a>
+                                    <button onclick="deleteEvent(${event.id}, '${event.title.replace(/'/g, "\\'")}')" class="action-link-danger">Löschen</button>
+                                </div>
+                            </td>
                         `;
 
                         tableBody.appendChild(tr);

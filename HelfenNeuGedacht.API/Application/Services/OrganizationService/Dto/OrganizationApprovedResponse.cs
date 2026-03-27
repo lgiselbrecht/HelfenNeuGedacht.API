@@ -5,13 +5,11 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto
     public class OrganizationApprovedResponse
     {
         public int Id { get; set; }
-
-    
+            
         public string Name { get; set; } = string.Empty;
 
-        public string RegistrationNumber { get; set; } = string.Empty; //Vereinsregister, etc.
-        public string? Type { get; set; } // z.B. Verein, Gemeinde, Feuerwehr
-
+        public string RegistrationNumber { get; set; } = string.Empty; //Vereinsregister
+        public string? Type { get; set; } 
 
         public OrganizationApprovalStatus ApprovalStatus { get; set; } = OrganizationApprovalStatus.Pending;
 

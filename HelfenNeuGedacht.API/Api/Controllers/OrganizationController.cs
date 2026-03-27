@@ -17,7 +17,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
             _organizationService = organizationService;
         }
 
-        [HttpPost("register")]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<OrganizationRegistrationResponse>> RegisterOrganization([FromBody] OrganizationRegistrationRequest request)
         {
@@ -35,18 +35,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        [Authorize(Roles = "OrganizationAdmin,SuperAdmin")]
-        public async Task<ActionResult<OrganizationResponse>> CreateOrganization(OrganizationRequest organization)
-        {
-            if (organization == null)
-                return BadRequest("no data recieved");
-
-            var createdOrganization = await _organizationService.CreateOrganizationAsync(organization);
-
-           return Ok(createdOrganization);
-        }
-
+        
         [HttpGet("{id}")]
         [Authorize(Roles = "OrganizationAdmin,SuperAdmin")]
         public async Task<ActionResult<Organization>> GetOrganizationById(int id)
@@ -93,50 +82,6 @@ namespace HelfenNeuGedacht.API.API.Controllers
 
             return Ok(deletedOrganization);
         }
-         [Authorize(Roles = "OrganizationAdmin,SuperAdmin")]
-        [HttpPost("{organizationId}/admins/{adminUserId}")]
-        public async Task<ActionResult<Organization>> CreateOrganizationAdmin(int organizationId, string adminUserId)
-        {
-            var organization = await _organizationService.GetOrganizationByIdAsync(organizationId);
-
-            if (organization == null)
-                return NotFound($"Keine Organization mit der ID {organizationId} gefunden.");
-
-            var result = await _organizationService.CreateOrganizationAdminAsync(organizationId, adminUserId);
-
-            return Ok(result);
-        }
-         [Authorize(Roles = "OrganizationAdmin,SuperAdmin")]
-        [HttpGet("{id}/admins")]
-        public async Task<ActionResult<IEnumerable<OrganizationResponse>>> GetOrganizationAdmins(int id)
-        {
-            var organization = await _organizationService.GetOrganizationByIdAsync(id);
-
-            if (organization == null)
-                return NotFound($"Keine Organization mit der ID {id} gefunden.");
-
-            var admins = await _organizationService.GetOrganizationAdminsAsync(id);
-
-            return Ok(admins);
-        }
-         [Authorize(Roles = "OrganizationAdmin,SuperAdmin")]
-        [HttpPut("{organizationId}/admins")]
-        public async Task<ActionResult<OrganizationResponse>> UpdateOrganizationAdmin(int organizationId, Organization updatedOrganization)
-        {
-          throw new NotImplementedException();
-        }
-        [Authorize(Roles = "OrganizationAdmin,SuperAdmin")]
-        [HttpDelete("{organizationId}/admins/{adminUserId}")]
-        public async Task<ActionResult<OrganizationResponse>> DeleteOrganizationAdmin(int organizationId, string adminUserId)
-        {
-            var organization = await _organizationService.GetOrganizationByIdAsync(organizationId);
-
-            if (organization == null)
-                return NotFound($"Keine Organization mit der ID {organizationId} gefunden.");
-
-            var result = await _organizationService.DeleteOrganizationAdminAsync(organizationId, adminUserId);
-
-            return Ok(result);
-        }
+        
     }
 }

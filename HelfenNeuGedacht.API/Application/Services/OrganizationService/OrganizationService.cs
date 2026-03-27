@@ -37,7 +37,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
         {
             try
             {
-                // 1. Check if email already exists
+    
                 var existingUser = await _userManager.FindByEmailAsync(organizationRequest.ContactEmail);
                 if (existingUser != null)
                 {
@@ -48,7 +48,6 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
                     };
                 }
 
-                // 2. Create Organization
                 var organization = new Organization
                 {
                     Name = organizationRequest.Name,
@@ -69,7 +68,6 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 
                 var createdOrganization = await _organizationRepositories.AddAsync(organization);
 
-                // 3. Create Admin User
                 var adminUser = new ApplicationUser
                 {
                     UserName = organizationRequest.ContactEmail,
@@ -82,7 +80,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 
                 if (!createUserResult.Succeeded)
                 {
-                    // Rollback: Delete organization if user creation fails
+       
                     await _organizationRepositories.DeleteAsync(createdOrganization);
                     
                     var errors = string.Join(", ", createUserResult.Errors.Select(e => e.Description));
@@ -93,13 +91,11 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
                     };
                 }
 
-                // 4. Assign OrganizationAdmin role
                 await _userManager.AddToRoleAsync(adminUser, Roles.OrganizationAdmin);
 
-                // 5. Generate JWT Token
+       
                 var tokenDto = await _tokenService.CreateTokenAsync(adminUser);
 
-                // 6. Return success response with token
                 return new OrganizationRegistrationResponse
                 {
                     Success = true,
@@ -118,41 +114,7 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
                     Message = $"Ein Fehler ist aufgetreten: {ex.Message}"
                 };
             }
-        }
-
-        public async Task<OrganizationResponse> CreateOrganizationAsync(OrganizationRequest eventEntity)
-        {
-            var organisatzion = new Organization()
-            {
-                Name = eventEntity.Name,
-                Description = eventEntity.Description,
-                Type = eventEntity.Type,
-                RegistrationNumber = eventEntity.RegistrationNumber,
-                Website = eventEntity.Website,
-                Street = eventEntity.Street,
-                PostalCode = eventEntity.PostalCode,
-                City = eventEntity.City,
-                State = eventEntity.State,
-                Country = eventEntity.Country,
-                ContactEmail = eventEntity.ContactEmail,
-                ContactPhone = eventEntity.ContactPhone,
-                ContactPersonName = eventEntity.ContactPersonName,
-                ContactPersonRole = eventEntity.ContactPersonRole
-
-
-            };
-
-
-
-            var newOrganization = await _organizationRepositories.AddAsync(organisatzion);
-
-
-            return _mapper.ToOrganizationResponse(newOrganization);
-
-        }
-
-
-       
+        }         
 
         public async Task<OrganizationResponse> DeleteOrganizationByIdAsync(int id)
         {
@@ -203,15 +165,15 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
         }
 
         //TODO: Frontend anbindung erst im Innovationsprojekt (v2)
-        public async Task<OrganizationApprovedResponse> ApproveOrganization(OrganizationApprovedRequest organizationApprovedRequest, string adminUser)
+        public async Task<OrganizationApprovedResponse> ApproveOrganization(OrganizationApprovedRequest organizationApprovedRequest, string SuperAdminId)
         {
-            var organization = await _organizationRepositories.FindByIdAsync(organizationApprovedRequest.OrganisationId);
+            var organization = await _organizationRepositories.FindByIdAsync(organizationApprovedRequest.OrganisationId) ;
 
             if (organization == null) {
                 return null;
             }
 
-                organization.ApprovedBy = adminUser;
+            organization.ApprovedBy = SuperAdminId;
             organization.ApprovalStatus = organizationApprovedRequest.ApprovalStatus;
             organization.IsApproved = organizationApprovedRequest.IsApproved;
             organization.RejectionReason = organizationApprovedRequest.RejectionReason;
@@ -222,31 +184,6 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 
 
         }
-
-        //TODO: Implement or Delete kann aber raus denke da wir das via userroles regeln können
-        public Task<IEnumerable<OrganizationResponse>> GetOrganizationAdminsAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<OrganizationResponse> DeleteOrganizationAdminAsync(int organizationId, string adminUserId)
-        {
-
-            throw new NotImplementedException();
-
-
-        }
-
-        public Task<OrganizationResponse> UpdateOrganizationAdminAsync(Organization organization, Organization updatedOrganization)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<OrganizationResponse> CreateOrganizationAdminAsync(int organizationId, string adminUserId)
-        {
-            throw new NotImplementedException();
-        }
-
      
     }
 }

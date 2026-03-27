@@ -1,10 +1,12 @@
-﻿using HelfenNeuGedacht.API.Application.Mapper;
+﻿using System.Security.Claims;
+using HelfenNeuGedacht.API.Application.Mapper;
 using HelfenNeuGedacht.API.Application.Repositories;
+using HelfenNeuGedacht.API.Application.Services.EventsService;
 using HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto;
 using HelfenNeuGedacht.API.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
+using Microsoft.AspNetCore.SignalR;
 
 namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
 {
@@ -15,19 +17,30 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
         private DtoMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHubContext<DashboardHub> _dashboardHub;
+        private readonly IEventService _eventService;
 
         public ShiftService(
             IShiftRepository shiftRepository, 
             IEventRepository eventRepository,
             DtoMapper mapper,
             IHttpContextAccessor httpContextAccessor,
-            UserManager<ApplicationUser> userManager) 
+            UserManager<ApplicationUser> userManager,
+            IHubContext<DashboardHub> dashboardHub,
+            IEventService eventService
+
+
+            ) 
+
         {
             _shiftRepositories = shiftRepository;
             _eventRepository = eventRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
+            _dashboardHub = dashboardHub;
+            _eventService = eventService;
+
         }
 
         private async Task<int?> GetUserOrganizationIdAsync()
@@ -52,7 +65,11 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
                 EventId = shiftRequest.EventId
             };
 
+            //für SignalR Update Dashboard bitte lassen //TODO: Komentar entfernen
             var newShift = await _shiftRepositories.AddAsync(shift);
+            var shiftEvent = await _eventService.GetEventByIdAsync(newShift.EventId);
+            var groupName = $"organization-{shiftEvent.OrganizationId}";
+            await _dashboardHub.Clients.Group(groupName).SendAsync("dashboardUpdated");
 
             return _mapper.ToShiftResponse(newShift);
         }
@@ -67,7 +84,18 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
         public async Task<ShiftResponse> DeleteShiftAsync(int id)
         {
             var shiftToDelete = await _shiftRepositories.FindByIdAsync(id);
+            if (shiftToDelete == null) {
+                return null;
+            }
+
             await _shiftRepositories.DeleteAsync(shiftToDelete);
+              
+
+            //für SignalR Update Dashboard bitte lassen //TODO: Komentar entfernen
+            var shiftEvent = await _eventService.GetEventByIdAsync(shiftToDelete.EventId);
+            var groupName = $"organization-{shiftEvent.OrganizationId}";
+            await _dashboardHub.Clients.Group(groupName).SendAsync("dashboardUpdated");
+
 
             return _mapper.ToShiftResponse(shiftToDelete);
         }

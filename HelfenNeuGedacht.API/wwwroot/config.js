@@ -1,5 +1,6 @@
-// Zentrale API-Konfiguration für das HelfenNeuGedacht Frontend
+// Zentrale API-Konfiguration für das HelfenNeuGedacht Frontend (Docker-Umgebung))
 const API_CONFIG = {
+    HUB_URL: 'http://localhost:5062/hubs',
     BASE_URL: 'http://localhost:5062/api',
     ENDPOINTS: {
         EVENTS: '/events',
@@ -13,8 +14,3 @@ const API_CONFIG = {
         return this.BASE_URL + this.ENDPOINTS[endpoint];
     }
 };
-
-// Für ältere Browser-Kompatibilität als window-Objekt verfügbar machen
-if (typeof window !== 'undefined') {
-    window.API_CONFIG = API_CONFIG;
-}

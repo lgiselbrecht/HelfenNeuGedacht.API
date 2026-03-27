@@ -54,7 +54,7 @@ builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 
 builder.Services.AddTransient<DtoMapper>();
 
-
+builder.Services.AddSignalR();
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -83,31 +83,48 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, JWTService>();
 
-//// JWT Authentication Configuration
-////TODO: checken obs das braucht
-//var jwtSecret = builder.Configuration.GetSection("JwtSettings")["Secret"]
-//    ?? throw new InvalidOperationException("JWT Secret not found in configuration");
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//.AddJwtBearer(options =>
-//{
-//    options.SaveToken = true;
-//    options.RequireHttpsMetadata = false;
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = false,
-//        ValidateAudience = false,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
-//        ClockSkew = TimeSpan.Zero
-//    };
-//});
+// JWT Authentication Configuration
+//TODO: checken obs das braucht
+var jwtSecret = builder.Configuration.GetSection("JwtSettings")["Secret"]
+    ?? throw new InvalidOperationException("JWT Secret not found in configuration");
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+        ClockSkew = TimeSpan.Zero
+    }; // Hier gehört ein Semikolon hin
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            if (!string.IsNullOrEmpty(accessToken) &&
+                path.StartsWithSegments("/hubs")) 
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    }; 
+});
 
 //HTTPS Support behind reverse proxy (e.g. nginx)
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
@@ -171,6 +188,7 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHub<DashboardHub>("/hubs/dashboard");
 app.MapControllers();
 
 app.Run();

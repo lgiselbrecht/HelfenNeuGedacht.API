@@ -1,14 +1,14 @@
-﻿using HelfenNeuGedacht.API.Application.Mapper;
+﻿using System.Security.Claims;
+using HelfenNeuGedacht.API.Application.Mapper;
 using HelfenNeuGedacht.API.Application.Repositories;
 using HelfenNeuGedacht.API.Application.Services.EventsService.Dto;
 using HelfenNeuGedacht.API.Domain.Entities;
-
 using HelfenNeuGedacht.API.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Http.HttpResults;
 using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
+using Microsoft.AspNetCore.SignalR;
 
 namespace HelfenNeuGedacht.API.Application.Services.EventsService
 {
@@ -18,17 +18,22 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
         private DtoMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHubContext<DashboardHub> _dashboardHub;
 
         public EventService(
             IEventRepository eventRepository, 
             DtoMapper mapper,
             IHttpContextAccessor httpContextAccessor,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IHubContext<DashboardHub> dashboardHub
+            )
+
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
+            _dashboardHub = dashboardHub;
         }
 
         private async Task<int?> GetUserOrganizationIdAsync()
@@ -54,6 +59,8 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             };
 
             var newEvent = await _eventRepository.AddAsync(events);
+            var groupName = $"organization-{newEvent.OrganizationId}";
+            await _dashboardHub.Clients.Group(groupName).SendAsync("dashboardUpdated");
             return _mapper.ToEventResponse(newEvent);
         }
 
@@ -61,7 +68,10 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
         {
             var eventToDelete = await _eventRepository.FindByIdAsync(id);
             await _eventRepository.DeleteAsync(eventToDelete);
-
+          
+            var orgId = eventToDelete.OrganizationId;
+            var groupName = $"organization-{orgId}";
+            await _dashboardHub.Clients.Group(groupName).SendAsync("dashboardUpdated");
             return _mapper.ToEventResponse(eventToDelete);
         }
 

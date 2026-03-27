@@ -13,10 +13,18 @@ COPY . .
 WORKDIR /src/HelfenNeuGedacht.API
 
 # ARG deklarieren (mit Default für lokale Entwicklung)
-ARG API_BASE_URL=http://localhost:5062/api
+# ARG API_BASE_URL=http://localhost:5062/api
 
 # config.js mit dem Build-ARG anpassen (ersetzt localhost durch konfigurierte URL)
-RUN sed -i "s|http://localhost:5062/api|${API_BASE_URL}|g" wwwroot/config.js
+# RUN sed -i "s|http://localhost:5062/api|${API_BASE_URL}|g" wwwroot/config.js
+
+# ARG für beide URLs deklarieren
+ARG API_BASE_URL=http://localhost:5062/api
+ARG HUB_BASE_URL=http://localhost:5062/hubs
+
+# Ersetzt beide URLs in der config.js
+RUN sed -i "s|http://localhost:5062/api|${API_BASE_URL}|g" wwwroot/config.js && \
+    sed -i "s|http://localhost:5062/hubs|${HUB_BASE_URL}|g" wwwroot/config.js
 
 # Build + Publish
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false

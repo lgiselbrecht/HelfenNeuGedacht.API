@@ -251,7 +251,7 @@
                     ageRestriction: document.getElementById('shiftAgeRestriction').value,
                     points: document.getElementById('shiftPoints').value,
                     //Event-ID für Testzwecke
-                    eventId: '1',
+                    eventId: '2',
                     //organizationId: parseInt(userInfo.OrganizationId, 10)
                 };
 
@@ -283,7 +283,7 @@
                     });
             });
 
-            // Logik für das Abrufen der Liste (GET) - gefiltert nach Organisation
+            // Logik für das Abrufen der Liste (GET)
             const userInfo = getUserInfo();
             if (!userInfo || !userInfo.OrganizationId) {
                 tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.</td></tr>';

@@ -1,4 +1,4 @@
-﻿namespace HelfenNeuGedacht.API.Domain.Entities
+namespace HelfenNeuGedacht.API.Domain.Entities
 {
     public class Shift : IEntity
     {
@@ -13,6 +13,7 @@
         public int AgeRestriction { get; set; } = 0;
 
         public int Points { get; set; }
+        public int RequiredHelpers { get; set; } = 0;
 
         // Beziehung zu HelpingEvents
         public int EventId { get; set; }

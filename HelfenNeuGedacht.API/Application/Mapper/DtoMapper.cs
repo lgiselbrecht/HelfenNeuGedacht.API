@@ -22,6 +22,7 @@ namespace HelfenNeuGedacht.API.Application.Mapper
                 Requirements = shift.Requirements,
                 AgeRestriction = shift.AgeRestriction,
                 Points = shift.Points,
+                RequiredHelpers = shift.RequiredHelpers,
                 EventId = shift.EventId
             };
         }
@@ -81,6 +82,7 @@ namespace HelfenNeuGedacht.API.Application.Mapper
                 Location = events.Location,
                 StartDate = events.StartDate,
                 EndDate = events.EndDate,
+                RequiredHelpers = events.RequiredHelpers,
                 OrganizationId = events.OrganizationId
             };
 

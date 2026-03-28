@@ -169,6 +169,7 @@
                         <textarea id="newShiftDesc" placeholder="Beschreibung" class="form-input" rows="2"></textarea>
                         <div class="row-gap-10">
                             <input type="number" id="newShiftPoints" placeholder="Punkte" class="form-input w-80" value="10">
+                            <input type="number" id="newShiftRequiredHelpers" placeholder="Helfer" class="form-input w-80" value="1" min="1">
                             <button class="btn-primary flex-1" onclick="submitNewShift()">Speichern</button>
                             <button class="btn-secondary" onclick="toggleShiftForm(false)">Abbrechen</button>
                         </div>
@@ -214,6 +215,7 @@
             const name = document.getElementById('newShiftName').value;
             const desc = document.getElementById('newShiftDesc').value;
             const points = parseInt(document.getElementById('newShiftPoints').value, 10);
+            const reqHelpers = parseInt(document.getElementById('newShiftRequiredHelpers').value, 10);
 
             if (!name) {
                 alert('Bitte geben Sie einen Namen für den Dienst ein.');
@@ -225,6 +227,7 @@
                 name: name,
                 description: desc,
                 points: points,
+                requiredHelpers: reqHelpers,
                 eventId: currentEventIdForShifts,
                 requirements: "",
                 ageRestriction: 0
@@ -272,11 +275,12 @@
             }
         }
 
-        function editShift(shiftId, name, desc, points) {
+        function editShift(shiftId, name, desc, points, helpers) {
             editingShiftId = shiftId;
             document.getElementById('newShiftName').value = name;
             document.getElementById('newShiftDesc').value = desc || '';
             document.getElementById('newShiftPoints').value = points;
+            document.getElementById('newShiftRequiredHelpers').value = helpers || 1;
             toggleShiftForm(true, true);
         }
 
@@ -314,6 +318,9 @@
                     });
                     document.getElementById('modalEventDate').textContent = dateStr;
                     document.getElementById('modalEventLocation').textContent = eventDetails.location || '-';
+                    
+                    // Schichten rendern
+                    shiftList.innerHTML = '';
 
                     // Schichten rendern
                     shiftList.innerHTML = '';
@@ -323,9 +330,9 @@
                         let totalHelpersCurrent = 0;
 
                         eventDetails.shifts.forEach(shift => {
-                            const helpersNeeded = 15; // Placeholder
-                            const helpersCurrent = Math.floor(Math.random() * helpersNeeded);
-                            const percentage = helpersCurrent / helpersNeeded;
+                            const helpersNeeded = shift.requiredHelpers || 0;
+                            const helpersCurrent = 0; // Später aus Datenbank holen
+                            const percentage = helpersNeeded > 0 ? (helpersCurrent / helpersNeeded) : 0;
 
                             totalHelpersNeeded += helpersNeeded;
                             totalHelpersCurrent += helpersCurrent;
@@ -357,7 +364,7 @@
                                     </div>
                                     <div class="shift-actions">
                                         <div class="badge ${badgeClass}">${badgeText}</div>
-                                        <button class="action-icon" onclick="editShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}', '${(shift.description || '').replace(/'/g, "\\'")}', ${shift.points})">
+                                        <button class="action-icon" onclick="editShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}', '${(shift.description || '').replace(/'/g, "\\'")}', ${shift.points}, ${shift.requiredHelpers})">
                                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </button>
                                         <button class="action-icon delete" onclick="deleteShift(${shift.id})">
@@ -502,6 +509,7 @@
                     location: document.getElementById('eventLocation').value,
                     startDate: new Date(document.getElementById('eventStartDate').value).toISOString(),
                     endDate: new Date(document.getElementById('eventEndDate').value).toISOString(),
+                    requiredHelpers: 0, // Wird später durch Summe der Dienste definiert
                     organizationId: parseInt(userInfo.OrganizationId, 10)
                 };
 

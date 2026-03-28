@@ -1,4 +1,4 @@
-﻿namespace HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto
+namespace HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto
 {
     public class UpdateShiftRequest
     {
@@ -11,6 +11,8 @@
         public int AgeRestriction { get; set; } = 0;
 
         public int Points { get; set; }
+
+        public int RequiredHelpers { get; set; }
 
         public int EventId { get; set; }
     }

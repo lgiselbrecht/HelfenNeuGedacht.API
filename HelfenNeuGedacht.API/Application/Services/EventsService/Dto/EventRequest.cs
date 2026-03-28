@@ -1,4 +1,4 @@
-﻿namespace HelfenNeuGedacht.API.Application.Services.EventsService.Dto
+namespace HelfenNeuGedacht.API.Application.Services.EventsService.Dto
 {
     public class EventRequest
     {
@@ -8,6 +8,7 @@
         public string Location { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int RequiredHelpers { get; set; }
         public int OrganizationId { get; set; }
     }
 

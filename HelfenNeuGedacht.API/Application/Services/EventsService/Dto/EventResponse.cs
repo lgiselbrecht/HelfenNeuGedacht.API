@@ -1,4 +1,4 @@
-﻿using HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto;
+using HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto;
 
 namespace HelfenNeuGedacht.API.Application.Services.EventsService.Dto
 {
@@ -10,6 +10,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService.Dto
         public string Location { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int RequiredHelpers { get; set; }
         public int OrganizationId { get; set; }
         public List<ShiftResponse>? Shifts { get; set; }
     }

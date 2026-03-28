@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using HelfenNeuGedacht.API.Application.Mapper;
 using HelfenNeuGedacht.API.Application.Repositories;
 using HelfenNeuGedacht.API.Application.Services.EventsService.Dto;
@@ -55,6 +55,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
                 Location = eventEntity.Location,
                 StartDate = eventEntity.StartDate,
                 EndDate = eventEntity.EndDate,
+                RequiredHelpers = eventEntity.RequiredHelpers,
                 OrganizationId = eventEntity.OrganizationId
             };
 
@@ -138,6 +139,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             existingEvent.Location = eventEntity.Location;
             existingEvent.StartDate = eventEntity.StartDate;
             existingEvent.EndDate = eventEntity.EndDate;
+            existingEvent.RequiredHelpers = eventEntity.RequiredHelpers;
             existingEvent.OrganizationId = eventEntity.OrganizationId;
 
             await _eventRepository.UpdateAsync(existingEvent);

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dienste - Helfen neu gedacht</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">H</div>
+            <div>Helfen neu<br>gedacht</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                    </path>
+                </svg>
+                Dashboard
+            </a>
+            <a href="events.html" class="nav-item active">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
+                </svg>
+                Veranstaltungen
+            </a>
+            <a href="shifts.html" class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                    </path>
+                </svg>
+                Dienste
+            </a>
+
+            <a href="organization.html" class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                    </path>
+                </svg>
+                Organisation
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button onclick="logout()" class="btn btn-outline btn-full">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="icon-small">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                    </path>
+                </svg>
+                Abmelden
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div class="page-title">
+                <h1>Veranstaltungen</h1>
+                <p>Verwalten Sie Ihre Events und die zugehörigen Dienste</p>
+            </div>
+            <button class="btn-primary" id="showFormBtn">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                NEUE VERANSTALTUNG ERSTELLEN
+            </button>
+        </header>
+
+        <form id="createEventForm" class="form-container" style="display: none;">
+            <input type="text" id="eventTitle" placeholder="Veranstaltungs-Titel" required>
+            <textarea id="eventDescription" placeholder="Beschreibung" rows="3" required></textarea>
+            <input type="text" id="eventLocation" placeholder="Ort" required>
+            <label>Start: <input type="datetime-local" id="eventStartDate" required></label>
+            <label>Ende: <input type="datetime-local" id="eventEndDate" required></label>
+            <div class="form-actions-row">
+                <button type="submit" class="btn-primary">Speichern</button>
+                <button type="button" id="cancelFormBtn" class="btn-secondary">Abbrechen</button>
+            </div>
+        </form>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Veranstaltung</th>
+                        <th>Ort</th>
+                        <th>Startdatum</th>
+                        <th>Enddatum</th>
+                        <th>Anzahl Helfer</th>
+                        <th>Aktion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="6" class="loading-text-td">Lade Veranstaltungen ...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Event Details Modal -->
+    <div class="modal-overlay" id="eventDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-top">
+                    <h2 id="modalEventTitle">Lade Event...</h2>
+                    <button class="modal-close-btn" id="closeModalBtn">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-header-info">
+                    <div class="modal-info-item">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        <span id="modalEventDate"></span>
+                    </div>
+                    <div class="modal-info-item">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span id="modalEventLocation"></span>
+                    </div>
+                    <div class="modal-info-item">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                            </path>
+                        </svg>
+                        <span id="modalEventHelpers">--/-- Helfer</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section-header">
+                    <h3 class="modal-section-title">Dienste</h3>
+                    <button class="btn-primary modal-btn-small">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
+                            </path>
+                        </svg>
+                        NEUEN DIENST HINZUFÜGEN
+                    </button>
+                </div>
+                <div class="shift-list" id="modalShiftList">
+                    <!-- Shifts will be injected dynamically here -->
+                    <div class="loading-placeholder">Lade Dienste...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Auth-Guard: Prüfe ob Benutzer eingeloggt ist
+        requireAuth();
+
+        function loadEventDetails(eventId) {
+            // Verhindert, dass der # Link die Seite nach oben springen lässt
+            if (event) event.preventDefault();
+
+            const modal = document.getElementById('eventDetailsModal');
+            const shiftList = document.getElementById('modalShiftList');
+
+            // Lade-Ansicht zeigen
+            modal.classList.add('active');
+            document.getElementById('modalEventTitle').textContent = 'Lade Event...';
+            document.getElementById('modalEventDate').textContent = '';
+            document.getElementById('modalEventLocation').textContent = '';
+            document.getElementById('modalEventHelpers').textContent = '--/-- Helfer';
+            shiftList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">Lade Dienste...</div>';
+
+            const detailUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}/${eventId}?includeShifts=true`;
+
+            authenticatedFetch(detailUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Details konnten nicht geladen werden');
+                    return response.json();
+                })
+                .then(eventDetails => {
+                    console.log('Detail-Daten aus der API:', eventDetails);
+
+                    document.getElementById('modalEventTitle').textContent = eventDetails.title || 'Ohne Titel';
+
+                    const dateStr = new Date(eventDetails.startDate).toLocaleDateString('de-DE', {
+                        day: '2-digit', month: 'long', year: 'numeric'
+                    });
+                    document.getElementById('modalEventDate').textContent = dateStr;
+                    document.getElementById('modalEventLocation').textContent = eventDetails.location || '-';
+
+                    // Schichten rendern
+                    shiftList.innerHTML = '';
+
+                    if (eventDetails.shifts && eventDetails.shifts.length > 0) {
+                        let totalHelpersNeeded = 0;
+                        let totalHelpersCurrent = 0;
+
+                        eventDetails.shifts.forEach(shift => {
+                            const helpersNeeded = 15; // Placeholder
+                            const helpersCurrent = Math.floor(Math.random() * helpersNeeded);
+                            const percentage = helpersCurrent / helpersNeeded;
+
+                            totalHelpersNeeded += helpersNeeded;
+                            totalHelpersCurrent += helpersCurrent;
+
+                            let badgeClass = 'voll';
+                            let badgeText = 'Voll';
+                            if (percentage < 0.4) {
+                                badgeClass = 'kritisch';
+                                badgeText = 'Kritisch';
+                            } else if (percentage < 0.9) {
+                                badgeClass = 'warnung';
+                                badgeText = 'Warnung';
+                            }
+
+                            const shiftHtml = `
+                                <div class="shift-card">
+                                    <div class="shift-details">
+                                        <h3>${shift.name || 'Dienst'}</h3>
+                                        <div class="shift-meta">
+                                            <div class="shift-meta-item">
+                                                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                08:00 - 12:00
+                                            </div>
+                                            <div class="shift-meta-item">
+                                                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                                <span style="${badgeClass === 'kritisch' ? 'color: #ef4444;' : (badgeClass === 'warnung' ? 'color: #f59e0b;' : 'color: #10b981;')}">${helpersCurrent}/${helpersNeeded} Helfer</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="shift-actions">
+                                        <div class="badge ${badgeClass}">${badgeText}</div>
+                                        <button class="action-icon">
+                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                        </button>
+                                        <button class="action-icon delete">
+                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                            shiftList.insertAdjacentHTML('beforeend', shiftHtml);
+                        });
+
+                        document.getElementById('modalEventHelpers').textContent = `${totalHelpersCurrent}/${totalHelpersNeeded} Helfer`;
+                    } else {
+                        // Dummy-Daten anzeigen, wenn noch keine Schichten im Backend existieren
+                        shiftList.innerHTML = `
+                            <div class="shift-card">
+                                <div class="shift-details">
+                                    <h3>Aufbau Festzelt (Beispiel)</h3>
+                                    <div class="shift-meta">
+                                        <div class="shift-meta-item">
+                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            08:00 - 12:00
+                                        </div>
+                                        <div class="shift-meta-item">
+                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                            <span style="color: #f59e0b;">8/10 Helfer</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="shift-actions">
+                                    <div class="badge warnung">Warnung</div>
+                                    <button class="action-icon"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
+                                    <button class="action-icon delete"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                                </div>
+                            </div>
+                            <div class="shift-card">
+                                <div class="shift-details">
+                                    <h3>Bar-Dienst (Beispiel)</h3>
+                                    <div class="shift-meta">
+                                        <div class="shift-meta-item">
+                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            12:00 - 18:00
+                                        </div>
+                                        <div class="shift-meta-item">
+                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                            <span style="color: #10b981;">15/15 Helfer</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="shift-actions">
+                                    <div class="badge voll">Voll</div>
+                                    <button class="action-icon"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
+                                    <button class="action-icon delete"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                                </div>
+                            </div>
+                        `;
+                        document.getElementById('modalEventHelpers').textContent = `23/25 Helfer`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Fehler beim Abrufen der Details:', error);
+                    shiftList.innerHTML = `<div style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden: ${error.message}</div>`;
+                });
+        }
+
+        async function deleteEvent(eventId, eventTitle) {
+            if (!confirm(`Möchten Sie die Veranstaltung "${eventTitle}" wirklich unwiderruflich löschen?`)) {
+                return;
+            }
+
+            try {
+                const deleteUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}/${eventId}`;
+                const response = await authenticatedFetch(deleteUrl, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('Veranstaltung wurde erfolgreich gelöscht.');
+                    location.reload();
+                } else {
+                    const error = await response.json();
+                    alert(`Fehler beim Löschen: ${error.message || 'Unbekannter Fehler'}`);
+                }
+            } catch (error) {
+                console.error('Fehler beim Löschen der Veranstaltung:', error);
+                alert('Netzwerkfehler beim Löschen der Veranstaltung.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Modal schliessen Events
+            const eventDetailsModal = document.getElementById('eventDetailsModal');
+            document.getElementById('closeModalBtn').addEventListener('click', () => {
+                eventDetailsModal.classList.remove('active');
+            });
+            eventDetailsModal.addEventListener('click', (e) => {
+                if (e.target === eventDetailsModal) {
+                    eventDetailsModal.classList.remove('active');
+                }
+            });
+
+            const apiUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`;
+            const tableBody = document.querySelector('tbody');
+
+            // --- Logik für das Erstellen einer neuen Veranstaltung (POST) ---
+            const showFormBtn = document.getElementById('showFormBtn');
+            const cancelFormBtn = document.getElementById('cancelFormBtn');
+            const createEventForm = document.getElementById('createEventForm');
+
+            // Formular einblenden
+            showFormBtn.addEventListener('click', () => {
+                createEventForm.style.display = 'block';
+                showFormBtn.style.display = 'none';
+            });
+
+            // Formular ausblenden
+            cancelFormBtn.addEventListener('click', () => {
+                createEventForm.style.display = 'none';
+                showFormBtn.style.display = 'block';
+                createEventForm.reset();
+            });
+
+            // Beim Absenden des Formulars Daten per API speichern
+            createEventForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Verhindert das Neuladen der Seite durch HTML
+
+                // OrganizationId aus JWT-Token holen
+                const userInfo = getUserInfo();
+                if (!userInfo || !userInfo.OrganizationId) {
+                    alert('Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.');
+                    return;
+                }
+
+                // Wir sammeln die Daten aus den Input-Feldern zusammen, angepasst an das Swagger/API-Format
+                const newEvent = {
+                    id: 0, // 0 als Erkennungszeichen für 'Neuanlage'
+                    title: document.getElementById('eventTitle').value,
+                    description: document.getElementById('eventDescription').value,
+                    location: document.getElementById('eventLocation').value,
+                    startDate: new Date(document.getElementById('eventStartDate').value).toISOString(),
+                    endDate: new Date(document.getElementById('eventEndDate').value).toISOString(),
+                    organizationId: parseInt(userInfo.OrganizationId, 10)
+                };
+
+                // POST Request an dein C#-Backend mit Authentifizierung
+                authenticatedFetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newEvent)
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Fehler beim Speichern');
+                        return response.json(); // Oder response.text(), falls Backend kein JSON liefert
+                    })
+                    .then(savedEvent => {
+                        alert('Veranstaltung erfolgreich in der Datenbank gespeichert!');
+
+                        // Formular aufräumen
+                        createEventForm.reset();
+                        createEventForm.style.display = 'none';
+                        showFormBtn.style.display = 'block';
+
+                        // Damit das neue Event in der Liste auftaucht, laden wir die Seite einmal neu
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Speichern fehlgeschlagen:', error);
+                        alert('Datenbank-Speicherung fehlgeschlagen. Läuft die API?');
+                    });
+            });
+
+            // Logik für das Abrufen der Liste (GET) - gefiltert nach Organisation
+            const userInfo = getUserInfo();
+            if (!userInfo || !userInfo.OrganizationId) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.</td></tr>';
+                return;
+            }
+
+            const apiUrlWithOrg = `${apiUrl}?organizationId=${userInfo.OrganizationId}`;
+
+            authenticatedFetch(apiUrlWithOrg)
+                .then(response => {
+                    if (!response.ok) throw new Error('Netzwerk-Antwort war nicht ok');
+                    return response.json();
+                })
+                .then(events => {
+                    tableBody.innerHTML = '';
+
+                    if (events.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">Keine Veranstaltungen für Ihre Organisation gefunden.</td></tr>';
+                        return;
+                    }
+
+                    events.forEach(event => {
+                        const tr = document.createElement('tr');
+
+                        tr.innerHTML = `
+                            <td>
+                                <div class="event-cell">
+                                    <div class="event-icon"></div>
+                                    <span>${event.title}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="location-cell">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    ${event.location}
+                                </div>
+                            </td>
+                             <td>${new Date(event.startDate).toLocaleDateString('de-DE')}</td>
+                            <td>${new Date(event.endDate).toLocaleDateString('de-DE')}</td>
+                            <td><span style="color: var(--text-muted); font-size: 0.8rem;">#${event.id}</span></td>
+                            <td>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details &rarr;</a>
+                                    <button onclick="deleteEvent(${event.id}, '${event.title.replace(/'/g, "\\'")}')" class="action-link-danger">Löschen</button>
+                                </div>
+                            </td>
+                        `;
+
+                        tableBody.appendChild(tr);
+                    });
+                })
+                .catch(error => {
+                    console.error('Fehler beim Laden der Veranstaltungen:', error);
+                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden der Veranstaltungen. Bitte versuchen Sie es später erneut.</td></tr>';
+                });
+        });
+    </script>
+</body>
+
+</html>

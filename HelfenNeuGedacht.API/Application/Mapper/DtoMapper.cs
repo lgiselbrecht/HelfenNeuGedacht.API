@@ -71,7 +71,7 @@ namespace HelfenNeuGedacht.API.Application.Mapper
             };
         }
 
-        public EventResponse ToEventResponse(HelpingEvents events, bool includeShifts = false)
+        public EventResponse ToEventResponse(Event events, bool includeShifts = false)
         {
             var response = new EventResponse()
             {

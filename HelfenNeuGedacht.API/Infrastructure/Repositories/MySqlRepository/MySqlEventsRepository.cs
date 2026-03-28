@@ -12,45 +12,45 @@ namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
             _context=context;
         }
 
-        public async Task<HelpingEvents> AddAsync(HelpingEvents entity)
+        public async Task<Event> AddAsync(Event entity)
         {
             _context.Event.AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity;
         }
 
-        public async Task<HelpingEvents> DeleteAsync(HelpingEvents entity)
+        public async Task<Event> DeleteAsync(Event entity)
         {
             _context.Event.Remove(entity);
             await _context.SaveChangesAsync();
             return entity;
         }
 
-        public async Task<List<HelpingEvents>> FindAllAsync()
+        public async Task<List<Event>> FindAllAsync()
         {
             return await _context.Event.ToListAsync();
         }
 
-        public async Task<HelpingEvents?> FindByIdAsync(int id)
+        public async Task<Event?> FindByIdAsync(int id)
         {
             return await _context.Event.FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<HelpingEvents> UpdateAsync(HelpingEvents entity)
+        public async Task<Event> UpdateAsync(Event entity)
         {
             _context.Event.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
         }
 
-        public async Task<HelpingEvents?> FindByIdWithShiftsAsync(int id)
+        public async Task<Event?> FindByIdWithShiftsAsync(int id)
         {
             return await _context.Event
                 .Include(e => e.Shift)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<List<HelpingEvents>> FindByOrganizationIdAsync(int organizationId)
+        public async Task<List<Event>> FindByOrganizationIdAsync(int organizationId)
         {
             return await _context.Event
                 .Where(e => e.OrganizationId == organizationId)

@@ -48,7 +48,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
 
         public async Task<EventResponse> CreateEventAsync(EventRequest eventEntity)
         {
-            var events = new HelpingEvents()
+            var events = new Event()
             {
                 Title = eventEntity.Title,
                 Description = eventEntity.Description,
@@ -97,7 +97,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
 
         public async Task<EventResponse?> GetEventByIdAsync(int id, bool includeShifts = false)
         {
-            HelpingEvents? events;
+            Event? events;
             
             if (includeShifts)
             {

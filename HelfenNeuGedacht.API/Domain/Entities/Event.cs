@@ -1,6 +1,6 @@
 using HelfenNeuGedacht.API.Domain.Entities;
 
-public class HelpingEvents : IEntity
+public class Event : IEntity
 {
     public int Id { get; set; }
     public string? Title {get; set;}

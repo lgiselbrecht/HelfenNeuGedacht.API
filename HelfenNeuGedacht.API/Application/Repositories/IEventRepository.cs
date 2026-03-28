@@ -1,8 +1,8 @@
 ﻿namespace HelfenNeuGedacht.API.Application.Repositories
 {
-    public interface IEventRepository : IRepository<HelpingEvents>
+    public interface IEventRepository : IRepository<Event>
     {
-        Task<HelpingEvents?> FindByIdWithShiftsAsync(int id);
-        Task<List<HelpingEvents>> FindByOrganizationIdAsync(int organizationId);
+        Task<Event?> FindByIdWithShiftsAsync(int id);
+        Task<List<Event>> FindByOrganizationIdAsync(int organizationId);
     }
 }

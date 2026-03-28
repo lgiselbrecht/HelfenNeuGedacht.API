@@ -8,7 +8,7 @@ namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
     public class MySqlDbContext : IdentityDbContext<ApplicationUser>
     {
 
-        public DbSet<HelpingEvents> Event { get; set; }
+        public DbSet<Event> Event { get; set; }
         public DbSet<Shift> Shift { get; set; }
         public DbSet<Organization> Organization { get; set; }
 

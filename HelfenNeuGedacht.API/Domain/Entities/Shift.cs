@@ -16,6 +16,6 @@
 
         // Beziehung zu HelpingEvents
         public int EventId { get; set; }
-        public HelpingEvents? Event { get; set; }
+        public Event? Event { get; set; }
     }
 }

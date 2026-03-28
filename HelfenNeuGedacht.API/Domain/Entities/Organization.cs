@@ -49,7 +49,7 @@ public class Organization : IEntity
 
     public string? RejectionReason { get; set; }
 
-    public ICollection<HelpingEvents> Events { get; set; } = new List<HelpingEvents>();
+    public ICollection<Event> Events { get; set; } = new List<Event>();
 
  }
 

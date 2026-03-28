@@ -24,7 +24,7 @@
                 </svg>
                 Dashboard
             </a>
-            <a href="events.html" class="nav-item active">
+            <a href="events.html" class="nav-item">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -32,7 +32,7 @@
                 </svg>
                 Veranstaltungen
             </a>
-            <a href="shifts.html" class="nav-item">
+            <a href="shifts.html" class="nav-item active">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
@@ -65,18 +65,18 @@
     <main class="main-content">
         <header class="page-header">
             <div class="page-title">
-                <h1>Veranstaltungen</h1>
-                <p>Verwalten Sie Ihre Events und die zugehörigen Dienste</p>
+                <h1>Dienste</h1>
+                <p>Verwalten Sie Ihre Dienstvorlagen</p>
             </div>
             <button class="btn-primary" id="showFormBtn">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
-                NEUE VERANSTALTUNG ERSTELLEN
+                NEUEN DIENST ERSTELLEN
             </button>
         </header>
 
-        <form id="createEventForm" class="form-container" style="display: none;">
+        <form id="createShiftForm" class="form-container" style="display: none;">
             <input type="text" id="eventTitle" placeholder="Veranstaltungs-Titel" required>
             <textarea id="eventDescription" placeholder="Beschreibung" rows="3" required></textarea>
             <input type="text" id="eventLocation" placeholder="Ort" required>
@@ -92,17 +92,16 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Veranstaltung</th>
-                        <th>Ort</th>
-                        <th>Startdatum</th>
-                        <th>Enddatum</th>
-                        <th>Anzahl Helfer</th>
-                        <th>Aktion</th>
+                        <th>Dienst</th>
+                        <th>Beschreibung</th>
+                        <th>Anforderungen</th>
+                        <th>Altersbeschränkung</th>
+                        <th>Punkte</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="6" class="loading-text-td">Lade Veranstaltungen ...</td>
+                        <td colspan="6" class="loading-text-td">Lade Dienste ...</td>
                     </tr>
                 </tbody>
             </table>
@@ -114,7 +113,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-header-top">
-                    <h2 id="modalEventTitle">Lade Event...</h2>
+                    <h2 id="modalEventTitle">Lade Dienst...</h2>
                     <button class="modal-close-btn" id="closeModalBtn">
                         <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

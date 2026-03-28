@@ -701,6 +701,16 @@ tbody tr:hover {
     color: #f59e0b;
 }
 
+.error-message {
+    text-align: center;
+    padding: 20px;
+    color: #ef4444;
+}
+
+.stat-kritisch { color: #ef4444; }
+.stat-warnung { color: #f59e0b; }
+.stat-voll { color: #10b981; }
+
 
 /* Shift */
 .shift-grid {

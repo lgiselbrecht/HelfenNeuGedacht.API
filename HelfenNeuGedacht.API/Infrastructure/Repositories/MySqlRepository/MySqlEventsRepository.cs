@@ -1,4 +1,4 @@
-﻿using HelfenNeuGedacht.API.Application.Repositories;
+using HelfenNeuGedacht.API.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
@@ -53,6 +53,7 @@ namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository
         public async Task<List<Event>> FindByOrganizationIdAsync(int organizationId)
         {
             return await _context.Event
+                .Include(e => e.Shift)
                 .Where(e => e.OrganizationId == organizationId)
                 .ToListAsync();
         }

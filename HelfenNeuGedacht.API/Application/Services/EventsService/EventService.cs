@@ -91,7 +91,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
 
             foreach (var events in allEvents)
             {
-                eventResponses.Add(_mapper.ToEventResponse(events));
+                eventResponses.Add(_mapper.ToEventResponse(events, true));
             }
             return eventResponses;
         }
@@ -122,7 +122,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
         public async Task<List<EventResponse>> GetEventsByOrganizationIdAsync(int organizationId)
         {
             var events = await _eventRepository.FindByOrganizationIdAsync(organizationId);
-            return events.Select(e => _mapper.ToEventResponse(e)).ToList();
+            return events.Select(e => _mapper.ToEventResponse(e, true)).ToList();
         }
 
         public async Task<EventResponse> UpdateEventAsync(EventRequest eventEntity)

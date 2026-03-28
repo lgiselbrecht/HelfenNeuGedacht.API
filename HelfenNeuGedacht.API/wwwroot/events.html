@@ -168,8 +168,10 @@
                         <input type="text" id="newShiftName" placeholder="Name (z.B. Bar-Dienst)" class="form-input">
                         <textarea id="newShiftDesc" placeholder="Beschreibung" class="form-input" rows="2"></textarea>
                         <div class="row-gap-10">
-                            <input type="number" id="newShiftPoints" placeholder="Punkte" class="form-input w-80" value="10">
-                            <input type="number" id="newShiftRequiredHelpers" placeholder="Helfer" class="form-input w-80" value="1" min="1">
+                            <input type="number" id="newShiftPoints" placeholder="Punkte" class="form-input w-80"
+                                value="10">
+                            <input type="number" id="newShiftRequiredHelpers" placeholder="Helfer"
+                                class="form-input w-80" value="1" min="1">
                             <button class="btn-primary flex-1" onclick="submitNewShift()">Speichern</button>
                             <button class="btn-secondary" onclick="toggleShiftForm(false)">Abbrechen</button>
                         </div>
@@ -196,7 +198,7 @@
         function toggleShiftForm(show, isEdit = false) {
             const container = document.getElementById('addShiftContainer');
             const submitBtn = container.querySelector('button.btn-primary');
-            
+
             if (show) {
                 container.classList.remove('hidden');
                 submitBtn.textContent = isEdit ? 'Aktualisieren' : 'Speichern';
@@ -234,10 +236,10 @@
             };
 
             try {
-                const url = editingShiftId 
+                const url = editingShiftId
                     ? `${API_CONFIG.BASE_URL}/shifts/${editingShiftId}`
                     : `${API_CONFIG.BASE_URL}/shifts`;
-                
+
                 const response = await authenticatedFetch(url, {
                     method: editingShiftId ? 'PUT' : 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -299,7 +301,7 @@
             document.getElementById('modalEventDate').textContent = '';
             document.getElementById('modalEventLocation').textContent = '';
             document.getElementById('modalEventHelpers').textContent = '--/-- Helfer';
-            shiftList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">Lade Dienste...</div>';
+            shiftList.innerHTML = '<div class="loading-placeholder">Lade Dienste...</div>';
 
             const detailUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}/${eventId}?includeShifts=true`;
 
@@ -318,7 +320,7 @@
                     });
                     document.getElementById('modalEventDate').textContent = dateStr;
                     document.getElementById('modalEventLocation').textContent = eventDetails.location || '-';
-                    
+
                     // Schichten rendern
                     shiftList.innerHTML = '';
 
@@ -358,7 +360,7 @@
                                             </div>
                                             <div class="shift-meta-item">
                                                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                                <span style="${badgeClass === 'kritisch' ? 'color: #ef4444;' : (badgeClass === 'warnung' ? 'color: #f59e0b;' : 'color: #10b981;')}">${helpersCurrent}/${helpersNeeded} Helfer</span>
+                                                <span class="stat-${badgeClass}">${helpersCurrent}/${helpersNeeded} Helfer</span>
                                             </div>
                                         </div>
                                     </div>
@@ -390,7 +392,7 @@
                                         </div>
                                         <div class="shift-meta-item">
                                             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                            <span style="color: #f59e0b;">8/10 Helfer</span>
+                                            <span class="stat-warnung">8/10 Helfer</span>
                                         </div>
                                     </div>
                                 </div>
@@ -410,7 +412,7 @@
                                         </div>
                                         <div class="shift-meta-item">
                                             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                            <span style="color: #10b981;">15/15 Helfer</span>
+                                            <span class="stat-voll">15/15 Helfer</span>
                                         </div>
                                     </div>
                                 </div>
@@ -426,7 +428,7 @@
                 })
                 .catch(error => {
                     console.error('Fehler beim Abrufen der Details:', error);
-                    shiftList.innerHTML = `<div style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden: ${error.message}</div>`;
+                    shiftList.innerHTML = `<div class="error-message">Fehler beim Laden: ${error.message}</div>`;
                 });
         }
 
@@ -543,7 +545,7 @@
             // Logik für das Abrufen der Liste (GET) - gefiltert nach Organisation
             const userInfo = getUserInfo();
             if (!userInfo || !userInfo.OrganizationId) {
-                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="6" class="error-message">Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.</td></tr>';
                 return;
             }
 
@@ -564,6 +566,7 @@
 
                     events.forEach(event => {
                         const tr = document.createElement('tr');
+                        const totalNeeded = (event.shifts || []).reduce((sum, s) => sum + (s.requiredHelpers || 0), 0);
 
                         tr.innerHTML = `
                             <td>
@@ -580,10 +583,10 @@
                             </td>
                              <td>${new Date(event.startDate).toLocaleDateString('de-DE')}</td>
                             <td>${new Date(event.endDate).toLocaleDateString('de-DE')}</td>
-                            <td><span style="color: var(--text-muted); font-size: 0.8rem;">#${event.id}</span></td>
+                            <td>${totalNeeded}</td>
                             <td>
                                 <div class="flex-center-gap">
-                                    <a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details &rarr;</a>
+                                    <a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details</a>
                                     <button onclick="deleteEvent(${event.id}, '${event.title.replace(/'/g, "\\'")}')" class="action-link-danger">Löschen</button>
                                 </div>
                             </td>
@@ -594,7 +597,7 @@
                 })
                 .catch(error => {
                     console.error('Fehler beim Laden der Veranstaltungen:', error);
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden der Veranstaltungen. Bitte versuchen Sie es später erneut.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="6" class="error-message">Fehler beim Laden der Veranstaltungen. Bitte versuchen Sie es später erneut.</td></tr>';
                 });
         });
     </script>

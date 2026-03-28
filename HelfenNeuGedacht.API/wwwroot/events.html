@@ -76,7 +76,7 @@
             </button>
         </header>
 
-        <form id="createEventForm" class="form-container" style="display: none;">
+        <form id="createEventForm" class="form-container hidden">
             <input type="text" id="eventTitle" placeholder="Veranstaltungs-Titel" required>
             <textarea id="eventDescription" placeholder="Beschreibung" rows="3" required></textarea>
             <input type="text" id="eventLocation" placeholder="Ort" required>
@@ -154,13 +154,25 @@
             <div class="modal-body">
                 <div class="modal-section-header">
                     <h3 class="modal-section-title">Dienste</h3>
-                    <button class="btn-primary modal-btn-small">
+                    <button class="btn-primary modal-btn-small" id="addShiftBtn">
                         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
                             </path>
                         </svg>
                         NEUEN DIENST HINZUFÜGEN
                     </button>
+                </div>
+
+                <div id="addShiftContainer" class="shift-form-container hidden">
+                    <div class="column-gap-10">
+                        <input type="text" id="newShiftName" placeholder="Name (z.B. Bar-Dienst)" class="form-input">
+                        <textarea id="newShiftDesc" placeholder="Beschreibung" class="form-input" rows="2"></textarea>
+                        <div class="row-gap-10">
+                            <input type="number" id="newShiftPoints" placeholder="Punkte" class="form-input w-80" value="10">
+                            <button class="btn-primary flex-1" onclick="submitNewShift()">Speichern</button>
+                            <button class="btn-secondary" onclick="toggleShiftForm(false)">Abbrechen</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="shift-list" id="modalShiftList">
                     <!-- Shifts will be injected dynamically here -->
@@ -177,7 +189,100 @@
         // Auth-Guard: Prüfe ob Benutzer eingeloggt ist
         requireAuth();
 
+        let currentEventIdForShifts = null;
+        let editingShiftId = null;
+
+        function toggleShiftForm(show, isEdit = false) {
+            const container = document.getElementById('addShiftContainer');
+            const submitBtn = container.querySelector('button.btn-primary');
+            
+            if (show) {
+                container.classList.remove('hidden');
+                submitBtn.textContent = isEdit ? 'Aktualisieren' : 'Speichern';
+            } else {
+                container.classList.add('hidden');
+                editingShiftId = null;
+                document.getElementById('newShiftName').value = '';
+                document.getElementById('newShiftDesc').value = '';
+                document.getElementById('newShiftPoints').value = '10';
+            }
+        }
+
+        async function submitNewShift() {
+            if (!currentEventIdForShifts) return;
+
+            const name = document.getElementById('newShiftName').value;
+            const desc = document.getElementById('newShiftDesc').value;
+            const points = parseInt(document.getElementById('newShiftPoints').value, 10);
+
+            if (!name) {
+                alert('Bitte geben Sie einen Namen für den Dienst ein.');
+                return;
+            }
+
+            const payload = {
+                id: editingShiftId || 0,
+                name: name,
+                description: desc,
+                points: points,
+                eventId: currentEventIdForShifts,
+                requirements: "",
+                ageRestriction: 0
+            };
+
+            try {
+                const url = editingShiftId 
+                    ? `${API_CONFIG.BASE_URL}/shifts/${editingShiftId}`
+                    : `${API_CONFIG.BASE_URL}/shifts`;
+                
+                const response = await authenticatedFetch(url, {
+                    method: editingShiftId ? 'PUT' : 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    toggleShiftForm(false);
+                    loadEventDetails(currentEventIdForShifts);
+                } else {
+                    alert('Fehler beim Speichern des Dienstes.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Ein Fehler ist aufgetreten.');
+            }
+        }
+
+        async function deleteShift(shiftId) {
+            if (!confirm('Diesen Dienst wirklich löschen?')) return;
+
+            try {
+                const response = await authenticatedFetch(`${API_CONFIG.BASE_URL}/shifts/${shiftId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    loadEventDetails(currentEventIdForShifts);
+                } else {
+                    alert('Fehler beim Löschen des Dienstes.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Ein Fehler ist aufgetreten.');
+            }
+        }
+
+        function editShift(shiftId, name, desc, points) {
+            editingShiftId = shiftId;
+            document.getElementById('newShiftName').value = name;
+            document.getElementById('newShiftDesc').value = desc || '';
+            document.getElementById('newShiftPoints').value = points;
+            toggleShiftForm(true, true);
+        }
+
         function loadEventDetails(eventId) {
+            currentEventIdForShifts = eventId;
+            toggleShiftForm(false);
             // Verhindert, dass der # Link die Seite nach oben springen lässt
             if (event) event.preventDefault();
 
@@ -252,10 +357,10 @@
                                     </div>
                                     <div class="shift-actions">
                                         <div class="badge ${badgeClass}">${badgeText}</div>
-                                        <button class="action-icon">
+                                        <button class="action-icon" onclick="editShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}', '${(shift.description || '').replace(/'/g, "\\'")}', ${shift.points})">
                                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </button>
-                                        <button class="action-icon delete">
+                                        <button class="action-icon delete" onclick="deleteShift(${shift.id})">
                                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
                                     </div>
@@ -354,6 +459,8 @@
                     eventDetailsModal.classList.remove('active');
                 }
             });
+
+            document.getElementById('addShiftBtn').addEventListener('click', () => toggleShiftForm(true));
 
             const apiUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`;
             const tableBody = document.querySelector('tbody');
@@ -467,7 +574,7 @@
                             <td>${new Date(event.endDate).toLocaleDateString('de-DE')}</td>
                             <td><span style="color: var(--text-muted); font-size: 0.8rem;">#${event.id}</span></td>
                             <td>
-                                <div style="display: flex; gap: 12px; align-items: center;">
+                                <div class="flex-center-gap">
                                     <a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details &rarr;</a>
                                     <button onclick="deleteEvent(${event.id}, '${event.title.replace(/'/g, "\\'")}')" class="action-link-danger">Löschen</button>
                                 </div>

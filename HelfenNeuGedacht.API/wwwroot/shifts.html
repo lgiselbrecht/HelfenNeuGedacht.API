@@ -68,7 +68,7 @@
                 <h1>Dienste</h1>
                 <p>Verwalten Sie Ihre Dienstvorlagen</p>
             </div>
-            <button class="btn-primary" id="showFormBtn">
+            <button class="btn-primary" id="showShiftFormBtn">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
@@ -77,94 +77,57 @@
         </header>
 
         <form id="createShiftForm" class="form-container" style="display: none;">
-            <input type="text" id="eventTitle" placeholder="Veranstaltungs-Titel" required>
-            <textarea id="eventDescription" placeholder="Beschreibung" rows="3" required></textarea>
-            <input type="text" id="eventLocation" placeholder="Ort" required>
-            <label>Start: <input type="datetime-local" id="eventStartDate" required></label>
-            <label>Ende: <input type="datetime-local" id="eventEndDate" required></label>
+            <input type="text" id="shiftTitle" placeholder="Dienstbezeichnung" required>
+            <textarea id="shiftDescription" placeholder="Beschreibung" rows="3" required></textarea>
+            <input type="text" id="shiftRequirements" placeholder="Anforderungen">
+            <input type="number" id="shiftAgeRestriction" placeholder="Altersbeschränkung">
+            <input type="number" id="shiftPoints" placeholder="Punkte">
             <div class="form-actions-row">
                 <button type="submit" class="btn-primary">Speichern</button>
-                <button type="button" id="cancelFormBtn" class="btn-secondary">Abbrechen</button>
+                <button type="button" id="cancelShiftFormBtn" class="btn-secondary">Abbrechen</button>
             </div>
         </form>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Dienst</th>
-                        <th>Beschreibung</th>
-                        <th>Anforderungen</th>
-                        <th>Altersbeschränkung</th>
-                        <th>Punkte</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="6" class="loading-text-td">Lade Dienste ...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <div class="shift-grid" id="cardwrapper"></div>
     </main>
 
-    <!-- Event Details Modal -->
-    <div class="modal-overlay" id="eventDetailsModal">
+    <!-- Shift Details Modal -->
+    <div class="modal-overlay" id="shiftDetailsModal">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-header-top">
-                    <h2 id="modalEventTitle">Lade Dienst...</h2>
-                    <button class="modal-close-btn" id="closeModalBtn">
+                    <div class="modal-header-title">
+                        <div class="modal-header-icon"></div>
+                        <h2 id="modalShiftTitle">Lade Dienst...</h2>
+                    </div>
+                    <button class="modal-close-btn" id="closeShiftModalBtn">
                         <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"></path>
+                                  d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
-                </div>
-                <div class="modal-header-info">
-                    <div class="modal-info-item">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                        <span id="modalEventDate"></span>
-                    </div>
-                    <div class="modal-info-item">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                            </path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        <span id="modalEventLocation"></span>
-                    </div>
-                    <div class="modal-info-item">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                            </path>
-                        </svg>
-                        <span id="modalEventHelpers">--/-- Helfer</span>
-                    </div>
                 </div>
             </div>
             <div class="modal-body">
-                <div class="modal-section-header">
-                    <h3 class="modal-section-title">Dienste</h3>
-                    <button class="btn-primary modal-btn-small">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
-                            </path>
-                        </svg>
-                        NEUEN DIENST HINZUFÜGEN
-                    </button>
-                </div>
-                <div class="shift-list" id="modalShiftList">
-                    <!-- Shifts will be injected dynamically here -->
-                    <div class="loading-placeholder">Lade Dienste...</div>
-                </div>
+                <table>
+                    <tr>
+                        <td>Beschreibung</td>
+                        <td id="modalShiftDescription">Beschreibung...</td>
+                    </tr>
+                    <tr>
+                        <td>Anforderungen</td>
+                        <td id="modalShiftRequirements">Anforderungen...</td>
+                    </tr>
+                    <tr>
+                        <td>Altersbeschränkdung</td>
+                        <td id="modalShiftAgeRestriction">Alterseinschränkung...</td>
+                    </tr>
+                    <tr>
+                        <td>Punkte</td>
+                        <td id="modalShiftPointes">Punkte...</td>
+                    </tr>
+                </table>
+               
             </div>
         </div>
     </div>
@@ -176,207 +139,100 @@
         // Auth-Guard: Prüfe ob Benutzer eingeloggt ist
         requireAuth();
 
-        function loadEventDetails(eventId) {
+        function loadShiftDetails(shiftId) {
             // Verhindert, dass der # Link die Seite nach oben springen lässt
             if (event) event.preventDefault();
 
-            const modal = document.getElementById('eventDetailsModal');
-            const shiftList = document.getElementById('modalShiftList');
+            const modal = document.getElementById('shiftDetailsModal');
 
             // Lade-Ansicht zeigen
             modal.classList.add('active');
-            document.getElementById('modalEventTitle').textContent = 'Lade Event...';
-            document.getElementById('modalEventDate').textContent = '';
-            document.getElementById('modalEventLocation').textContent = '';
-            document.getElementById('modalEventHelpers').textContent = '--/-- Helfer';
-            shiftList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">Lade Dienste...</div>';
+            document.getElementById('modalShiftTitle').textContent = 'Lade Dienst...';
+            document.getElementById('modalShiftDescription').textContent = 'Beschreibung...';
 
-            const detailUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}/${eventId}?includeShifts=true`;
+            const detailUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${shiftId}`;
 
             authenticatedFetch(detailUrl)
                 .then(response => {
                     if (!response.ok) throw new Error('Details konnten nicht geladen werden');
                     return response.json();
                 })
-                .then(eventDetails => {
-                    console.log('Detail-Daten aus der API:', eventDetails);
+                .then(shift => {
+                    console.log('Detail-Daten aus der API:', shift);
 
-                    document.getElementById('modalEventTitle').textContent = eventDetails.title || 'Ohne Titel';
-
-                    const dateStr = new Date(eventDetails.startDate).toLocaleDateString('de-DE', {
-                        day: '2-digit', month: 'long', year: 'numeric'
-                    });
-                    document.getElementById('modalEventDate').textContent = dateStr;
-                    document.getElementById('modalEventLocation').textContent = eventDetails.location || '-';
-
-                    // Schichten rendern
-                    shiftList.innerHTML = '';
-
-                    if (eventDetails.shifts && eventDetails.shifts.length > 0) {
-                        let totalHelpersNeeded = 0;
-                        let totalHelpersCurrent = 0;
-
-                        eventDetails.shifts.forEach(shift => {
-                            const helpersNeeded = 15; // Placeholder
-                            const helpersCurrent = Math.floor(Math.random() * helpersNeeded);
-                            const percentage = helpersCurrent / helpersNeeded;
-
-                            totalHelpersNeeded += helpersNeeded;
-                            totalHelpersCurrent += helpersCurrent;
-
-                            let badgeClass = 'voll';
-                            let badgeText = 'Voll';
-                            if (percentage < 0.4) {
-                                badgeClass = 'kritisch';
-                                badgeText = 'Kritisch';
-                            } else if (percentage < 0.9) {
-                                badgeClass = 'warnung';
-                                badgeText = 'Warnung';
-                            }
-
-                            const shiftHtml = `
-                                <div class="shift-card">
-                                    <div class="shift-details">
-                                        <h3>${shift.name || 'Dienst'}</h3>
-                                        <div class="shift-meta">
-                                            <div class="shift-meta-item">
-                                                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                08:00 - 12:00
-                                            </div>
-                                            <div class="shift-meta-item">
-                                                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                                <span style="${badgeClass === 'kritisch' ? 'color: #ef4444;' : (badgeClass === 'warnung' ? 'color: #f59e0b;' : 'color: #10b981;')}">${helpersCurrent}/${helpersNeeded} Helfer</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="shift-actions">
-                                        <div class="badge ${badgeClass}">${badgeText}</div>
-                                        <button class="action-icon">
-                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                        </button>
-                                        <button class="action-icon delete">
-                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            `;
-                            shiftList.insertAdjacentHTML('beforeend', shiftHtml);
-                        });
-
-                        document.getElementById('modalEventHelpers').textContent = `${totalHelpersCurrent}/${totalHelpersNeeded} Helfer`;
-                    } else {
-                        // Dummy-Daten anzeigen, wenn noch keine Schichten im Backend existieren
-                        shiftList.innerHTML = `
-                            <div class="shift-card">
-                                <div class="shift-details">
-                                    <h3>Aufbau Festzelt (Beispiel)</h3>
-                                    <div class="shift-meta">
-                                        <div class="shift-meta-item">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                            08:00 - 12:00
-                                        </div>
-                                        <div class="shift-meta-item">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                            <span style="color: #f59e0b;">8/10 Helfer</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="shift-actions">
-                                    <div class="badge warnung">Warnung</div>
-                                    <button class="action-icon"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
-                                    <button class="action-icon delete"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                                </div>
-                            </div>
-                            <div class="shift-card">
-                                <div class="shift-details">
-                                    <h3>Bar-Dienst (Beispiel)</h3>
-                                    <div class="shift-meta">
-                                        <div class="shift-meta-item">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                            12:00 - 18:00
-                                        </div>
-                                        <div class="shift-meta-item">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                            <span style="color: #10b981;">15/15 Helfer</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="shift-actions">
-                                    <div class="badge voll">Voll</div>
-                                    <button class="action-icon"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
-                                    <button class="action-icon delete"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                                </div>
-                            </div>
-                        `;
-                        document.getElementById('modalEventHelpers').textContent = `23/25 Helfer`;
-                    }
+                    document.getElementById('modalShiftTitle').textContent = shift.name || 'Ohne Titel';
+                    document.getElementById('modalShiftDescription').textContent = shift.description || 'Keine Beschreibung';
+                    document.getElementById('modalShiftRequirements').textContent = shift.requirements || 'Keine Anforderungen';
+                    document.getElementById('modalShiftAgeRestriction').textContent = shift.ageRestriction || 'Keine Altersbeschränkung';
+                    document.getElementById('modalShiftPointes').textContent = shift.points || 'Keine Beschreibung';
+       
                 })
                 .catch(error => {
                     console.error('Fehler beim Abrufen der Details:', error);
-                    shiftList.innerHTML = `<div style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden: ${error.message}</div>`;
                 });
         }
 
-        async function deleteEvent(eventId, eventTitle) {
-            if (!confirm(`Möchten Sie die Veranstaltung "${eventTitle}" wirklich unwiderruflich löschen?`)) {
+        async function deleteShift(shiftId, shiftTitle) {
+            if (!confirm(`Möchten Sie den Dienst "${shiftTitle}" wirklich unwiderruflich löschen?`)) {
                 return;
             }
 
             try {
-                const deleteUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}/${eventId}`;
+                const deleteUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${shiftId}`;
                 const response = await authenticatedFetch(deleteUrl, {
                     method: 'DELETE'
                 });
 
                 if (response.ok) {
-                    alert('Veranstaltung wurde erfolgreich gelöscht.');
+                    alert('Dienst wurde erfolgreich gelöscht.');
                     location.reload();
                 } else {
                     const error = await response.json();
                     alert(`Fehler beim Löschen: ${error.message || 'Unbekannter Fehler'}`);
                 }
             } catch (error) {
-                console.error('Fehler beim Löschen der Veranstaltung:', error);
-                alert('Netzwerkfehler beim Löschen der Veranstaltung.');
+                console.error('Fehler beim Löschen des Dienstes:', error);
+                alert('Netzwerkfehler beim Löschen des Dienstes.');
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
 
-            // Modal schliessen Events
-            const eventDetailsModal = document.getElementById('eventDetailsModal');
-            document.getElementById('closeModalBtn').addEventListener('click', () => {
-                eventDetailsModal.classList.remove('active');
+            // Modal schliessen Dienste
+            const shiftDetailsModal = document.getElementById('shiftDetailsModal');
+            document.getElementById('closeShiftModalBtn').addEventListener('click', () => {
+                shiftDetailsModal.classList.remove('active');
             });
-            eventDetailsModal.addEventListener('click', (e) => {
-                if (e.target === eventDetailsModal) {
-                    eventDetailsModal.classList.remove('active');
+            shiftDetailsModal.addEventListener('click', (e) => {
+                if (e.target === shiftDetailsModal) {
+                    shiftDetailsModal.classList.remove('active');
                 }
             });
 
-            const apiUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`;
+            const apiUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}`;
             const tableBody = document.querySelector('tbody');
+            const cardwrapper = document.getElementById('cardwrapper');
 
-            // --- Logik für das Erstellen einer neuen Veranstaltung (POST) ---
-            const showFormBtn = document.getElementById('showFormBtn');
-            const cancelFormBtn = document.getElementById('cancelFormBtn');
-            const createEventForm = document.getElementById('createEventForm');
+            // --- Logik für das Erstellen eines Dienstes (POST) ---
+            const showShiftFormBtn = document.getElementById('showShiftFormBtn');
+            const cancelShiftFormBtn = document.getElementById('cancelShiftFormBtn');
+            const createShiftForm = document.getElementById('createShiftForm');
 
             // Formular einblenden
-            showFormBtn.addEventListener('click', () => {
-                createEventForm.style.display = 'block';
-                showFormBtn.style.display = 'none';
+            showShiftFormBtn.addEventListener('click', () => {
+                createShiftForm.style.display = 'block';
+                showShiftFormBtn.style.display = 'none';
             });
 
             // Formular ausblenden
-            cancelFormBtn.addEventListener('click', () => {
-                createEventForm.style.display = 'none';
-                showFormBtn.style.display = 'block';
-                createEventForm.reset();
+            cancelShiftFormBtn.addEventListener('click', () => {
+                createShiftForm.style.display = 'none';
+                showShiftFormBtn.style.display = 'block';
+                createShiftForm.reset();
             });
 
             // Beim Absenden des Formulars Daten per API speichern
-            createEventForm.addEventListener('submit', (e) => {
+            createShiftForm.addEventListener('submit', (e) => {
                 e.preventDefault(); // Verhindert das Neuladen der Seite durch HTML
 
                 // OrganizationId aus JWT-Token holen
@@ -387,33 +243,36 @@
                 }
 
                 // Wir sammeln die Daten aus den Input-Feldern zusammen, angepasst an das Swagger/API-Format
-                const newEvent = {
-                    id: 0, // 0 als Erkennungszeichen für 'Neuanlage'
-                    title: document.getElementById('eventTitle').value,
-                    description: document.getElementById('eventDescription').value,
-                    location: document.getElementById('eventLocation').value,
-                    startDate: new Date(document.getElementById('eventStartDate').value).toISOString(),
-                    endDate: new Date(document.getElementById('eventEndDate').value).toISOString(),
-                    organizationId: parseInt(userInfo.OrganizationId, 10)
+                const newShift = {
+                    //id: 0, // 0 als Erkennungszeichen für 'Neuanlage'
+                    name: document.getElementById('shiftTitle').value,
+                    description: document.getElementById('shiftDescription').value,
+                    requirements: document.getElementById('shiftRequirements').value,
+                    ageRestriction: document.getElementById('shiftAgeRestriction').value,
+                    points: document.getElementById('shiftPoints').value,
+                    //Event-ID für Testzwecke
+                    eventId: '1',
+                    //organizationId: parseInt(userInfo.OrganizationId, 10)
                 };
 
                 // POST Request an dein C#-Backend mit Authentifizierung
                 authenticatedFetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newEvent)
+                    body: JSON.stringify(newShift)
                 })
                     .then(response => {
                         if (!response.ok) throw new Error('Fehler beim Speichern');
-                        return response.json(); // Oder response.text(), falls Backend kein JSON liefert
+                        return response.text(); // Oder response.json(), falls Backend JSON liefert
                     })
-                    .then(savedEvent => {
-                        alert('Veranstaltung erfolgreich in der Datenbank gespeichert!');
+                    .then(savedShift => {
+                        console.log('Saved Shift');
+                        alert('Dienst erfolgreich in der Datenbank gespeichert!');
 
                         // Formular aufräumen
-                        createEventForm.reset();
-                        createEventForm.style.display = 'none';
-                        showFormBtn.style.display = 'block';
+                        createShiftForm.reset();
+                        createShiftForm.style.display = 'none';
+                        showShiftFormBtn.style.display = 'block';
 
                         // Damit das neue Event in der Liste auftaucht, laden wir die Seite einmal neu
                         location.reload();
@@ -433,52 +292,41 @@
 
             const apiUrlWithOrg = `${apiUrl}?organizationId=${userInfo.OrganizationId}`;
 
-            authenticatedFetch(apiUrlWithOrg)
+            //authenticatedFetch(apiUrlWithOrg)
+            authenticatedFetch(apiUrl)
                 .then(response => {
                     if (!response.ok) throw new Error('Netzwerk-Antwort war nicht ok');
                     return response.json();
                 })
-                .then(events => {
-                    tableBody.innerHTML = '';
+                .then(shifts => {
+                    cardwrapper.innerHTML = '';
 
-                    if (events.length === 0) {
-                        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">Keine Veranstaltungen für Ihre Organisation gefunden.</td></tr>';
+                    if (shifts.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">Kein Dienst für Ihre Organisation gefunden.</td></tr>';
                         return;
                     }
 
-                    events.forEach(event => {
-                        const tr = document.createElement('tr');
+                    shifts.forEach(shift => {
+                        const card = document.createElement('div');
 
-                        tr.innerHTML = `
-                            <td>
-                                <div class="event-cell">
-                                    <div class="event-icon"></div>
-                                    <span>${event.title}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="location-cell">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                    ${event.location}
-                                </div>
-                            </td>
-                             <td>${new Date(event.startDate).toLocaleDateString('de-DE')}</td>
-                            <td>${new Date(event.endDate).toLocaleDateString('de-DE')}</td>
-                            <td><span style="color: var(--text-muted); font-size: 0.8rem;">#${event.id}</span></td>
-                            <td>
-                                <div style="display: flex; gap: 12px; align-items: center;">
-                                    <a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details &rarr;</a>
-                                    <button onclick="deleteEvent(${event.id}, '${event.title.replace(/'/g, "\\'")}')" class="action-link-danger">Löschen</button>
-                                </div>
-                            </td>
+                        card.classList.add('shift-card-s');
+                        card.innerHTML = `
+                            <div class="shift-card-header">
+                                <div class="shift-card-icon"></div>
+                                <h2 class="shift-card-title">${shift.name}</h2>
+                            </div>
+                            <p class="shift-card-description"> ${shift.description}</p>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <a href="#" onclick="loadShiftDetails(${shift.id})" class="action-link">Details</a>
+                                <button onclick="deleteShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}')" class="action-link-danger">Löschen</button>
+                            </div>
                         `;
-
-                        tableBody.appendChild(tr);
+                        cardwrapper.appendChild(card);
                     });
                 })
                 .catch(error => {
-                    console.error('Fehler beim Laden der Veranstaltungen:', error);
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden der Veranstaltungen. Bitte versuchen Sie es später erneut.</td></tr>';
+                    console.error('Fehler beim Laden der Dienste:', error);
+                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden der Dienste. Bitte versuchen Sie es später erneut.</td></tr>';
                 });
         });
     </script>

@@ -39,10 +39,16 @@ namespace HelfenNeuGedacht.API.Api.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Shift>> GetShift(int Id)
+        public async Task<ActionResult<ShiftResponse>> GetShift(int Id)
         {
             var shift = await _shiftService.GetShiftByIdAsync(Id);
-            return Ok();
+
+            if (shift == null)
+            {
+                return NotFound("no data recieved");
+            }
+
+            return Ok(shift);
         }
 
         [HttpPost]

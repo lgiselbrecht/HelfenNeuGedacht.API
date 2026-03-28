@@ -472,14 +472,14 @@
 
             // Formular einblenden
             showFormBtn.addEventListener('click', () => {
-                createEventForm.style.display = 'block';
-                showFormBtn.style.display = 'none';
+                createEventForm.classList.remove('hidden');
+                showFormBtn.classList.add('hidden');
             });
 
             // Formular ausblenden
             cancelFormBtn.addEventListener('click', () => {
-                createEventForm.style.display = 'none';
-                showFormBtn.style.display = 'block';
+                createEventForm.classList.add('hidden');
+                showFormBtn.classList.remove('hidden');
                 createEventForm.reset();
             });
 
@@ -520,8 +520,8 @@
 
                         // Formular aufräumen
                         createEventForm.reset();
-                        createEventForm.style.display = 'none';
-                        showFormBtn.style.display = 'block';
+                        createEventForm.classList.add('hidden');
+                        showFormBtn.classList.remove('hidden');
 
                         // Damit das neue Event in der Liste auftaucht, laden wir die Seite einmal neu
                         location.reload();

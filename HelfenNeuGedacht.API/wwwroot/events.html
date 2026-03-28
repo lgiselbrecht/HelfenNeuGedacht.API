@@ -92,12 +92,12 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Veranstaltung</th>
-                        <th>Ort</th>
-                        <th>Startdatum</th>
-                        <th>Enddatum</th>
-                        <th>Anzahl Helfer</th>
-                        <th>Aktion</th>
+                        <th class="text-center">Veranstaltung</th>
+                        <th class="text-center">Ort</th>
+                        <th class="text-center">Startdatum</th>
+                        <th class="text-center">Enddatum</th>
+                        <th class="text-center">Anzahl Helfer</th>
+                        <th class="text-center">Aktion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -581,10 +581,10 @@
                                     ${event.location}
                                 </div>
                             </td>
-                             <td>${new Date(event.startDate).toLocaleDateString('de-DE')}</td>
-                            <td>${new Date(event.endDate).toLocaleDateString('de-DE')}</td>
-                            <td>${totalNeeded}</td>
-                            <td>
+                             <td class="text-center">${new Date(event.startDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                            <td class="text-center">${new Date(event.endDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                            <td class="text-center">${totalNeeded}</td>
+                            <td class="text-center">
                                 <div class="flex-center-gap">
                                     <a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details</a>
                                     <button onclick="deleteEvent(${event.id}, '${event.title.replace(/'/g, "\\'")}')" class="action-link-danger">Löschen</button>

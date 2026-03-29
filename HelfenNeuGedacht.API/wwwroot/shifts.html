@@ -97,11 +97,18 @@
             <div class="modal-body">
                 <form id="editShiftForm" class="form-container">
                     <input type="number" id="editShiftId" placeholder="ID" required>
-                    <input type="text" id="editShiftTitle" placeholder="Dienstbezeichnung" required>
-                    <textarea id="editShiftDescription" placeholder="Beschreibung" rows="3" required></textarea>
-                    <input type="text" id="editShiftRequirements" placeholder="Anforderungen">
-                    <input type="number" id="editShiftAgeRestriction" placeholder="Altersbeschränkung">
-                    <input type="number" id="editShiftPoints" placeholder="Punkte">
+                    <label for="editShiftTitle">Titel</label>
+                    <input type="text" id="editShiftTitle" required>
+                    <label for="editShiftDescription">Beschreibung</label>
+                    <textarea id="editShiftDescription"  rows="3" required></textarea>
+                    <label for="editShiftRequirements">Anforderungen</label>
+                    <input type="text" id="editShiftRequirements">
+                    <label for="editShiftAgeRestriction">Altersbeschränkung</label>
+                    <input type="number" id="editShiftAgeRestriction">
+                    <label for="editShiftPoints">Punkte</label>
+                    <input type="number" id="editShiftPoints">
+                    <label for="editShiftRelatedEvent">Zugewiesene Veranstaltung</label>
+                    <select id="editShiftRelatedEvent" required></select>
                     <div class="form-actions-row">
                         <button type="submit" class="btn-primary">Speichern</button>
                         <button class="btn-danger" id="deleteShiftButton">Löschen</button>
@@ -131,14 +138,18 @@
             </div>
             <div class="modal-body">
                 <form id="createShiftForm" class="form-container">
-                    <input type="text" id="shiftTitle" placeholder="Dienstbezeichnung" required>
-                    <textarea id="shiftDescription" placeholder="Beschreibung" rows="3" required></textarea>
-                    <input type="text" id="shiftRequirements" placeholder="Anforderungen">
-                    <input type="number" id="shiftAgeRestriction" placeholder="Altersbeschränkung">
-                    <input type="number" id="shiftPoints" placeholder="Punkte">
-                    <select id="shiftRelatedEvent">
-                        
-                    </select>
+                    <label for="shiftTitle">Bezeichnung</label>
+                    <input type="text" id="shiftTitle" required>
+                    <label for="shiftDescription">Beschreibung</label>
+                    <textarea id="shiftDescription" rows="3" required></textarea>
+                    <label for="shiftRequirements">Anforderungen</label>
+                    <input type="text" id="shiftRequirements">
+                    <label for="shiftAgeRestriction">Altersbeschränkung</label>
+                    <input type="number" id="shiftAgeRestriction">
+                    <label for="shiftPoints">Punkte</label>
+                    <input type="number" id="shiftPoints">
+                    <label for="shiftRelatedEvents">zugewiesene Veranstaltung</label>
+                    <select id="shiftRelatedEvent" required></select>
                     <div class="form-actions-row">
                         <button type="submit" class="btn-primary">Speichern</button>
                         <button type="button" id="cancelShiftFormBtn" class="btn-secondary">Abbrechen</button>
@@ -163,9 +174,10 @@
             document.getElementById('editShiftForm').reset();
         }
 
-        function loadShiftDetails(shiftId) { 
+        async function loadShiftDetails(shiftId) { 
             if (window.event) window.event.preventDefault();
 
+            const eventlist = await getEvents();
             const modal = document.getElementById('shiftDetailsModal');
             modal.classList.add('active');
             document.getElementById('detailShiftTitle').textContent = 'Lade Dienst...';
@@ -185,6 +197,18 @@
                     document.getElementById('editShiftRequirements').value = shift.requirements || '';
                     document.getElementById('editShiftAgeRestriction').value = shift.ageRestriction || '';
                     document.getElementById('editShiftPoints').value = shift.points || '';
+                    
+                    const select = document.getElementById('editShiftRelatedEvent');
+                    select.innerHTML = '<option disabled value="">-- Veranstaltung wählen --</option>';
+                    eventlist.forEach(event => {
+                        const option = document.createElement('option');
+                        option.value = event.id;
+                        option.textContent = event.title;
+                        if (shift.eventId === event.id) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
 
                     const deleteBtn = document.getElementById('deleteShiftButton');
                     const newDeleteBtn = deleteBtn.cloneNode(true);
@@ -247,7 +271,7 @@
 
                 const eventlist = await getEvents();
                 const select = document.getElementById('shiftRelatedEvent');
-                select.innerHTML = '<option disabled value="">-- Veranstaltung wählen --</option>';
+                select.innerHTML = '<option disabled selected value="">-- Veranstaltung wählen --</option>';
                 eventlist.forEach(event => {
                     const option = document.createElement('option');
                     option.value = event.id;
@@ -266,7 +290,6 @@
                     requirements: document.getElementById('shiftRequirements').value,
                     ageRestriction: parseInt(document.getElementById('shiftAgeRestriction').value) || 0,
                     points: parseInt(document.getElementById('shiftPoints').value) || 0,
-                    //Vorerst statisch
                     eventId: document.getElementById('shiftRelatedEvent').value
                 };
 
@@ -290,7 +313,7 @@
                     requirements: document.getElementById('editShiftRequirements').value,
                     ageRestriction: parseInt(document.getElementById('editShiftAgeRestriction').value) || 0,
                     points: parseInt(document.getElementById('editShiftPoints').value) || 0,
-                    eventId: 1
+                    eventId: document.getElementById('editShiftRelatedEvent').value
                 };
 
                 authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${id}`, {

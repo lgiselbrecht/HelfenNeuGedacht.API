@@ -9,7 +9,6 @@
 </head>
 
 <body>
-
     <aside class="sidebar">
         <div class="brand">
             <div class="brand-icon">H</div>
@@ -19,7 +18,7 @@
             <a href="dashboard.html" class="nav-item">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                          d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
                     </path>
                 </svg>
                 Dashboard
@@ -27,7 +26,7 @@
             <a href="events.html" class="nav-item">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                     </path>
                 </svg>
                 Veranstaltungen
@@ -35,7 +34,7 @@
             <a href="shifts.html" class="nav-item active">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
                     </path>
                 </svg>
                 Dienste
@@ -44,7 +43,7 @@
             <a href="organization.html" class="nav-item">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                     </path>
                 </svg>
                 Organisation
@@ -54,7 +53,7 @@
             <button onclick="logout()" class="btn btn-outline btn-full">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="icon-small">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
                     </path>
                 </svg>
                 Abmelden
@@ -75,19 +74,6 @@
                 NEUEN DIENST ERSTELLEN
             </button>
         </header>
-
-        <form id="createShiftForm" class="form-container" style="display: none;">
-            <input type="text" id="shiftTitle" placeholder="Dienstbezeichnung" required>
-            <textarea id="shiftDescription" placeholder="Beschreibung" rows="3" required></textarea>
-            <input type="text" id="shiftRequirements" placeholder="Anforderungen">
-            <input type="number" id="shiftAgeRestriction" placeholder="Altersbeschränkung">
-            <input type="number" id="shiftPoints" placeholder="Punkte">
-            <div class="form-actions-row">
-                <button type="submit" class="btn-primary">Speichern</button>
-                <button type="button" id="cancelShiftFormBtn" class="btn-secondary">Abbrechen</button>
-            </div>
-        </form>
-
         <div class="shift-grid" id="cardwrapper"></div>
     </main>
 
@@ -98,7 +84,7 @@
                 <div class="modal-header-top">
                     <div class="modal-header-title">
                         <div class="modal-header-icon"></div>
-                        <h2 id="modalShiftTitle">Lade Dienst...</h2>
+                        <h2 id="detailShiftTitle">Lade Dienst...</h2>
                     </div>
                     <button class="modal-close-btn" id="closeShiftModalBtn">
                         <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,25 +95,52 @@
                 </div>
             </div>
             <div class="modal-body">
-                <table>
-                    <tr>
-                        <td>Beschreibung</td>
-                        <td id="modalShiftDescription">Beschreibung...</td>
-                    </tr>
-                    <tr>
-                        <td>Anforderungen</td>
-                        <td id="modalShiftRequirements">Anforderungen...</td>
-                    </tr>
-                    <tr>
-                        <td>Altersbeschränkdung</td>
-                        <td id="modalShiftAgeRestriction">Alterseinschränkung...</td>
-                    </tr>
-                    <tr>
-                        <td>Punkte</td>
-                        <td id="modalShiftPointes">Punkte...</td>
-                    </tr>
-                </table>
-               
+                <form id="editShiftForm" class="form-container">
+                    <input type="number" id="editShiftId" placeholder="ID" required>
+                    <input type="text" id="editShiftTitle" placeholder="Dienstbezeichnung" required>
+                    <textarea id="editShiftDescription" placeholder="Beschreibung" rows="3" required></textarea>
+                    <input type="text" id="editShiftRequirements" placeholder="Anforderungen">
+                    <input type="number" id="editShiftAgeRestriction" placeholder="Altersbeschränkung">
+                    <input type="number" id="editShiftPoints" placeholder="Punkte">
+                    <div class="form-actions-row">
+                        <button type="submit" class="btn-primary">Speichern</button>
+                        <button class="btn-danger" id="deleteShiftButton">Löschen</button>
+                        <button type="button" id="cancelEditingShiftFormBtn" class="btn-secondary">Abbrechen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shift Add Modal -->
+    <div class="modal-overlay" id="shiftEditModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-top">
+                    <div class="modal-header-title">
+                        <div class="modal-header-icon"></div>
+                        <h2 id="modalShiftTitle">Neuen Dienst erstellen</h2>
+                    </div>
+                    <button class="modal-close-btn" id="closeEditShiftModalBtn">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="createShiftForm" class="form-container">
+                    <input type="text" id="shiftTitle" placeholder="Dienstbezeichnung" required>
+                    <textarea id="shiftDescription" placeholder="Beschreibung" rows="3" required></textarea>
+                    <input type="text" id="shiftRequirements" placeholder="Anforderungen">
+                    <input type="number" id="shiftAgeRestriction" placeholder="Altersbeschränkung">
+                    <input type="number" id="shiftPoints" placeholder="Punkte">
+                    <div class="form-actions-row">
+                        <button type="submit" class="btn-primary">Speichern</button>
+                        <button type="button" id="cancelShiftFormBtn" class="btn-secondary">Abbrechen</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -136,19 +149,25 @@
     <script src="config.js"></script>
     <script src="auth.js"></script>
     <script>
+
         // Auth-Guard: Prüfe ob Benutzer eingeloggt ist
         requireAuth();
 
-        function loadShiftDetails(shiftId) {
-            // Verhindert, dass der # Link die Seite nach oben springen lässt
-            if (event) event.preventDefault();
+        // Hilfsfunktion zum Schließen aller Modale
+        function closeAllModals() {
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            document.getElementById('createShiftForm').reset();
+            document.getElementById('editShiftForm').reset();
+        }
+
+        function loadShiftDetails(shiftId) { 
+            if (window.event) window.event.preventDefault();
 
             const modal = document.getElementById('shiftDetailsModal');
-
-            // Lade-Ansicht zeigen
             modal.classList.add('active');
-            document.getElementById('modalShiftTitle').textContent = 'Lade Dienst...';
-            document.getElementById('modalShiftDescription').textContent = 'Beschreibung...';
+            document.getElementById('detailShiftTitle').textContent = 'Lade Dienst...';
 
             const detailUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${shiftId}`;
 
@@ -158,177 +177,140 @@
                     return response.json();
                 })
                 .then(shift => {
-                    console.log('Detail-Daten aus der API:', shift);
+                    document.getElementById('detailShiftTitle').textContent = (shift.name || 'Dienst') + " - Detailansicht";
+                    document.getElementById('editShiftId').value = shift.id;
+                    document.getElementById('editShiftTitle').value = shift.name || '';
+                    document.getElementById('editShiftDescription').value = shift.description || '';
+                    document.getElementById('editShiftRequirements').value = shift.requirements || '';
+                    document.getElementById('editShiftAgeRestriction').value = shift.ageRestriction || '';
+                    document.getElementById('editShiftPoints').value = shift.points || '';
 
-                    document.getElementById('modalShiftTitle').textContent = shift.name || 'Ohne Titel';
-                    document.getElementById('modalShiftDescription').textContent = shift.description || 'Keine Beschreibung';
-                    document.getElementById('modalShiftRequirements').textContent = shift.requirements || 'Keine Anforderungen';
-                    document.getElementById('modalShiftAgeRestriction').textContent = shift.ageRestriction || 'Keine Altersbeschränkung';
-                    document.getElementById('modalShiftPointes').textContent = shift.points || 'Keine Beschreibung';
-       
+                    const deleteBtn = document.getElementById('deleteShiftButton');
+                    const newDeleteBtn = deleteBtn.cloneNode(true);
+                    deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
+
+                    newDeleteBtn.addEventListener('click', () => {
+                        deleteShift(shift.id, shift.name);
+                    });
                 })
                 .catch(error => {
-                    console.error('Fehler beim Abrufen der Details:', error);
+                    console.error('Fehler:', error);
+                    alert("Fehler beim Laden der Details.");
+                    closeAllModals();
                 });
         }
 
         async function deleteShift(shiftId, shiftTitle) {
-            if (!confirm(`Möchten Sie den Dienst "${shiftTitle}" wirklich unwiderruflich löschen?`)) {
-                return;
-            }
+            if (!confirm(`Möchten Sie den Dienst "${shiftTitle}" wirklich löschen?`)) return;
 
             try {
                 const deleteUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${shiftId}`;
-                const response = await authenticatedFetch(deleteUrl, {
-                    method: 'DELETE'
-                });
+                const response = await authenticatedFetch(deleteUrl, { method: 'DELETE' });
 
                 if (response.ok) {
-                    alert('Dienst wurde erfolgreich gelöscht.');
                     location.reload();
                 } else {
-                    const error = await response.json();
-                    alert(`Fehler beim Löschen: ${error.message || 'Unbekannter Fehler'}`);
+                    alert('Fehler beim Löschen.');
                 }
             } catch (error) {
-                console.error('Fehler beim Löschen des Dienstes:', error);
-                alert('Netzwerkfehler beim Löschen des Dienstes.');
+                console.error('Löschfehler:', error);
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-
-            // Modal schliessen Dienste
             const shiftDetailsModal = document.getElementById('shiftDetailsModal');
-            document.getElementById('closeShiftModalBtn').addEventListener('click', () => {
-                shiftDetailsModal.classList.remove('active');
-            });
-            shiftDetailsModal.addEventListener('click', (e) => {
-                if (e.target === shiftDetailsModal) {
-                    shiftDetailsModal.classList.remove('active');
-                }
-            });
-
-            const apiUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}`;
-            const tableBody = document.querySelector('tbody');
+            const shiftEditModal = document.getElementById('shiftEditModal');
             const cardwrapper = document.getElementById('cardwrapper');
 
-            // --- Logik für das Erstellen eines Dienstes (POST) ---
-            const showShiftFormBtn = document.getElementById('showShiftFormBtn');
-            const cancelShiftFormBtn = document.getElementById('cancelShiftFormBtn');
-            const createShiftForm = document.getElementById('createShiftForm');
+            // --- Schließen-Logik vereinheitlichen ---
+            const closeButtons = [
+                'closeShiftModalBtn',
+                'cancelEditingShiftFormBtn',
+                'closeEditShiftModalBtn',
+                'cancelShiftFormBtn'
+            ];
 
-            // Formular einblenden
-            showShiftFormBtn.addEventListener('click', () => {
-                createShiftForm.style.display = 'block';
-                showShiftFormBtn.style.display = 'none';
+            closeButtons.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.addEventListener('click', closeAllModals);
             });
 
-            // Formular ausblenden
-            cancelShiftFormBtn.addEventListener('click', () => {
-                createShiftForm.style.display = 'none';
-                showShiftFormBtn.style.display = 'block';
-                createShiftForm.reset();
+            [shiftDetailsModal, shiftEditModal].forEach(m => {
+                m.addEventListener('click', (e) => {
+                    if (e.target === m) closeAllModals();
+                });
             });
 
-            // Beim Absenden des Formulars Daten per API speichern
-            createShiftForm.addEventListener('submit', (e) => {
-                e.preventDefault(); // Verhindert das Neuladen der Seite durch HTML
+            document.getElementById('showShiftFormBtn').addEventListener('click', () => {
+                shiftEditModal.classList.add('active');
+            });
 
-                // OrganizationId aus JWT-Token holen
+            document.getElementById('createShiftForm').addEventListener('submit', (e) => {
+                e.preventDefault();
                 const userInfo = getUserInfo();
-                if (!userInfo || !userInfo.OrganizationId) {
-                    alert('Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.');
-                    return;
-                }
 
-                // Wir sammeln die Daten aus den Input-Feldern zusammen, angepasst an das Swagger/API-Format
                 const newShift = {
-                    //id: 0, // 0 als Erkennungszeichen für 'Neuanlage'
                     name: document.getElementById('shiftTitle').value,
                     description: document.getElementById('shiftDescription').value,
                     requirements: document.getElementById('shiftRequirements').value,
-                    ageRestriction: document.getElementById('shiftAgeRestriction').value,
-                    points: document.getElementById('shiftPoints').value,
-                    //Event-ID für Testzwecke
-                    eventId: '2',
-                    //organizationId: parseInt(userInfo.OrganizationId, 10)
+                    ageRestriction: parseInt(document.getElementById('shiftAgeRestriction').value) || 0,
+                    points: parseInt(document.getElementById('shiftPoints').value) || 0,
+                    //Vorerst statisch
+                    eventId: 1
                 };
 
-                // POST Request an dein C#-Backend mit Authentifizierung
-                authenticatedFetch(apiUrl, {
+                authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newShift)
                 })
-                    .then(response => {
-                        if (!response.ok) throw new Error('Fehler beim Speichern');
-                        return response.text(); // Oder response.json(), falls Backend JSON liefert
-                    })
-                    .then(savedShift => {
-                        console.log('Saved Shift');
-                        alert('Dienst erfolgreich in der Datenbank gespeichert!');
-
-                        // Formular aufräumen
-                        createShiftForm.reset();
-                        createShiftForm.style.display = 'none';
-                        showShiftFormBtn.style.display = 'block';
-
-                        // Damit das neue Event in der Liste auftaucht, laden wir die Seite einmal neu
-                        location.reload();
-                    })
-                    .catch(error => {
-                        console.error('Speichern fehlgeschlagen:', error);
-                        alert('Datenbank-Speicherung fehlgeschlagen. Läuft die API?');
-                    });
+                    .then(res => res.ok ? location.reload() : alert("Fehler beim Speichern"));
             });
 
-            // Logik für das Abrufen der Liste (GET)
-            const userInfo = getUserInfo();
-            if (!userInfo || !userInfo.OrganizationId) {
-                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.</td></tr>';
-                return;
-            }
+            document.getElementById('editShiftForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('editShiftId').value;
 
-            const apiUrlWithOrg = `${apiUrl}?organizationId=${userInfo.OrganizationId}`;
+                const editedShift = {
+                    id: id,
+                    name: document.getElementById('editShiftTitle').value,
+                    description: document.getElementById('editShiftDescription').value,
+                    requirements: document.getElementById('editShiftRequirements').value,
+                    ageRestriction: parseInt(document.getElementById('editShiftAgeRestriction').value) || 0,
+                    points: parseInt(document.getElementById('editShiftPoints').value) || 0,
+                    eventId: 1
+                };
 
-            //authenticatedFetch(apiUrlWithOrg)
-            authenticatedFetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error('Netzwerk-Antwort war nicht ok');
-                    return response.json();
+                authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(editedShift)
                 })
+                    .then(res => res.ok ? location.reload() : alert("Fehler beim Update"));
+            });
+
+            authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}`)
+                .then(res => res.json())
                 .then(shifts => {
                     cardwrapper.innerHTML = '';
-
-                    if (shifts.length === 0) {
-                        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">Kein Dienst für Ihre Organisation gefunden.</td></tr>';
-                        return;
-                    }
-
                     shifts.forEach(shift => {
                         const card = document.createElement('div');
-
-                        card.classList.add('shift-card-s');
+                        card.className = 'shift-card-s';
                         card.innerHTML = `
-                            <div class="shift-card-header">
-                                <div class="shift-card-icon"></div>
-                                <h2 class="shift-card-title">${shift.name}</h2>
-                            </div>
-                            <p class="shift-card-description"> ${shift.description}</p>
-                            <div style="display: flex; gap: 12px; align-items: center;">
-                                <a href="#" onclick="loadShiftDetails(${shift.id})" class="action-link">Details</a>
-                                <button onclick="deleteShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}')" class="action-link-danger">Löschen</button>
-                            </div>
-                        `;
+                    <div class="shift-card-header">
+                        <div class="shift-card-icon"></div>
+                        <h2 class="shift-card-title">${shift.name}</h2>
+                    </div>
+                    <p class="shift-card-description">${shift.description}</p>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <button onclick="loadShiftDetails(${shift.id})" class="btn-primary">Details</button>
+                    </div>
+                `;
                         cardwrapper.appendChild(card);
                     });
-                })
-                .catch(error => {
-                    console.error('Fehler beim Laden der Dienste:', error);
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden der Dienste. Bitte versuchen Sie es später erneut.</td></tr>';
                 });
         });
+
     </script>
 </body>
 

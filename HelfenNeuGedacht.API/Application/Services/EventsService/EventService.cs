@@ -21,7 +21,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
         private readonly IHubContext<DashboardHub> _dashboardHub;
 
         public EventService(
-            IEventRepository eventRepository, 
+            IEventRepository eventRepository,
             DtoMapper mapper,
             IHttpContextAccessor httpContextAccessor,
             UserManager<ApplicationUser> userManager,
@@ -55,6 +55,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
                 Location = eventEntity.Location,
                 StartDate = eventEntity.StartDate,
                 EndDate = eventEntity.EndDate,
+                RequiredHelpers = eventEntity.RequiredHelpers,
                 OrganizationId = eventEntity.OrganizationId
             };
 
@@ -68,7 +69,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
         {
             var eventToDelete = await _eventRepository.FindByIdAsync(id);
             await _eventRepository.DeleteAsync(eventToDelete);
-          
+
             var orgId = eventToDelete.OrganizationId;
             var groupName = $"organization-{orgId}";
             await _dashboardHub.Clients.Group(groupName).SendAsync("dashboardUpdated");
@@ -90,7 +91,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
 
             foreach (var events in allEvents)
             {
-                eventResponses.Add(_mapper.ToEventResponse(events));
+                eventResponses.Add(_mapper.ToEventResponse(events, true));
             }
             return eventResponses;
         }
@@ -98,7 +99,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
         public async Task<EventResponse?> GetEventByIdAsync(int id, bool includeShifts = false)
         {
             Event? events;
-            
+
             if (includeShifts)
             {
                 events = await _eventRepository.FindByIdWithShiftsAsync(id);
@@ -107,7 +108,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             {
                 events = await _eventRepository.FindByIdAsync(id);
             }
-            
+
             if (events == null)
             {
                 return null;
@@ -117,11 +118,11 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
         }
 
         // This method is currently not used, but it can be useful for future features like an Superadmin dashboard
-     
+
         public async Task<List<EventResponse>> GetEventsByOrganizationIdAsync(int organizationId)
         {
             var events = await _eventRepository.FindByOrganizationIdAsync(organizationId);
-            return events.Select(e => _mapper.ToEventResponse(e)).ToList();
+            return events.Select(e => _mapper.ToEventResponse(e, true)).ToList();
         }
 
         public async Task<EventResponse> UpdateEventAsync(EventRequest eventEntity)
@@ -138,6 +139,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             existingEvent.Location = eventEntity.Location;
             existingEvent.StartDate = eventEntity.StartDate;
             existingEvent.EndDate = eventEntity.EndDate;
+            existingEvent.RequiredHelpers = eventEntity.RequiredHelpers;
             existingEvent.OrganizationId = eventEntity.OrganizationId;
 
             await _eventRepository.UpdateAsync(existingEvent);

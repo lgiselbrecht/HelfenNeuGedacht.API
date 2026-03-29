@@ -8,6 +8,7 @@ public class Event : IEntity
     public string? Location {get; set; }
     public DateTime StartDate { get; set; } 
     public DateTime EndDate { get; set; }
+    public int RequiredHelpers { get; set; } = 0;
     public int OrganizationId { get; set; }
     public Organization? Organization { get; set; }
     public ICollection<Shift>? Shift { get; set; }

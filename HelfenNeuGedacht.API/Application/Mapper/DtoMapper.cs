@@ -22,7 +22,7 @@ namespace HelfenNeuGedacht.API.Application.Mapper
                 Requirements = shift.Requirements,
                 AgeRestriction = shift.AgeRestriction,
                 Points = shift.Points,
-                EventId = shift.EventId
+                EventId = (int)shift.EventId
             };
         }
 

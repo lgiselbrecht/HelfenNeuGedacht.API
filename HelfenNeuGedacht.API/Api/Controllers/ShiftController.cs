@@ -11,8 +11,7 @@ namespace HelfenNeuGedacht.API.Api.Controllers
 {
     [ApiController]
     [Route("api/shifts")]
-    //[Authorize(Roles = $"{Roles.OrganizationAdmin},{Roles.OrganizationUser}")]
-    //TODO: Rollen festlegen
+    [Authorize(Roles = $"{Roles.OrganizationAdmin},{Roles.OrganizationUser},{Roles.SuperAdmin}")]
     public class ShiftController : ControllerBase
     {
         private readonly IShiftService _shiftService;

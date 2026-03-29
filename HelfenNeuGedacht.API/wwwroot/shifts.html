@@ -136,6 +136,9 @@
                     <input type="text" id="shiftRequirements" placeholder="Anforderungen">
                     <input type="number" id="shiftAgeRestriction" placeholder="Altersbeschränkung">
                     <input type="number" id="shiftPoints" placeholder="Punkte">
+                    <select id="shiftRelatedEvent">
+                        
+                    </select>
                     <div class="form-actions-row">
                         <button type="submit" class="btn-primary">Speichern</button>
                         <button type="button" id="cancelShiftFormBtn" class="btn-secondary">Abbrechen</button>
@@ -150,10 +153,8 @@
     <script src="auth.js"></script>
     <script>
 
-        // Auth-Guard: Prüfe ob Benutzer eingeloggt ist
         requireAuth();
 
-        // Hilfsfunktion zum Schließen aller Modale
         function closeAllModals() {
             document.querySelectorAll('.modal-overlay').forEach(modal => {
                 modal.classList.remove('active');
@@ -218,11 +219,11 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+
             const shiftDetailsModal = document.getElementById('shiftDetailsModal');
             const shiftEditModal = document.getElementById('shiftEditModal');
             const cardwrapper = document.getElementById('cardwrapper');
 
-            // --- Schließen-Logik vereinheitlichen ---
             const closeButtons = [
                 'closeShiftModalBtn',
                 'cancelEditingShiftFormBtn',
@@ -235,14 +236,24 @@
                 if (btn) btn.addEventListener('click', closeAllModals);
             });
 
-            [shiftDetailsModal, shiftEditModal].forEach(m => {
-                m.addEventListener('click', (e) => {
-                    if (e.target === m) closeAllModals();
+            [shiftDetailsModal, shiftEditModal].forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeAllModals();
                 });
             });
 
-            document.getElementById('showShiftFormBtn').addEventListener('click', () => {
+            document.getElementById('showShiftFormBtn').addEventListener('click', async(e) => {
                 shiftEditModal.classList.add('active');
+
+                const eventlist = await getEvents();
+                const select = document.getElementById('shiftRelatedEvent');
+                select.innerHTML = '<option disabled value="">-- Veranstaltung wählen --</option>';
+                eventlist.forEach(event => {
+                    const option = document.createElement('option');
+                    option.value = event.id;
+                    option.textContent = event.title;
+                    select.appendChild(option);
+                });
             });
 
             document.getElementById('createShiftForm').addEventListener('submit', (e) => {
@@ -256,7 +267,7 @@
                     ageRestriction: parseInt(document.getElementById('shiftAgeRestriction').value) || 0,
                     points: parseInt(document.getElementById('shiftPoints').value) || 0,
                     //Vorerst statisch
-                    eventId: 1
+                    eventId: document.getElementById('shiftRelatedEvent').value
                 };
 
                 authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}`, {
@@ -266,6 +277,7 @@
                 })
                     .then(res => res.ok ? location.reload() : alert("Fehler beim Speichern"));
             });
+
 
             document.getElementById('editShiftForm').addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -310,6 +322,12 @@
                     });
                 });
         });
+
+        async function getEvents() {
+            const res = await authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`);
+            const events = await res.json();
+            return events;
+        }
 
     </script>
 </body>

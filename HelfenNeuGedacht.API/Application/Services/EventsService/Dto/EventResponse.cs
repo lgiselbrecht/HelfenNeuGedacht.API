@@ -1,4 +1,4 @@
-﻿using HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto;
+using HelfenNeuGedacht.API.Application.Services.ShiftServices.Dto;
 
 namespace HelfenNeuGedacht.API.Application.Services.EventsService.Dto
 {

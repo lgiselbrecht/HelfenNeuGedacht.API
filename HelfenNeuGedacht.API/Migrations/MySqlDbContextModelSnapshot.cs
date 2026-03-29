@@ -145,6 +145,9 @@ namespace HelfenNeuGedacht.API.Migrations
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
+                    b.Property<int>("RequiredHelpers")
+                        .HasColumnType("int");
+
                     b.Property<string>("Requirements")
                         .IsRequired()
                         .HasColumnType("longtext");

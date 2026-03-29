@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelfenNeuGedacht.API.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20260328133012_SomeChanges")]
-    partial class SomeChanges
+    [Migration("20260328102434_AddRequiredHelpersToEventAndShift")]
+    partial class AddRequiredHelpersToEventAndShift
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,6 +146,9 @@ namespace HelfenNeuGedacht.API.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequiredHelpers")
                         .HasColumnType("int");
 
                     b.Property<string>("Requirements")

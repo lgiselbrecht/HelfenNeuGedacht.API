@@ -1,4 +1,4 @@
-﻿using HelfenNeuGedacht.API.Application.Repositories;
+using HelfenNeuGedacht.API.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository

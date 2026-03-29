@@ -1,4 +1,4 @@
-﻿namespace HelfenNeuGedacht.API.Application.Services.EventsService.Dto
+namespace HelfenNeuGedacht.API.Application.Services.EventsService.Dto
 {
     public class EventRequest
     {

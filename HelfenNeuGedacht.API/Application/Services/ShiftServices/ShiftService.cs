@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using HelfenNeuGedacht.API.Application.Mapper;
 using HelfenNeuGedacht.API.Application.Repositories;
 using HelfenNeuGedacht.API.Application.Services.EventsService;
@@ -62,6 +62,7 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
                 Requirements = shiftRequest.Requirements,
                 AgeRestriction = shiftRequest.AgeRestriction,
                 Points = shiftRequest.Points,
+                RequiredHelpers = shiftRequest.RequiredHelpers,
                 EventId = shiftRequest.EventId
             };
 
@@ -151,6 +152,7 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
             existingShift.Requirements = shift.Requirements;
             existingShift.AgeRestriction = shift.AgeRestriction;
             existingShift.Points = shift.Points;
+            //existingShift.RequiredHelpers = shift.RequiredHelpers;
             existingShift.EventId = shift.EventId;
 
             await _shiftRepositories.UpdateAsync(existingShift);

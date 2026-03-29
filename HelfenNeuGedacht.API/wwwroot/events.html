@@ -77,14 +77,35 @@
         </header>
 
         <form id="createEventForm" class="form-container hidden">
-            <input type="text" id="eventTitle" placeholder="Veranstaltungs-Titel" required>
-            <textarea id="eventDescription" placeholder="Beschreibung" rows="3" required></textarea>
-            <input type="text" id="eventLocation" placeholder="Ort" required>
-            <label>Start: <input type="datetime-local" id="eventStartDate" required></label>
-            <label>Ende: <input type="datetime-local" id="eventEndDate" required></label>
-            <div class="form-actions-row">
-                <button type="submit" class="btn-primary">Speichern</button>
-                <button type="button" id="cancelFormBtn" class="btn-secondary">Abbrechen</button>
+            <div class="form-group">
+                <label class="form-label">Veranstaltungsname</label>
+                <input type="text" id="eventTitle" placeholder="z.B. Sommerfest 2026" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Beschreibung</label>
+                <textarea id="eventDescription" placeholder="Worum geht es in dieser Veranstaltung?" class="form-input" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Ort</label>
+                <input type="text" id="eventLocation" placeholder="z.B. Marktplatz, Hauptstraße" class="form-input" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Start</label>
+                    <input type="datetime-local" id="eventStartDate" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ende</label>
+                    <input type="datetime-local" id="eventEndDate" class="form-input" required>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="cancelFormBtn" class="btn btn-secondary">Abbrechen</button>
+                <button type="submit" class="btn btn-primary">Veranstaltung speichern</button>
             </div>
         </form>
 
@@ -92,12 +113,12 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Veranstaltung</th>
-                        <th>Ort</th>
-                        <th>Startdatum</th>
-                        <th>Enddatum</th>
-                        <th>Anzahl Helfer</th>
-                        <th>Aktion</th>
+                        <th class="text-center">Veranstaltung</th>
+                        <th class="text-center">Ort</th>
+                        <th class="text-center">Startdatum</th>
+                        <th class="text-center">Enddatum</th>
+                        <th class="text-center">Anzahl Helfer</th>
+                        <th class="text-center">Aktion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -164,14 +185,27 @@
                 </div>
 
                 <div id="addShiftContainer" class="shift-form-container hidden">
-                    <div class="column-gap-10">
+                    <div class="form-group">
+                        <label class="form-label">Dienst-Name</label>
                         <input type="text" id="newShiftName" placeholder="Name (z.B. Bar-Dienst)" class="form-input">
-                        <textarea id="newShiftDesc" placeholder="Beschreibung" class="form-input" rows="2"></textarea>
-                        <div class="row-gap-10">
-                            <input type="number" id="newShiftPoints" placeholder="Punkte" class="form-input w-80" value="10">
-                            <button class="btn-primary flex-1" onclick="submitNewShift()">Speichern</button>
-                            <button class="btn-secondary" onclick="toggleShiftForm(false)">Abbrechen</button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Beschreibung</label>
+                        <textarea id="newShiftDesc" placeholder="Optionale Details zum Dienst..." class="form-input" rows="2"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Punkte</label>
+                            <input type="number" id="newShiftPoints" class="form-input" value="10">
                         </div>
+                        <div class="form-group">
+                            <label class="form-label">Benötigte Helfer</label>
+                            <input type="number" id="newShiftRequiredHelpers" class="form-input" value="1" min="1">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="toggleShiftForm(false)">Abbrechen</button>
+                        <button type="submit" class="btn btn-primary" onclick="submitNewShift()">Dienst speichern</button>
                     </div>
                 </div>
                 <div class="shift-list" id="modalShiftList">
@@ -195,7 +229,7 @@
         function toggleShiftForm(show, isEdit = false) {
             const container = document.getElementById('addShiftContainer');
             const submitBtn = container.querySelector('button.btn-primary');
-            
+
             if (show) {
                 container.classList.remove('hidden');
                 submitBtn.textContent = isEdit ? 'Aktualisieren' : 'Speichern';
@@ -214,6 +248,7 @@
             const name = document.getElementById('newShiftName').value;
             const desc = document.getElementById('newShiftDesc').value;
             const points = parseInt(document.getElementById('newShiftPoints').value, 10);
+            const reqHelpers = parseInt(document.getElementById('newShiftRequiredHelpers').value, 10);
 
             if (!name) {
                 alert('Bitte geben Sie einen Namen für den Dienst ein.');
@@ -225,16 +260,17 @@
                 name: name,
                 description: desc,
                 points: points,
+                requiredHelpers: reqHelpers,
                 eventId: currentEventIdForShifts,
                 requirements: "",
                 ageRestriction: 0
             };
 
             try {
-                const url = editingShiftId 
+                const url = editingShiftId
                     ? `${API_CONFIG.BASE_URL}/shifts/${editingShiftId}`
                     : `${API_CONFIG.BASE_URL}/shifts`;
-                
+
                 const response = await authenticatedFetch(url, {
                     method: editingShiftId ? 'PUT' : 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -272,11 +308,12 @@
             }
         }
 
-        function editShift(shiftId, name, desc, points) {
+        function editShift(shiftId, name, desc, points, helpers) {
             editingShiftId = shiftId;
             document.getElementById('newShiftName').value = name;
             document.getElementById('newShiftDesc').value = desc || '';
             document.getElementById('newShiftPoints').value = points;
+            document.getElementById('newShiftRequiredHelpers').value = helpers || 1;
             toggleShiftForm(true, true);
         }
 
@@ -295,7 +332,7 @@
             document.getElementById('modalEventDate').textContent = '';
             document.getElementById('modalEventLocation').textContent = '';
             document.getElementById('modalEventHelpers').textContent = '--/-- Helfer';
-            shiftList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">Lade Dienste...</div>';
+            shiftList.innerHTML = '<div class="loading-placeholder">Lade Dienste...</div>';
 
             const detailUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}/${eventId}?includeShifts=true`;
 
@@ -318,14 +355,17 @@
                     // Schichten rendern
                     shiftList.innerHTML = '';
 
+                    // Schichten rendern
+                    shiftList.innerHTML = '';
+
                     if (eventDetails.shifts && eventDetails.shifts.length > 0) {
                         let totalHelpersNeeded = 0;
                         let totalHelpersCurrent = 0;
 
                         eventDetails.shifts.forEach(shift => {
-                            const helpersNeeded = 15; // Placeholder
-                            const helpersCurrent = Math.floor(Math.random() * helpersNeeded);
-                            const percentage = helpersCurrent / helpersNeeded;
+                            const helpersNeeded = shift.requiredHelpers || 0;
+                            const helpersCurrent = 0; // Später aus Datenbank holen
+                            const percentage = helpersNeeded > 0 ? (helpersCurrent / helpersNeeded) : 0;
 
                             totalHelpersNeeded += helpersNeeded;
                             totalHelpersCurrent += helpersCurrent;
@@ -351,13 +391,13 @@
                                             </div>
                                             <div class="shift-meta-item">
                                                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                                <span style="${badgeClass === 'kritisch' ? 'color: #ef4444;' : (badgeClass === 'warnung' ? 'color: #f59e0b;' : 'color: #10b981;')}">${helpersCurrent}/${helpersNeeded} Helfer</span>
+                                                <span class="stat-${badgeClass}">${helpersCurrent}/${helpersNeeded} Helfer</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="shift-actions">
                                         <div class="badge ${badgeClass}">${badgeText}</div>
-                                        <button class="action-icon" onclick="editShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}', '${(shift.description || '').replace(/'/g, "\\'")}', ${shift.points})">
+                                        <button class="action-icon" onclick="editShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}', '${(shift.description || '').replace(/'/g, "\\'")}', ${shift.points}, ${shift.requiredHelpers})">
                                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </button>
                                         <button class="action-icon delete" onclick="deleteShift(${shift.id})">
@@ -383,7 +423,7 @@
                                         </div>
                                         <div class="shift-meta-item">
                                             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                            <span style="color: #f59e0b;">8/10 Helfer</span>
+                                            <span class="stat-warnung">8/10 Helfer</span>
                                         </div>
                                     </div>
                                 </div>
@@ -403,7 +443,7 @@
                                         </div>
                                         <div class="shift-meta-item">
                                             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                            <span style="color: #10b981;">15/15 Helfer</span>
+                                            <span class="stat-voll">15/15 Helfer</span>
                                         </div>
                                     </div>
                                 </div>
@@ -419,7 +459,7 @@
                 })
                 .catch(error => {
                     console.error('Fehler beim Abrufen der Details:', error);
-                    shiftList.innerHTML = `<div style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden: ${error.message}</div>`;
+                    shiftList.innerHTML = `<div class="error-message">Fehler beim Laden: ${error.message}</div>`;
                 });
         }
 
@@ -502,6 +542,7 @@
                     location: document.getElementById('eventLocation').value,
                     startDate: new Date(document.getElementById('eventStartDate').value).toISOString(),
                     endDate: new Date(document.getElementById('eventEndDate').value).toISOString(),
+                    requiredHelpers: 0, // Wird später durch Summe der Dienste definiert
                     organizationId: parseInt(userInfo.OrganizationId, 10)
                 };
 
@@ -535,7 +576,7 @@
             // Logik für das Abrufen der Liste (GET) - gefiltert nach Organisation
             const userInfo = getUserInfo();
             if (!userInfo || !userInfo.OrganizationId) {
-                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="6" class="error-message">Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.</td></tr>';
                 return;
             }
 
@@ -556,6 +597,7 @@
 
                     events.forEach(event => {
                         const tr = document.createElement('tr');
+                        const totalNeeded = (event.shifts || []).reduce((sum, s) => sum + (s.requiredHelpers || 0), 0);
 
                         tr.innerHTML = `
                             <td>
@@ -570,12 +612,12 @@
                                     ${event.location}
                                 </div>
                             </td>
-                             <td>${new Date(event.startDate).toLocaleDateString('de-DE')}</td>
-                            <td>${new Date(event.endDate).toLocaleDateString('de-DE')}</td>
-                            <td><span style="color: var(--text-muted); font-size: 0.8rem;">#${event.id}</span></td>
-                            <td>
+                             <td class="text-center">${new Date(event.startDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                            <td class="text-center">${new Date(event.endDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                            <td class="text-center">${totalNeeded}</td>
+                            <td class="text-center">
                                 <div class="flex-center-gap">
-                                    <a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details &rarr;</a>
+                                    <a href="#" onclick="loadEventDetails(${event.id})" class="action-link">Details</a>
                                     <button onclick="deleteEvent(${event.id}, '${event.title.replace(/'/g, "\\'")}')" class="action-link-danger">Löschen</button>
                                 </div>
                             </td>
@@ -586,7 +628,7 @@
                 })
                 .catch(error => {
                     console.error('Fehler beim Laden der Veranstaltungen:', error);
-                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #ef4444;">Fehler beim Laden der Veranstaltungen. Bitte versuchen Sie es später erneut.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="6" class="error-message">Fehler beim Laden der Veranstaltungen. Bitte versuchen Sie es später erneut.</td></tr>';
                 });
         });
     </script>

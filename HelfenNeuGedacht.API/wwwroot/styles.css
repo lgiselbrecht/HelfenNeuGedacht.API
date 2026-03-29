@@ -268,27 +268,37 @@ body {
 .action-link {
     color: var(--primary-color);
     text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background-color: #eff6ff;
+    transition: all 0.2s;
+    display: inline-block;
 }
 
 .action-link:hover {
-    text-decoration: underline;
+    background-color: var(--primary-color);
+    color: white;
 }
 
 .action-link-danger {
     color: #ef4444;
-    background: none;
+    background-color: #fef2f2;
     border: none;
-    padding: 0;
+    padding: 6px 12px;
+    border-radius: 6px;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: inline-block;
 }
 
 .action-link-danger:hover {
-    text-decoration: underline;
+    background-color: #ef4444;
+    color: white;
 }
 
 /* --- Form Elements --- */
@@ -324,6 +334,7 @@ body {
     font-size: 0.9rem;
     transition: border-color 0.2s;
     background-color: var(--white);
+    margin-bottom: 15px;
 }
 
 .form-input:focus,
@@ -713,6 +724,24 @@ tbody tr:hover {
 
 .text-warning {
     color: #f59e0b;
+}
+
+.error-message {
+    text-align: center;
+    padding: 20px;
+    color: #ef4444;
+}
+
+.stat-kritisch {
+    color: #ef4444;
+}
+
+.stat-warnung {
+    color: #f59e0b;
+}
+
+.stat-voll {
+    color: #10b981;
 }
 
 

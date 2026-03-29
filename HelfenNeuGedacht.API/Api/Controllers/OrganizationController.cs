@@ -1,10 +1,11 @@
 ﻿using HelfenNeuGedacht.API.Application.Services.OrganizationService;
 using HelfenNeuGedacht.API.Application.Services.OrganizationService.Dto;
+using HelfenNeuGedacht.API.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelfenNeuGedacht.API.API.Controllers
-//TODO: Add/check Authorization
+
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -37,7 +38,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
 
         
         [HttpGet("{id}")]
-        [Authorize(Roles = "OrganizationAdmin,SuperAdmin")]
+        [Authorize(Roles = $"{Roles.OrganizationAdmin},{Roles.OrganizationUser}")]
         public async Task<ActionResult<Organization>> GetOrganizationById(int id)
         {
             var organization = await _organizationService.GetOrganizationByIdAsync(id);
@@ -47,7 +48,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
 
             return Ok(organization);
         }
-         [Authorize(Roles = "OrganizationAdmin,SuperAdmin")]
+        [Authorize(Roles = $"{Roles.OrganizationAdmin}")]
         [HttpPut("{id}")]
         public async Task<ActionResult<OrganizationResponse>> UpdateOrganizationById(int id, OrganizationRequest updatedOrganization)
         {
@@ -59,7 +60,8 @@ namespace HelfenNeuGedacht.API.API.Controllers
 
             return Ok(result);
         }
-        [Authorize(Roles = "SuperAdmin")]
+        //für später: Innovationsprojekt
+        [Authorize(Roles = $"{Roles.SuperAdmin}")]
         [HttpPut("{id}/approve")]
         public async Task<ActionResult<OrganizationResponse>> ApproveOrganizationById(OrganizationApprovedRequest approveRequest, string adminuser)
         {
@@ -69,7 +71,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
             return Ok(result);
         }
 
-         [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = $"{Roles.OrganizationAdmin}")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Organization>> DeleteOrganizationById(int id)
         {

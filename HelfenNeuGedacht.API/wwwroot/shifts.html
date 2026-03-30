@@ -111,7 +111,7 @@
                     <select id="editShiftRelatedEvent" required></select>
                     <div class="form-actions-row">
                         <button type="submit" class="btn-primary">Speichern</button>
-                        <button class="btn-danger" id="deleteShiftButton">Löschen</button>
+                        <button type="button" class="btn-danger" id="deleteShiftButton">Löschen</button>
                         <button type="button" id="cancelEditingShiftFormBtn" class="btn-secondary">Abbrechen</button>
                     </div>
                 </form>
@@ -166,23 +166,21 @@
 
         requireAuth();
 
-        function closeAllModals() {
-            document.querySelectorAll('.modal-overlay').forEach(modal => {
-                modal.classList.remove('active');
-            });
-            document.getElementById('createShiftForm').reset();
-            document.getElementById('editShiftForm').reset();
+        async function getEvents() {
+            const res = await authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`);
+            const events = await res.json();
+            return events;
         }
 
-        async function loadShiftDetails(shiftId) { 
+        async function getShiftDetails(shiftId) {
             if (window.event) window.event.preventDefault();
 
+            const detailUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${shiftId}`;
             const eventlist = await getEvents();
             const modal = document.getElementById('shiftDetailsModal');
+
             modal.classList.add('active');
             document.getElementById('detailShiftTitle').textContent = 'Lade Dienst...';
-
-            const detailUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${shiftId}`;
 
             authenticatedFetch(detailUrl)
                 .then(response => {
@@ -197,18 +195,8 @@
                     document.getElementById('editShiftRequirements').value = shift.requirements || '';
                     document.getElementById('editShiftAgeRestriction').value = shift.ageRestriction || '';
                     document.getElementById('editShiftPoints').value = shift.points || '';
-                    
-                    const select = document.getElementById('editShiftRelatedEvent');
-                    select.innerHTML = '<option disabled value="">-- Veranstaltung wählen --</option>';
-                    eventlist.forEach(event => {
-                        const option = document.createElement('option');
-                        option.value = event.id;
-                        option.textContent = event.title;
-                        if (shift.eventId === event.id) {
-                            option.selected = true;
-                        }
-                        select.appendChild(option);
-                    });
+
+                    fillEventSelect('editShiftRelatedEvent', eventlist, shift.eventId)
 
                     const deleteBtn = document.getElementById('deleteShiftButton');
                     const newDeleteBtn = deleteBtn.cloneNode(true);
@@ -242,6 +230,121 @@
             }
         }
 
+        async function addShift(newShift) {
+            authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newShift)
+            })
+                .then(res => res.ok ? location.reload() : alert("Fehler beim Speichern"));
+        }
+
+        async function editShift(editedShift, id) {
+            authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editedShift)
+            })
+                .then(res => res.ok ? location.reload() : alert("Fehler beim Update"));
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            document.getElementById('createShiftForm').reset();
+            document.getElementById('editShiftForm').reset();
+        }
+
+        function generateShiftCardHtml(shift) {
+            return `
+                    <div class="shift-card-header">
+                        <div class="shift-card-icon"></div>
+                        <h2 class="shift-card-title">${shift.name}</h2>
+                    </div>
+                    <p class="shift-card-description">${shift.description}</p>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <button onclick="getShiftDetails(${shift.id})" class="btn-primary">Details</button>
+                    </div>`
+        }
+
+        function fillEventSelect(selectId, eventlist, selectedId) {
+            const select = document.getElementById(selectId);
+            const placeholder = document.createElement('option');
+            placeholder.disabled = true;
+            placeholder.value = "";
+            placeholder.textContent = "-- Veranstaltung wählen --";
+
+            if (!selectedId) {
+                placeholder.selected = true;
+            }
+
+            select.innerHTML = '';
+            select.appendChild(placeholder);
+
+            eventlist.forEach(event => {
+                const option = document.createElement('option');
+                option.value = event.id;
+                option.textContent = event.title;
+
+                if (selectedId && event.id === selectedId) {
+                    option.selected = true;
+                }
+
+                select.appendChild(option);
+            });
+        }
+
+        document.getElementById('createShiftForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const userInfo = getUserInfo();
+
+            const newShift = {
+                name: document.getElementById('shiftTitle').value,
+                description: document.getElementById('shiftDescription').value,
+                requirements: document.getElementById('shiftRequirements').value,
+                ageRestriction: parseInt(document.getElementById('shiftAgeRestriction').value) || 0,
+                points: parseInt(document.getElementById('shiftPoints').value) || 0,
+                eventId: document.getElementById('shiftRelatedEvent').value
+            };
+
+            addShift(newShift);
+        });
+
+        document.getElementById('editShiftForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editShiftId').value;
+
+            const editedShift = {
+                id: id,
+                name: document.getElementById('editShiftTitle').value,
+                description: document.getElementById('editShiftDescription').value,
+                requirements: document.getElementById('editShiftRequirements').value,
+                ageRestriction: parseInt(document.getElementById('editShiftAgeRestriction').value) || 0,
+                points: parseInt(document.getElementById('editShiftPoints').value) || 0,
+                eventId: document.getElementById('editShiftRelatedEvent').value
+            };
+
+            editShift(editedShift, id);
+        });
+
+        document.getElementById('showShiftFormBtn').addEventListener('click', async (e) => {
+            shiftEditModal.classList.add('active');
+
+            const eventlist = await getEvents();
+            const select = document.getElementById('shiftRelatedEvent');
+
+            fillEventSelect('shiftRelatedEvent', eventlist);
+
+            //select.innerHTML = '<option disabled selected value="">-- Veranstaltung wählen --</option>';
+            //eventlist.forEach(event => {
+            //    const option = document.createElement('option');
+            //    option.value = event.id;
+            //    option.textContent = event.title;
+            //    select.appendChild(option);
+            //});
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
 
             const shiftDetailsModal = document.getElementById('shiftDetailsModal');
@@ -266,64 +369,6 @@
                 });
             });
 
-            document.getElementById('showShiftFormBtn').addEventListener('click', async(e) => {
-                shiftEditModal.classList.add('active');
-
-                const eventlist = await getEvents();
-                const select = document.getElementById('shiftRelatedEvent');
-                select.innerHTML = '<option disabled selected value="">-- Veranstaltung wählen --</option>';
-                eventlist.forEach(event => {
-                    const option = document.createElement('option');
-                    option.value = event.id;
-                    option.textContent = event.title;
-                    select.appendChild(option);
-                });
-            });
-
-            document.getElementById('createShiftForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const userInfo = getUserInfo();
-
-                const newShift = {
-                    name: document.getElementById('shiftTitle').value,
-                    description: document.getElementById('shiftDescription').value,
-                    requirements: document.getElementById('shiftRequirements').value,
-                    ageRestriction: parseInt(document.getElementById('shiftAgeRestriction').value) || 0,
-                    points: parseInt(document.getElementById('shiftPoints').value) || 0,
-                    eventId: document.getElementById('shiftRelatedEvent').value
-                };
-
-                authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newShift)
-                })
-                    .then(res => res.ok ? location.reload() : alert("Fehler beim Speichern"));
-            });
-
-
-            document.getElementById('editShiftForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const id = document.getElementById('editShiftId').value;
-
-                const editedShift = {
-                    id: id,
-                    name: document.getElementById('editShiftTitle').value,
-                    description: document.getElementById('editShiftDescription').value,
-                    requirements: document.getElementById('editShiftRequirements').value,
-                    ageRestriction: parseInt(document.getElementById('editShiftAgeRestriction').value) || 0,
-                    points: parseInt(document.getElementById('editShiftPoints').value) || 0,
-                    eventId: document.getElementById('editShiftRelatedEvent').value
-                };
-
-                authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(editedShift)
-                })
-                    .then(res => res.ok ? location.reload() : alert("Fehler beim Update"));
-            });
-
             authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SHIFTS}`)
                 .then(res => res.json())
                 .then(shifts => {
@@ -331,26 +376,11 @@
                     shifts.forEach(shift => {
                         const card = document.createElement('div');
                         card.className = 'shift-card-s';
-                        card.innerHTML = `
-                    <div class="shift-card-header">
-                        <div class="shift-card-icon"></div>
-                        <h2 class="shift-card-title">${shift.name}</h2>
-                    </div>
-                    <p class="shift-card-description">${shift.description}</p>
-                    <div style="display: flex; gap: 12px; align-items: center;">
-                        <button onclick="loadShiftDetails(${shift.id})" class="btn-primary">Details</button>
-                    </div>
-                `;
+                        card.innerHTML = generateShiftCardHtml(shift);
                         cardwrapper.appendChild(card);
                     });
                 });
         });
-
-        async function getEvents() {
-            const res = await authenticatedFetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`);
-            const events = await res.json();
-            return events;
-        }
 
     </script>
 </body>

@@ -232,13 +232,16 @@
 
         function toggleShiftForm(show, isEdit = false) {
             const container = document.getElementById('addShiftContainer');
+            const addShiftBtn = document.getElementById('addShiftBtn');
             const submitBtn = container.querySelector('button.btn-primary');
 
             if (show) {
                 container.classList.remove('hidden');
+                addShiftBtn.classList.add('hidden');
                 submitBtn.textContent = isEdit ? 'Aktualisieren' : 'Speichern';
             } else {
                 container.classList.add('hidden');
+                addShiftBtn.classList.remove('hidden');
                 editingShiftId = null;
                 document.getElementById('newShiftName').value = '';
                 document.getElementById('newShiftDesc').value = '';
@@ -256,6 +259,8 @@
             const desc = document.getElementById('newShiftDesc').value;
             const points = parseInt(document.getElementById('newShiftPoints').value, 10);
             const reqHelpers = parseInt(document.getElementById('newShiftRequiredHelpers').value, 10);
+            const reqs = document.getElementById('newShiftRequirements').value;
+            const ageLimit = parseInt(document.getElementById('newShiftAgeRestriction').value, 10) || 0;
 
             if (!name) {
                 alert('Bitte geben Sie einen Namen für den Dienst ein.');

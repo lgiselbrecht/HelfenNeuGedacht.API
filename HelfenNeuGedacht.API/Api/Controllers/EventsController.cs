@@ -61,7 +61,9 @@ namespace HelfenNeuGedacht.API.API.Controllers
         {
             if (eventRequest == null)
                 return BadRequest("no data recieved");
-            var updatedEvent = await _eventService.UpdateEventAsync(eventRequest);
+            var updatedEvent = await _eventService.UpdateEventAsync(id, eventRequest);
+            if (updatedEvent == null)
+                return NotFound("Event not found");
             return Ok(updatedEvent);
         }
 

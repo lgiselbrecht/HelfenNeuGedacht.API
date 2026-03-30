@@ -60,7 +60,10 @@ namespace HelfenNeuGedacht.API.Api.Controllers
             }
 
             var createdShift = await _shiftService.AddShiftAsync(shift);
-
+            if (createdShift == null)
+            {
+                return NotFound("Event not found");
+                    }
             return Created();
         }
 

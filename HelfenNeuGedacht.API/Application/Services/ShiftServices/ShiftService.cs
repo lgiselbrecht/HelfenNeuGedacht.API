@@ -55,6 +55,11 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
 
         public async Task<ShiftResponse> AddShiftAsync(CreateShiftRequest shiftRequest)
         {
+            var events = await _eventService.GetEventByIdAsync(shiftRequest.EventId);
+            if (events == null)
+            {
+                return null;
+            }
             var shift = new Shift()
             {
                 Name = shiftRequest.Name,

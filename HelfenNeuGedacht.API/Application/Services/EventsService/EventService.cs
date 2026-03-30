@@ -8,6 +8,7 @@ using HelfenNeuGedacht.API.Infrastructure.Repositories.MySqlRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
 namespace HelfenNeuGedacht.API.Application.Services.EventsService
@@ -125,13 +126,13 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             return events.Select(e => _mapper.ToEventResponse(e, true)).ToList();
         }
 
-        public async Task<EventResponse> UpdateEventAsync(EventRequest eventEntity)
+        public async Task<EventResponse> UpdateEventAsync(int id, EventRequest eventEntity)
         {
-            var existingEvent = await _eventRepository.FindByIdAsync(eventEntity.Id);
+            var existingEvent = await _eventRepository.FindByIdAsync(id);
 
             if (existingEvent == null)
             {
-                throw new Exception("Event not found");
+                return null;
             }
 
             existingEvent.Title = eventEntity.Title;

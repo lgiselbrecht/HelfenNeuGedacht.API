@@ -5,7 +5,7 @@ const API_CONFIG = {
     ENDPOINTS: {
         EVENTS: '/events',
         SHIFTS: '/shifts',
-        ORGANIZATION: '/v1/organization',
+        ORGANIZATION: '/organization',
         AUTH: '/authenticate'
     },
     

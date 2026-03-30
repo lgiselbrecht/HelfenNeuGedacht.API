@@ -107,7 +107,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
         ClockSkew = TimeSpan.Zero
-    }; // Hier gehört ein Semikolon hin
+    }; 
 
     options.Events = new JwtBearerEvents
     {

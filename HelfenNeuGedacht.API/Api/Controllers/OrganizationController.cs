@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HelfenNeuGedacht.API.API.Controllers
 
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class OrganizationController : ControllerBase
     {

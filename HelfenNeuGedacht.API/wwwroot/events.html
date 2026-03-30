@@ -186,31 +186,33 @@
                 </div>
 
                 <div id="addShiftContainer" class="shift-form-container hidden">
-                    <div class="form-group">
-                        <label class="form-label">Dienst-Name</label>
-                        <input type="text" id="newShiftName" placeholder="Name (z.B. Bar-Dienst)" class="form-input">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Beschreibung</label>
-                        <textarea id="newShiftDesc" placeholder="Optionale Details zum Dienst..." class="form-input"
-                            rows="2"></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Punkte</label>
-                            <input type="number" id="newShiftPoints" class="form-input" value="10">
+                    <form id="createShiftForm" class="form-container">
+                        <label for="newShiftName">Bezeichnung</label>
+                        <input type="text" id="newShiftName" required placeholder="Name (z.B. Bar-Dienst)">
+
+                        <label for="newShiftDesc">Beschreibung</label>
+                        <textarea id="newShiftDesc" rows="3" required
+                            placeholder="Optionale Details zum Dienst..."></textarea>
+
+                        <label for="newShiftRequirements">Anforderungen</label>
+                        <input type="text" id="newShiftRequirements" placeholder="z.B. Führerschein Klasse B">
+
+                        <label for="newShiftAgeRestriction">Altersbeschränkung</label>
+                        <input type="number" id="newShiftAgeRestriction" placeholder="z.B. 18">
+
+                        <label for="newShiftPoints">Punkte</label>
+                        <input type="number" id="newShiftPoints" value="10">
+
+                        <label for="newShiftRequiredHelpers">Benötigte Helfer</label>
+                        <input type="number" id="newShiftRequiredHelpers" value="1" min="1">
+
+                        <div class="form-actions-row">
+                            <button type="submit" class="btn-primary" onclick="submitNewShift()">Dienst
+                                speichern</button>
+                            <button type="button" class="btn btn-secondary"
+                                onclick="toggleShiftForm(false)">Abbrechen</button>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Benötigte Helfer</label>
-                            <input type="number" id="newShiftRequiredHelpers" class="form-input" value="1" min="1">
-                        </div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary"
-                            onclick="toggleShiftForm(false)">Abbrechen</button>
-                        <button type="submit" class="btn btn-primary" onclick="submitNewShift()">Dienst
-                            speichern</button>
-                    </div>
+                    </form>
                 </div>
                 <div class="shift-list" id="modalShiftList">
                     <div class="loading-placeholder">Lade Dienste...</div>
@@ -240,7 +242,10 @@
                 editingShiftId = null;
                 document.getElementById('newShiftName').value = '';
                 document.getElementById('newShiftDesc').value = '';
+                document.getElementById('newShiftRequirements').value = '';
+                document.getElementById('newShiftAgeRestriction').value = '';
                 document.getElementById('newShiftPoints').value = '10';
+                document.getElementById('newShiftRequiredHelpers').value = '1';
             }
         }
 
@@ -264,8 +269,8 @@
                 points: points,
                 requiredHelpers: reqHelpers,
                 eventId: currentEventIdForShifts,
-                requirements: "",
-                ageRestriction: 0
+                requirements: reqs,
+                ageRestriction: ageLimit
             };
 
             try {
@@ -310,10 +315,12 @@
             }
         }
 
-        function editShift(shiftId, name, desc, points, helpers) {
+        function editShift(shiftId, name, desc, points, helpers, requirements, ageRestriction) {
             editingShiftId = shiftId;
             document.getElementById('newShiftName').value = name;
             document.getElementById('newShiftDesc').value = desc || '';
+            document.getElementById('newShiftRequirements').value = requirements || '';
+            document.getElementById('newShiftAgeRestriction').value = ageRestriction || '';
             document.getElementById('newShiftPoints').value = points;
             document.getElementById('newShiftRequiredHelpers').value = helpers || 1;
             toggleShiftForm(true, true);
@@ -393,7 +400,7 @@
                                     </div>
                                     <div class="shift-actions">
                                         <div class="badge ${badgeClass}">${badgeText}</div>
-                                        <button class="action-icon" onclick="editShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}', '${(shift.description || '').replace(/'/g, "\\'")}', ${shift.points}, ${shift.requiredHelpers})">
+                                        <button class="action-icon" onclick="editShift(${shift.id}, '${shift.name.replace(/'/g, "\\'")}', '${(shift.description || '').replace(/'/g, "\\'")}', ${shift.points}, ${shift.requiredHelpers}, '${(shift.requirements || '').replace(/'/g, "\\'")}', ${shift.ageRestriction || 0})">
                                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </button>
                                         <button class="action-icon delete" onclick="deleteShift(${shift.id})">

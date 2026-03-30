@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HelfenNeuGedacht.API.API.Controllers
 
-//TODO: Add/check Authorization
+
 {
     [Route("api/[controller]")]
     [ApiController]

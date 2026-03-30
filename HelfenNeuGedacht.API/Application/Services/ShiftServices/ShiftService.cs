@@ -157,8 +157,14 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
             existingShift.Requirements = shift.Requirements;
             existingShift.AgeRestriction = shift.AgeRestriction;
             existingShift.Points = shift.Points;
-            //existingShift.RequiredHelpers = shift.RequiredHelpers;
+            existingShift.RequiredHelpers = shift.RequiredHelpers;
             existingShift.EventId = shift.EventId;
+
+            var existsEvent = await _eventService.GetEventByIdAsync(shift.EventId);
+            if (existsEvent == null)
+            {
+                return null;
+            }
 
             await _shiftRepositories.UpdateAsync(existingShift);
 

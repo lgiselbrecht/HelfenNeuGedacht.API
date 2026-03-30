@@ -27,6 +27,7 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             IHttpContextAccessor httpContextAccessor,
             UserManager<ApplicationUser> userManager,
             IHubContext<DashboardHub> dashboardHub
+
             )
 
         {

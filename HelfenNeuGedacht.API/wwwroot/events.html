@@ -84,12 +84,14 @@
 
             <div class="form-group">
                 <label class="form-label">Beschreibung</label>
-                <textarea id="eventDescription" placeholder="Worum geht es in dieser Veranstaltung?" class="form-input" rows="3" required></textarea>
+                <textarea id="eventDescription" placeholder="Worum geht es in dieser Veranstaltung?" class="form-input"
+                    rows="3" required></textarea>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Ort</label>
-                <input type="text" id="eventLocation" placeholder="z.B. Marktplatz, Hauptstraße" class="form-input" required>
+                <input type="text" id="eventLocation" placeholder="z.B. Marktplatz, Hauptstraße" class="form-input"
+                    required>
             </div>
 
             <div class="form-row">
@@ -130,7 +132,6 @@
         </div>
     </main>
 
-    <!-- Event Details Modal -->
     <div class="modal-overlay" id="eventDetailsModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -191,7 +192,8 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Beschreibung</label>
-                        <textarea id="newShiftDesc" placeholder="Optionale Details zum Dienst..." class="form-input" rows="2"></textarea>
+                        <textarea id="newShiftDesc" placeholder="Optionale Details zum Dienst..." class="form-input"
+                            rows="2"></textarea>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -204,12 +206,13 @@
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="toggleShiftForm(false)">Abbrechen</button>
-                        <button type="submit" class="btn btn-primary" onclick="submitNewShift()">Dienst speichern</button>
+                        <button type="button" class="btn btn-secondary"
+                            onclick="toggleShiftForm(false)">Abbrechen</button>
+                        <button type="submit" class="btn btn-primary" onclick="submitNewShift()">Dienst
+                            speichern</button>
                     </div>
                 </div>
                 <div class="shift-list" id="modalShiftList">
-                    <!-- Shifts will be injected dynamically here -->
                     <div class="loading-placeholder">Lade Dienste...</div>
                 </div>
             </div>
@@ -220,7 +223,6 @@
     <script src="config.js"></script>
     <script src="auth.js"></script>
     <script>
-        // Auth-Guard: Prüfe ob Benutzer eingeloggt ist
         requireAuth();
 
         let currentEventIdForShifts = null;
@@ -320,13 +322,11 @@
         function loadEventDetails(eventId) {
             currentEventIdForShifts = eventId;
             toggleShiftForm(false);
-            // Verhindert, dass der # Link die Seite nach oben springen lässt
             if (event) event.preventDefault();
 
             const modal = document.getElementById('eventDetailsModal');
             const shiftList = document.getElementById('modalShiftList');
 
-            // Lade-Ansicht zeigen
             modal.classList.add('active');
             document.getElementById('modalEventTitle').textContent = 'Lade Event...';
             document.getElementById('modalEventDate').textContent = '';
@@ -352,10 +352,6 @@
                     document.getElementById('modalEventDate').textContent = dateStr;
                     document.getElementById('modalEventLocation').textContent = eventDetails.location || '-';
 
-                    // Schichten rendern
-                    shiftList.innerHTML = '';
-
-                    // Schichten rendern
                     shiftList.innerHTML = '';
 
                     if (eventDetails.shifts && eventDetails.shifts.length > 0) {
@@ -364,7 +360,7 @@
 
                         eventDetails.shifts.forEach(shift => {
                             const helpersNeeded = shift.requiredHelpers || 0;
-                            const helpersCurrent = 0; // Später aus Datenbank holen
+                            const helpersCurrent = 0;
                             const percentage = helpersNeeded > 0 ? (helpersCurrent / helpersNeeded) : 0;
 
                             totalHelpersNeeded += helpersNeeded;
@@ -411,50 +407,8 @@
 
                         document.getElementById('modalEventHelpers').textContent = `${totalHelpersCurrent}/${totalHelpersNeeded} Helfer`;
                     } else {
-                        // Dummy-Daten anzeigen, wenn noch keine Schichten im Backend existieren
-                        shiftList.innerHTML = `
-                            <div class="shift-card">
-                                <div class="shift-details">
-                                    <h3>Aufbau Festzelt (Beispiel)</h3>
-                                    <div class="shift-meta">
-                                        <div class="shift-meta-item">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                            08:00 - 12:00
-                                        </div>
-                                        <div class="shift-meta-item">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                            <span class="stat-warnung">8/10 Helfer</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="shift-actions">
-                                    <div class="badge warnung">Warnung</div>
-                                    <button class="action-icon"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
-                                    <button class="action-icon delete"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                                </div>
-                            </div>
-                            <div class="shift-card">
-                                <div class="shift-details">
-                                    <h3>Bar-Dienst (Beispiel)</h3>
-                                    <div class="shift-meta">
-                                        <div class="shift-meta-item">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                            12:00 - 18:00
-                                        </div>
-                                        <div class="shift-meta-item">
-                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                            <span class="stat-voll">15/15 Helfer</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="shift-actions">
-                                    <div class="badge voll">Voll</div>
-                                    <button class="action-icon"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
-                                    <button class="action-icon delete"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                                </div>
-                            </div>
-                        `;
-                        document.getElementById('modalEventHelpers').textContent = `23/25 Helfer`;
+                        shiftList.innerHTML = '<div class="loading-placeholder">Noch keine Dienste erstellt.</div>';
+                        document.getElementById('modalEventHelpers').textContent = `0/0 Helfer`;
                     }
                 })
                 .catch(error => {
@@ -489,7 +443,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
 
-            // Modal schliessen Events
             const eventDetailsModal = document.getElementById('eventDetailsModal');
             document.getElementById('closeModalBtn').addEventListener('click', () => {
                 eventDetailsModal.classList.remove('active');
@@ -505,27 +458,24 @@
             const apiUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EVENTS}`;
             const tableBody = document.querySelector('tbody');
 
-            // --- Logik für das Erstellen einer neuen Veranstaltung (POST) ---
             const showFormBtn = document.getElementById('showFormBtn');
             const cancelFormBtn = document.getElementById('cancelFormBtn');
             const createEventForm = document.getElementById('createEventForm');
 
-            // Formular einblenden
             showFormBtn.addEventListener('click', () => {
                 createEventForm.classList.remove('hidden');
                 showFormBtn.classList.add('hidden');
             });
 
-            // Formular ausblenden
             cancelFormBtn.addEventListener('click', () => {
                 createEventForm.classList.add('hidden');
                 showFormBtn.classList.remove('hidden');
                 createEventForm.reset();
             });
 
-            // Beim Absenden des Formulars Daten per API speichern
+
             createEventForm.addEventListener('submit', (e) => {
-                e.preventDefault(); // Verhindert das Neuladen der Seite durch HTML
+                e.preventDefault();
 
                 // OrganizationId aus JWT-Token holen
                 const userInfo = getUserInfo();
@@ -534,19 +484,17 @@
                     return;
                 }
 
-                // Wir sammeln die Daten aus den Input-Feldern zusammen, angepasst an das Swagger/API-Format
+
                 const newEvent = {
-                    id: 0, // 0 als Erkennungszeichen für 'Neuanlage'
+                    id: 0,
                     title: document.getElementById('eventTitle').value,
                     description: document.getElementById('eventDescription').value,
                     location: document.getElementById('eventLocation').value,
                     startDate: new Date(document.getElementById('eventStartDate').value).toISOString(),
                     endDate: new Date(document.getElementById('eventEndDate').value).toISOString(),
-                    requiredHelpers: 0, // Wird später durch Summe der Dienste definiert
                     organizationId: parseInt(userInfo.OrganizationId, 10)
                 };
 
-                // POST Request an dein C#-Backend mit Authentifizierung
                 authenticatedFetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -557,14 +505,12 @@
                         return response.json(); // Oder response.text(), falls Backend kein JSON liefert
                     })
                     .then(savedEvent => {
-                        alert('Veranstaltung erfolgreich in der Datenbank gespeichert!');
+                        alert('Veranstaltung erfolgreich gespeichert!');
 
-                        // Formular aufräumen
                         createEventForm.reset();
                         createEventForm.classList.add('hidden');
                         showFormBtn.classList.remove('hidden');
 
-                        // Damit das neue Event in der Liste auftaucht, laden wir die Seite einmal neu
                         location.reload();
                     })
                     .catch(error => {
@@ -573,7 +519,6 @@
                     });
             });
 
-            // Logik für das Abrufen der Liste (GET) - gefiltert nach Organisation
             const userInfo = getUserInfo();
             if (!userInfo || !userInfo.OrganizationId) {
                 tableBody.innerHTML = '<tr><td colspan="6" class="error-message">Fehler: Keine Organisation gefunden. Bitte melden Sie sich erneut an.</td></tr>';

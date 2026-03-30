@@ -82,7 +82,7 @@ namespace HelfenNeuGedacht.API.Application.Mapper
                 Location = events.Location,
                 StartDate = events.StartDate,
                 EndDate = events.EndDate,
-                RequiredHelpers = events.RequiredHelpers,
+                RequiredHelpers = events.Shift?.Sum(s => s.RequiredHelpers) ?? 0,
                 OrganizationId = events.OrganizationId
             };
 

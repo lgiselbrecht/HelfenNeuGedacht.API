@@ -10,7 +10,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = $"{Roles.OrganizationAdmin},{Roles.OrganizationUser}")]
+    [Authorize(Roles = $"{Roles.OrganizationAdmin},{Roles.OrganizationUser},{Roles.SuperAdmin}")]
     public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;

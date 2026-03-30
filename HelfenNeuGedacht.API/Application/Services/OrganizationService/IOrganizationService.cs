@@ -5,7 +5,6 @@ namespace HelfenNeuGedacht.API.Application.Services.OrganizationService
 {
     public interface IOrganizationService
     {
-        //Organizations
         public Task<OrganizationRegistrationResponse> RegisterOrganizationWithAdminAsync(OrganizationRequest organizationRequest, string password);
         public Task<OrganizationResponse> GetOrganizationByIdAsync(int id);
         public Task<OrganizationResponse> UpdateOrganizationByIdAsync(int id, OrganizationRequest updatedOrganization);

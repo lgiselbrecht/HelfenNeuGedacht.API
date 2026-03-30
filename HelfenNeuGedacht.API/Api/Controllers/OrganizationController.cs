@@ -71,7 +71,7 @@ namespace HelfenNeuGedacht.API.API.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = $"{Roles.OrganizationAdmin}")]
+        [Authorize(Roles = $"{Roles.SuperAdmin}")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Organization>> DeleteOrganizationById(int id)
         {

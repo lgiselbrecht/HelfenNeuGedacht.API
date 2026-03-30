@@ -9,7 +9,6 @@
 
         public string RegistrationNumber { get; set; } = string.Empty; //Vereinsregister, etc.
         public string? Type { get; set; } // z.B. Verein, Gemeinde, Feuerwehr
-        //TODO: in v2 Enum
 
         public string? Website { get; set; }
 

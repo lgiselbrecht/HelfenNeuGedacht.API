@@ -118,8 +118,6 @@ namespace HelfenNeuGedacht.API.Application.Services.EventsService
             return _mapper.ToEventResponse(events, includeShifts);
         }
 
-        // This method is currently not used, but it can be useful for future features like an Superadmin dashboard
-
         public async Task<List<EventResponse>> GetEventsByOrganizationIdAsync(int organizationId)
         {
             var events = await _eventRepository.FindByOrganizationIdAsync(organizationId);

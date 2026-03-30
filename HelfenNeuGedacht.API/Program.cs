@@ -84,8 +84,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, JWTService>();
 
 
-// JWT Authentication Configuration
-//TODO: checken obs das braucht
 var jwtSecret = builder.Configuration.GetSection("JwtSettings")["Secret"]
     ?? throw new InvalidOperationException("JWT Secret not found in configuration");
 
@@ -179,7 +177,7 @@ app.MapScalarApiReference(options =>
 app.UseHttpsRedirection();
 
 
-//TODO: besser einschränken 
+//TODO: besser einschränken aber für Abgabe so gelassen das es bei den Dozent:Innen direkt funktioniert
 app.UseCors("AllowAll");
 
 app.UseDefaultFiles();

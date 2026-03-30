@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Mysqlx.Crud;
 
 namespace HelfenNeuGedacht.API.Api.Controllers
-//TODO: Add/check Authorization
 {
     [ApiController]
     [Route("api/shifts")]

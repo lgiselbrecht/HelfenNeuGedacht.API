@@ -71,7 +71,6 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
                 EventId = shiftRequest.EventId
             };
 
-            //für SignalR Update Dashboard bitte lassen //TODO: Komentar entfernen
             var newShift = await _shiftRepositories.AddAsync(shift);
             var shiftEvent = await _eventService.GetEventByIdAsync(newShift.EventId);
             var groupName = $"organization-{shiftEvent.OrganizationId}";
@@ -97,7 +96,6 @@ namespace HelfenNeuGedacht.API.Application.Services.ShiftServices
             await _shiftRepositories.DeleteAsync(shiftToDelete);
               
 
-            //für SignalR Update Dashboard bitte lassen //TODO: Komentar entfernen
             var shiftEvent = await _eventService.GetEventByIdAsync(shiftToDelete.EventId);
             var groupName = $"organization-{shiftEvent.OrganizationId}";
             await _dashboardHub.Clients.Group(groupName).SendAsync("dashboardUpdated");

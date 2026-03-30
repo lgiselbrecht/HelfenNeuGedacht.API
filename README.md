@@ -1,4 +1,6 @@
-# HelfenNeuGedacht.API
+# Fachhochschule Vorarlberg - Anwendungsintegration / Innovation Project
+
+## HelfenNeuGedacht.API
 
 Eine Web API auf Basis von .NET 10, inklusive MySQL-Datenbank und SignalR für Echtzeit-Kommunikation.
 
